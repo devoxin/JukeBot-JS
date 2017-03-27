@@ -1,0 +1,23 @@
+{
+  "name": "jukebot",
+  "version": "5.2.0",
+  "description": "MusicBot for Discord",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node --harmony ./src/shardHandler.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CrimsonXV/JukeBot/JukeBot.git"
+  },
+  "author": "CrimsonXV",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^11.0.0",
+    "fs-extra": "^2.1.2",
+    "gcc": "^1.0.2",
+    "node-opus": "^0.2.4",
+    "ytdl-core": "github:timeforaninja/node-ytdl-core"
+  }
+}
