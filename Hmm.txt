@@ -1,0 +1,6 @@
+Permissions
+    -> Permissive
+        -> Blacklist
+        -> Anyone can use
+    -> RoleOnly
+        -> Acts as whitelist
