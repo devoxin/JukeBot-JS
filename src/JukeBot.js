@@ -2,11 +2,7 @@ const config  = require("./config.json");
 const Discord = require("discord.js");
 const fs      = require("fs");
 const fse     = require("fs-extra");
-
-const client = new Discord.Client({
-	shardId    : process.argv[2],
-	shardCount : process.argv[3]
-});
+const client  = new Discord.Client();
 
 let guilds = {}
 let hasInit = false;
