@@ -23,15 +23,15 @@ client.on("message", msg => {
 	let args    = msg.content.split(" ").slice(1)
 
 	if (fs.existsSync(`./aliases.json`)) {
-		let aliases = require("./aliases.json");
 		delete require.cache[require.resolve("./aliases.json")];
+		let aliases = require("./aliases.json");
 		if (aliases[command]) command = aliases[command];
 	}
 
 	if (fs.existsSync(`./commands/${command}.js`)) {
 		try {
-			require(`./commands/${command}`).run(client, msg, args, guilds, Discord);
 			delete require.cache[require.resolve(`./commands/${command}`)];
+			require(`./commands/${command}`).run(client, msg, args, guilds, Discord);
 		} catch(e) {
 			msg.channel.sendEmbed(
 				new Discord.RichEmbed()
