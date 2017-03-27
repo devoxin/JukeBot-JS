@@ -1,7 +1,9 @@
 {
-	
+
 	"token" : "",
 	"owners" : [],
-	"youtube" : ""
+	"youtube" : "",
+	"prefix" : "",
+	"version" : "5.2.0"
 
 }
