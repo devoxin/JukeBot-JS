@@ -66,7 +66,7 @@ function init(id) {
 	load(id)
 }
 
-async function load(id) {
+function load(id) {
 	let idconf = require(`./data/${id}/config.json`);
 	delete require.cache[require.resolve(`./data/${id}/config.json`)];
 	guilds[id] = {
