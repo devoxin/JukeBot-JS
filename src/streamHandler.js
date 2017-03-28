@@ -9,6 +9,7 @@ let downloading = [];
 exports.play = async function play(guild, client, Discord) {
 	if (downloading.includes(guild.id) || !client.guilds.get(guild.id) || !client.guilds.get(guild.id).voiceConnection || client.guilds.get(guild.id).voiceConnection.speaking) return;
 	downloading.push(guild.id);
+	// FORMAT CHECKING
 	let song = guild.queue[0];
 	let m = await guild.msgc.sendEmbed(
 		new Discord.RichEmbed()
@@ -31,9 +32,14 @@ exports.play = async function play(guild, client, Discord) {
 }
 
 function queueCheck(guild, client, Discord) {
+	try {
+		if (fs.existsSync(`./data/${guild.id}/songs/${song.id}.mp3`)) fs.unlinkSync(`./data/${guild.id}/songs/${song.id}.mp3`)
+	} catch (e) {
+		console.log(`[SHARD ${client.options.shardId}] Failed to delete ${guild.id}/${song.id}.mp3\n${e.message}`)
+	}
 	guild.queue.shift();
 	downloading = downloading.filter(d => d !== guild.id);
-	if (guild.queue.length > 0) return play(guild, client, Discord);
+	if (guild.queue.length > 0) return exports.play(guild, client, Discord);
 	guild.msgc.sendEmbed(
 		new Discord.RichEmbed()
 		.setColor("#1E90FF")
