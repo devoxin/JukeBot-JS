@@ -14,10 +14,23 @@ client.on("ready", () => {
 	hasInit = true;
 })
 
+client.on("guildCreate", g => {
+	// Send welcome message
+	init(g);
+})
+
 client.on("message", msg => {
-	if (msg.channel.type === 'dm' || msg.author.bot || !guilds[msg.guild.id]) return false;
-	// is mentioned
-	if (!msg.content.startsWith(guilds[msg.guild.id].prefix)) return false;
+	if (msg.channel.type === 'dm' || msg.author.bot || !guilds[msg.guild.id]) return;
+
+	if (msg.isMentioned(client.user.id) && msg.content.toLowerCase().includes("help")) {
+		return msg.channel.sendEmbed(
+			new Discord.RichEmbed()
+			.setColor("#1E90FF")
+			.setTitle(`Use ${guilds[msg.guild.id].prefix}help for commands`)
+		)
+	}
+
+	if (!msg.content.startsWith(guilds[msg.guild.id].prefix)) return;
 
 	let command = msg.content.substring(guilds[msg.guild.id].prefix.length).toLowerCase().split(" ")[0];
 	let args    = msg.content.split(" ").slice(1)
@@ -46,8 +59,8 @@ client.on("message", msg => {
 })
 
 function init(id) {
-	if (!fs.existsSync(`./data/${id}`)) fs.mkdirSync(`./data/${id}`);
-	if (!fs.existsSync(`./data/${id}/songs`)) fs.mkdirSync(`./data/${id}/songs`);
+	if (!fs.existsSync(`./data/${id}`))             fs.mkdirSync(`./data/${id}`);
+	if (!fs.existsSync(`./data/${id}/songs`))       fs.mkdirSync(`./data/${id}/songs`);
 	if (!fs.existsSync(`./data/${id}/config.json`)) fs.writeFileSync(`./data/${id}/config.json`, JSON.stringify(template, "", "\t"))
 
 	load(id)
@@ -57,8 +70,9 @@ async function load(id) {
 	let idconf = require(`./data/${id}/config.json`);
 	delete require.cache[require.resolve(`./data/${id}/config.json`)];
 	guilds[id] = {
+		id     : id,
 		prefix : idconf.prefix,
-		msgch  : "",
+		msgc   : "",
 		queue  : [],
 		volume : 1,
 		svotes : [],
