@@ -27,6 +27,8 @@ exports.run = async function (client, msg, args, guilds, Discord) {
 	let query = rxm ? rxm[1] : args.join(" ").replace(/<|>/g, "")
 
 	let res = await ytutil.search(query)
+	if (res.length === 0)
+		return msg.channel.sendEmbed(new Discord.RichEmbed().setColor("#1E90FF").setTitle("No results found."))
 
 	msg.channel.sendEmbed(
 		new Discord.RichEmbed()
@@ -46,7 +48,7 @@ exports.run = async function (client, msg, args, guilds, Discord) {
 				src.edit("", { embed: new Discord.RichEmbed()
 					.setColor("#1E90FF")
 					.setTitle(`Enqueued ${res[m.content - 1].snippet.title}`)
-					.setDescription("Requested by " + m.author.username + "#" + m.author.discriminator)
+					.setDescription(`Requested by ${m.author.username}#${m.author.discriminator}`)
 				});
 				sthandle.play(guild, client, Discord);
 			}
