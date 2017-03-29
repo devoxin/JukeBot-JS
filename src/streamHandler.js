@@ -1,51 +1,55 @@
-const ytutil = require("../util/youtubeHandler.js")
-const yt     = require("ytdl-core");
-const fs     = require("fs");
+const yt         = require("ytdl-core");
+const superagent = require("superagent")
+const sbuffer    = require("buffered2").BufferedStream;
 
 const formats   = ["249", "250", "251", "140", "141", "171"];
-let downloading = [];
 
-exports.play = async function play(guild, client, Discord) {
-	if (downloading.includes(guild.id) || !client.guilds.get(guild.id) || !client.guilds.get(guild.id).voiceConnection || client.guilds.get(guild.id).voiceConnection.speaking) return;
-	downloading.push(guild.id);
+exports.play = async function play(guild, client) {
+	if (!client.guilds.get(guild.id)                  ||
+		!client.voiceConnections.get(guild.id)        ||
+		client.voiceConnections.get(guild.id).playing ||
+		client.voiceConnections.get(guild.id).paused
+	) return;
 
 	let song = guild.queue[0];
 
-	let m = await guild.msgc.sendEmbed(
-		new Discord.RichEmbed()
-			.setColor("#1E90FF")
-			.setTitle("Now Downloading")
-			.setDescription(`${song.title}`)
-	);
+	if (song.src === "youtube") {
 
-	let stream = yt(song.id, {filter: 'audioonly'}).pipe(fs.createWriteStream(`./data/${guild.id}/songs/${song.id}.mp3`));
-	stream.on("close", () => {
-		m.edit("", { embed: new Discord.RichEmbed()
-			.setColor("#1E90FF")
-			.setTitle("Now playing")
-			.setDescription(`[${song.title}](https://youtu.be/${song.id})`)
+		let buffer = new sbuffer();
+		yt(song.id, { filter: "audioonly" }).pipe(buffer);
+
+		guild.msgc.createMessage({embed: {
+			color: 0x1E90FF,
+				title: "Now Playing",
+				description: `[${song.title}](https://youtu.be/${song.id})`
+		}});
+		client.voiceConnections.get(guild.id).play(buffer);
+		client.voiceConnections.get(guild.id).once("end", () => {
+			queueCheck(guild, client, song);
 		});
-		client.guilds.get(guild.id).voiceConnection.playFile(`./data/${guild.id}/songs/${song.id}.mp3`, { passes: 2, volume: guild.volume });
-		client.guilds.get(guild.id).voiceConnection.player.dispatcher.once("end", () => {
-			queueCheck(guild, client, Discord, song);
+
+	} else if (song.src === "soundcloud") {
+
+		guild.msgc.createMessage({embed: {
+			color: 0x1E90FF,
+			title: "Now Playing",
+			description: song.title
+		}});
+		client.voiceConnections.get(guild.id).play(song.id);
+		client.voiceConnections.get(guild.id).once("end", () => {
+			queueCheck(guild, client, song);
 		});
-	})
+
+	}
 
 }
 
-function queueCheck(guild, client, Discord, song) {
-	try {
-		if (fs.existsSync(`./data/${guild.id}/songs/${song.id}.mp3`)) fs.unlinkSync(`./data/${guild.id}/songs/${song.id}.mp3`);
-	} catch (e) {
-		console.log(`[SHARD ${client.options.shardId}] Failed to delete ${guild.id}/${song.id}.mp3\n${e.message}`)
-	}
+function queueCheck(guild, client, song) {
 	guild.queue.shift();
-	downloading = downloading.filter(d => d !== guild.id);
-	if (guild.queue.length > 0) return exports.play(guild, client, Discord);
-	guild.msgc.sendEmbed(
-		new Discord.RichEmbed()
-		.setColor("#1E90FF")
-		.setTitle("Queue concluded!")
-	);
-	if (client.guilds.get(guild.id).voiceConnection) client.guilds.get(guild.id).voiceConnection.disconnect();
+	if (guild.queue.length > 0) return exports.play(guild, client);
+	guild.msgc.createMessage({embed: {
+		color: 0x1E90FF,
+		title: "Queue concluded!",
+	}});
+	if (client.voiceConnections.get(guild.id).channelID) client.leaveVoiceChannel(guild.id);
 }

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cd src && node --harmony ./shardHandler.js"
+    "start": "cd src && node --harmony ./JukeBot.js"
   },
   "repository": {
     "type": "git",
@@ -14,7 +14,10 @@
   "author": "CrimsonXV",
   "license": "ISC",
   "dependencies": {
+    "buffered2": "^1.0.0",
     "discord.js": "^11.0.0",
+    "eris": "^0.6.0",
+    "eventemitter3": "^2.0.2",
     "fs-extra": "^2.1.2",
     "gcc": "^1.0.2",
     "node-opus": "^0.2.4",
