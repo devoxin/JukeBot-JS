@@ -57,51 +57,72 @@ exports.run = async function (client, msg, args, guilds) {
 	let ytrxm = args.join(" ").replace(/<|>/g, "").match(ytrx)
 	let scrxm = args.join(" ").replace(/<|>/g, "").match(scrx)
 
-	if ((ytrxm && ytrxm[1]) || !scrxm || !scrxm[1]) {
+	if ((ytrxm && ytrxm[1]) || (!scrxm || !scrxm[1])) {
 
-		let res = await ytutil.search(args.join(" ").replace(/<|>/g, ""))
-		if (res.length === 0)
-			return client.createMessage(msg.channel.id, {
-				embed: {
-					color: 0x1E90FF,
-					title: "No results found.",
-				}
+		if (ytrxm && ytrxm[1]) {
+
+			let res = await ytutil.videoInfo(ytrxm[1])
+			if (res.length === 0)
+				return client.createMessage(msg.channel.id, {
+					embed: {
+						color: 0x1E90FF,
+						title: "No results found.",
+					}
 				});
 
-		let src = await client.createMessage(msg.channel.id, {
-			embed: {
-				color: 0x1E90FF,
-				title: "Select Song",
-				description: res.map((v, i) => `**${i + 1}.** ${v.snippet.title}`).join("\n"),
-				footer: {
-					text: "1, 2 or 3 || c to cancel selection"
+			guild.queue.push({ id: res[0].id, title: res[0].snippet.title, req: msg.author.id, src: "youtube" });
+				msg.channel.createMessage({embed: {
+					color: 0x1E90FF,
+					title: `Enqueued ${res[0].snippet.title}`,
+					description: `Requested by ${msg.author.username}#${msg.author.discriminator}`
+				}});
+			sthandle.play(guild, client);
+
+		} else {
+
+			let res = await ytutil.search(args.join(" ").replace(/<|>/g, ""))
+			if (res.length === 0)
+				return client.createMessage(msg.channel.id, {
+					embed: {
+						color: 0x1E90FF,
+						title: "No results found.",
+					}
+				});
+
+			let src = await client.createMessage(msg.channel.id, {
+				embed: {
+					color: 0x1E90FF,
+					title: "Select Song",
+					description: res.map((v, i) => `**${i + 1}.** ${v.snippet.title}`).join("\n"),
+					footer: {
+						text: "1, 2 or 3 || c to cancel selection"
+					}
 				}
-			}
-		}).catch(err => {
+			})
 
-		})
+			const collector = await messageCollector.awaitMessages(
+				client,
+				msg.channel,
+				(m => m.author.id === msg.author.id && ((parseInt(m.content) && m.content >= 1 && m.content <= res.length) || m.content.toLowerCase().startsWith(guild.prefix + "p") || m.content === "c")),
+				{ maxMatches: 1 }
+			);
 
-		const collector = await messageCollector.awaitMessages(
-			client,
-			msg.channel,
-			(m => m.author.id === msg.author.id && ((parseInt(m.content) && m.content >= 1 && m.content <= res.length) || m.content.toLowerCase().startsWith(guild.prefix + "p") || m.content === "c")),
-			{ maxMatches: 1 }
-		);
+			collector[0].delete();
+			if (collector[0].content === "c" && client.voiceConnections.get(msg.guild.id).channelID && guild.queue.length === 0)
+				client.leaveVoiceChannel(guild.id);
 
-		collector[0].delete();
-		if (collector[0].content === "c" && client.voiceConnections.get(msg.guild.id).channelID && guild.queue.length === 0)
-			client.leaveVoiceChannel(guild.id);
+			if (collector[0].content.toLowerCase().startsWith(guild.prefix + "p") || collector[0].content === "c")
+				return src.delete();
 
-		if (collector[0].content.toLowerCase().startsWith(guild.prefix + "p") || collector[0].content === "c")
-			return src.delete();
+			guild.queue.push({ id: res[collector[0].content - 1].id.videoId, title: res[collector[0].content - 1].snippet.title, req: msg.author.id, src: "youtube" });
+				src.edit({embed: {
+					color: 0x1E90FF,
+					title: `Enqueued ${res[collector[0].content - 1].snippet.title}`,
+					description: `Requested by ${msg.author.username}#${msg.author.discriminator}`
+				}});
+			sthandle.play(guild, client);
 
-		guild.queue.push({ id: res[collector[0].content - 1].id.videoId, title: res[collector[0].content - 1].snippet.title, req: msg.author.id, src: "youtube" });
-			src.edit({embed: {
-				color: 0x1E90FF,
-				title: `Enqueued ${res[collector[0].content - 1].snippet.title}`,
-				description: `Requested by ${msg.author.username}#${msg.author.discriminator}`
-			}});
-		sthandle.play(guild, client);
+		}
 
 	} else {
 

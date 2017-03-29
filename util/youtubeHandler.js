@@ -19,6 +19,19 @@ module.exports = {
 		return results.body.items;
 	},
 
+	async videoInfo(id) {
+
+		let result = await superagent.get("https://www.googleapis.com/youtube/v3/videos").query({
+			part       : "snippet",
+			id         : id,
+			key        : ytk
+		}).catch(err => {
+			return [];
+		})
+
+		return result.body.items;
+	},
+
 	download(id, guildid) {
 		let stream =
 		stream.on("close", () => {
