@@ -1,6 +1,7 @@
 const superagent = require("superagent");
-const ytdl       = require("ytdl-core");
-const ytk = require("../src/config.json").youtube
+//const yt         = require("ytdl-core");
+const ytk        = require("../src/config.json").youtube;
+const fs         = require("fs");
 
 module.exports = {
 
@@ -16,6 +17,13 @@ module.exports = {
 		})
 
 		return results.body.items;
+	},
+
+	download(id, guildid) {
+		let stream =
+		stream.on("close", () => {
+			return true;
+		})
 	}
 
 }
