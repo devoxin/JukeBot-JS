@@ -1,3 +1,4 @@
+const ytutil     = require("../util/youtubeHandler.js");
 const yt         = require("ytdl-core");
 const sbuffer    = require("buffered2").BufferedStream;
 
@@ -11,6 +12,9 @@ exports.play = async function play(guild, client) {
 	let song = guild.queue[0];
 
 	if (song.src === "youtube") {
+
+		song.duration = await ytutil.getDuration(song.id);
+		song.started = Date.now();
 
 		let buffer = new sbuffer();
 		yt(song.id, { filter: "audioonly" }).pipe(buffer);

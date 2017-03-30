@@ -64,7 +64,6 @@ client.on("messageCreate", msg => {
 
 function init(id) {
 	if (!fs.existsSync(`./data/`))           fs.mkdirSync(`./data/`)
-	if (!fs.existsSync(`./data/${id}`))      fs.mkdirSync(`./data/${id}`);
 	if (!fs.existsSync(`./data/${id}.json`)) fs.writeFileSync(`./data/${id}.json`, JSON.stringify(template, "", "\t"))
 
 	load(id)

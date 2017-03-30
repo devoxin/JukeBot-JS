@@ -33,11 +33,31 @@ module.exports = {
 		return result.body.items;
 	},
 
-	download(id, guildid) {
-		let stream =
-		stream.on("close", () => {
-			return true;
-		})
+	async getDuration(id) {
+
+		let req = await superagent.get('https://www.googleapis.com/youtube/v3/videos').query({
+			part: 'contentDetails',
+			id: id,
+			key: ytk
+		}).catch(err => {
+			return 0;
+		});
+
+		if (!req || !req.body || req.body.items.length === 0)
+			return 0;
+
+		return module.exports.getSeconds(req.body.items[0].contentDetails.duration);
+
+	},
+
+	getSeconds(duration) {
+		let match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
+		if(!match) return 0;
+		let hours = (parseInt(match[1]) || 0) * 3600;
+		let minutes = (parseInt(match[2]) || 0) * 60;
+		let seconds = parseInt(match[3]) || 0;
+
+		return hours + minutes + seconds;
 	}
 
 }

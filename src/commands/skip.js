@@ -4,19 +4,19 @@ exports.run = function (client, msg, args, guilds) {
 		return msg.channel.createMessage({ embed: {
 			color: 0x1E90FF,
 			title: "There's no playback activity"
-		}})
+		}});
 
 	if (msg.member.voiceState.channelID !== client.voiceConnections.get(msg.guild.id).channelID)
 		return msg.channel.createMessage({ embed: {
 			color: 0x1E90FF,
 			title: "You need to be in my voicechannel to skip"
-		}})
+		}});
 
 	if (guild.svotes.includes(msg.author.id))
 		return msg.channel.createMessage({ embed: {
 			color: 0x1E90FF,
 			title: "You've already voted"
-		}})
+		}});
 
 	guild.svotes.push(msg.author.id);
 
@@ -29,5 +29,5 @@ exports.run = function (client, msg, args, guilds) {
 		color: 0x1E90FF,
 		title: "Voted to skip",
 		description: `${voiceMembers - guild.svotes.length}/${voiceMembers} votes needed.`
-	}})
+	}});
 }
