@@ -46,7 +46,11 @@ exports.play = async function play(guild, client) {
 }
 
 function queueCheck(guild, client, song) {
-	guild.queue.shift();
+	if (guild.repeat === "All") {
+		delete song.started;
+		delete song.duration;
+		guild.queue.push(song);
+	if (guild.repeat === "None" || guild.repeat === "All") guild.queue.shift();
 	guild.svotes = [];
 	if (guild.queue.length > 0) return exports.play(guild, client);
 	guild.msgc.createMessage({embed: {

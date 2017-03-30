@@ -77,7 +77,7 @@ function load(id) {
 		msgc   : "",
 		queue  : [],
 		svotes : [],
-		repeat : false
+		repeat : "None"
 	}
 }
 

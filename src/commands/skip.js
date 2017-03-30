@@ -20,7 +20,7 @@ exports.run = function (client, msg, args, guilds) {
 
 	guild.svotes.push(msg.author.id);
 
-	let voiceMembers = Math.round(msg.guild.channels.get(msg.member.voiceState.channelID).voiceMembers.filter(m => !m.bot).length)
+	let voiceMembers = Math.round(msg.guild.channels.get(msg.member.voiceState.channelID).voiceMembers.filter(m => !m.bot).length / 2)
 
 	if (guild.svotes.length >= voiceMembers)
 		return client.voiceConnections.get(msg.guild.id).stopPlaying();
@@ -28,6 +28,6 @@ exports.run = function (client, msg, args, guilds) {
 	msg.channel.createMessage({ embed: {
 		color: 0x1E90FF,
 		title: "Voted to skip",
-		description: `${voiceMembers - guild.svotes.length}/${voiceMembers} votes needed.`
+		description: `${guild.svotes.length}/${voiceMembers} vote(s) needed.`
 	}});
 }
