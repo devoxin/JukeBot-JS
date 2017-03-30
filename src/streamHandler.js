@@ -1,8 +1,5 @@
 const yt         = require("ytdl-core");
-const superagent = require("superagent")
 const sbuffer    = require("buffered2").BufferedStream;
-
-const formats   = ["249", "250", "251", "140", "141", "171"];
 
 exports.play = async function play(guild, client) {
 	if (!client.guilds.get(guild.id)                  ||
@@ -46,6 +43,7 @@ exports.play = async function play(guild, client) {
 
 function queueCheck(guild, client, song) {
 	guild.queue.shift();
+	guild.svotes = [];
 	if (guild.queue.length > 0) return exports.play(guild, client);
 	guild.msgc.createMessage({embed: {
 		color: 0x1E90FF,

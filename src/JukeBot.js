@@ -43,6 +43,8 @@ client.on("messageCreate", msg => {
 	}
 
 	if (fs.existsSync(`./commands/${command}.js`)) {
+		if (!client["cmdstats"]) client["cmdstats"] = 0;
+		client["cmdstats"]++;
 		try {
 			delete require.cache[require.resolve(`./commands/${command}`)];
 			require(`./commands/${command}`).run(client, msg, args, guilds);
@@ -76,7 +78,6 @@ function load(id) {
 		prefix : idconf.prefix,
 		msgc   : "",
 		queue  : [],
-		volume : 1,
 		svotes : [],
 		repeat : false
 	}

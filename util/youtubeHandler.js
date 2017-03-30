@@ -1,7 +1,8 @@
 const superagent = require("superagent");
 //const yt         = require("ytdl-core");
 const ytk        = require("../src/config.json").youtube;
-const fs         = require("fs");
+
+const formats   = ["249", "250", "251", "140", "141", "171"];
 
 module.exports = {
 
