@@ -1,3 +1,5 @@
+const owners = require("../src/config.json").owners;
+
 module.exports = {
 
 	hasRole(member, rolename) {
@@ -11,7 +13,7 @@ module.exports = {
 		let db = require(`../src/data/${guild}.json`);
 		delete require.cache[require.resolve(`../src/data/${guild}.json`)];
 
-		if (db.admins.includes(member) || member.guild.ownerID === member.user.id) return true;
+		if (db.admins.includes(member.id) || owners.includes(member.id) || member.guild.ownerID === member.id) return true;
 		else return false;
 	},
 
