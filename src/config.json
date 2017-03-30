@@ -1,9 +1,10 @@
 {
 
-	"token" : "",
-	"owners" : [],
-	"youtube" : "",
-	"prefix" : "",
-	"version" : "5.2.0"
+	"token"      : "",
+	"owners"     : [],
+	"youtube"    : "",
+	"soundcloud" : "",
+	"prefix"     : "",
+	"version"    : "5.1.0"
 
 }

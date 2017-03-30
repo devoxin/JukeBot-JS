@@ -1,6 +1,6 @@
 const config  = require("./config.json");
-const Eris    = require("eris");
 const fs      = require("fs");
+const Eris    = require("eris");
 const client  = new Eris(config.token);
 
 let guilds = {}
