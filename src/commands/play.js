@@ -3,8 +3,8 @@ const scutil           = require("../../util/soundcloudHandler.js")
 const sthandle         = require("../streamHandler.js")
 const messageCollector = require("../../util/messageCollector.js");
 
-const ytrx = /(?:[?&]v=|\/embed\/|\/1\/|\/v\/|youtu\.be\/)([^&\n?#]+)/;
-const scrx = /((https:\/\/)|(http:\/\/)|(www.)|(s))+(soundcloud.com\/)+[a-zA-Z0-9-.]+(\/)+[a-zA-Z0-9-.]+/;
+const ytrx = new RegExp("(?:youtube\\.com.*(?:\\?|&)(?:v|list)=|youtube\\.com.*embed\\/|youtube\\.com.*v\\/|youtu\\.be\\/)((?!videoseries)[a-zA-Z0-9_-]*)");
+const scrx = new RegExp("((https:\/\/)|(http:\/\/)|(www.)|(s))+(soundcloud.com\/)+[a-zA-Z0-9-.]+(\/)+[a-zA-Z0-9-.]+");
 
 exports.run = async function (client, msg, args, guilds) {
 	if (!args[0]) return client.createMessage(msg.channel.id, {
@@ -61,24 +61,46 @@ exports.run = async function (client, msg, args, guilds) {
 
 		if (ytrxm && ytrxm[1]) {
 
-			let res = await ytutil.videoInfo(ytrxm[1])
-			if (res.length === 0)
-				return client.createMessage(msg.channel.id, {
-					embed: {
-						color: 0x1E90FF,
-						title: "No results found.",
-					}
-				});
+			if (ytrxm[1].length >= 20) { //treat as playlist
 
-			guild.queue.push({ id: res[0].id, title: res[0].snippet.title, req: msg.author.id, src: "youtube" });
-				msg.channel.createMessage({embed: {
+				let m = await msg.channel.createMessage({ embed: {
 					color: 0x1E90FF,
-					title: `Enqueued ${res[0].snippet.title}`,
-					description: `Requested by ${msg.author.username}#${msg.author.discriminator}`
-				}});
-			sthandle.play(guild, client);
+					title: "Importing..."
+				}})
+				let res = await ytutil.getPlaylist(ytrxm[1]);
+				if (res.length === 0)
+					return client.createMessage(msg.channel.id, {
+						embed: {
+							color: 0x1E90FF,
+							title: "No results found.",
+						}
+					});
+				res.map(v => guild.queue.push({ id: v.id, title: v.title, req: msg.author.id, src: "youtube" }));
+				m.delete();
+				sthandle.play(guild, client);
 
-		} else {
+			} else {
+
+				let res = await ytutil.videoInfo(ytrxm[1])
+				if (res.length === 0)
+					return client.createMessage(msg.channel.id, {
+						embed: {
+							color: 0x1E90FF,
+							title: "No results found.",
+						}
+					});
+
+				guild.queue.push({ id: res[0].id, title: res[0].snippet.title, req: msg.author.id, src: "youtube" });
+					msg.channel.createMessage({embed: {
+						color: 0x1E90FF,
+						title: `Enqueued ${res[0].snippet.title}`,
+						description: `Requested by ${msg.author.username}#${msg.author.discriminator}`
+					}});
+				sthandle.play(guild, client);
+
+			}
+
+		} else { // Search for it.
 
 			let res = await ytutil.search(args.join(" ").replace(/<|>/g, ""))
 			if (res.length === 0)
@@ -124,7 +146,7 @@ exports.run = async function (client, msg, args, guilds) {
 
 		}
 
-	} else {
+	} else { // Soundcloud
 
 		let scinfo = await scutil.getTrack(args.join(" ").replace(/<|>/g, ""))
 		if (!scinfo)

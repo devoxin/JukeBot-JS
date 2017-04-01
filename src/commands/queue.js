@@ -16,7 +16,7 @@ exports.run = function (client, msg, args, guilds) {
 	if (page > maxPage) page = maxPage;
 
 	let startQueue = ((page - 1) * 10) + 1;
-	let endQueue   = startQueue + 10 > guild.queue.length ? guild.queue.length : 10
+	let endQueue   = startQueue + 10 > guild.queue.length ? guild.queue.length : startQueue + 10
 
 	let track   = guild.queue[0];
 	let finish  = track.started ? track.started + (track.duration * 1000) + 2000 : undefined;
@@ -30,14 +30,13 @@ exports.run = function (client, msg, args, guilds) {
 		fields: [
 			{
 				name: "Queue",
-				value: guild.queue.slice(startQueue, endQueue).map((item, i) => `${i + 1}. ${item.title} - ${client.users.get(item.req) ? client.users.get(item.req).username : "Unknown"}`).join("\n")
+				value: guild.queue.slice(startQueue, endQueue).map((item, i) => `${startQueue + i}. ${item.title} - ${client.users.get(item.req) ? client.users.get(item.req).username : "Unknown"}`).join("\n")
 			}
 		],
 		footer: {
 			text: `Page ${page}/${maxPage}`
 		}
 	}
-
-	msg.channel.createMessage({ embed: embed })
+	msg.channel.createMessage({ embed: embed }).catch(e => {})
 
 }

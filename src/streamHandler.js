@@ -50,6 +50,7 @@ function queueCheck(guild, client, song) {
 		delete song.started;
 		delete song.duration;
 		guild.queue.push(song);
+	}
 	if (guild.repeat === "None" || guild.repeat === "All") guild.queue.shift();
 	guild.svotes = [];
 	if (guild.queue.length > 0) return exports.play(guild, client);
