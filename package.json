@@ -15,7 +15,6 @@
   "license": "ISC",
   "dependencies": {
     "buffered2": "^1.0.0",
-    "discord.js": "^11.0.0",
     "eris": "^0.6.0",
     "eventemitter3": "^2.0.2",
     "gcc": "^1.0.2",

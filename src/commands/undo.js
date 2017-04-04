@@ -1,5 +1,5 @@
 exports.run = async function(client, msg, args, guilds) {
-	let queue = guilds[msg.guild.id].queue.slice(1).reverse()
+	let queue = guilds[msg.guild.id].queue.slice(1);
 
 	let remove = parseInt(args[0]) ? parseInt(args[0]) : 1
 	let removed = 0;
