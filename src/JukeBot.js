@@ -14,13 +14,20 @@ client.on("ready", () => {
 })
 
 client.on("guildCreate", g => {
-	// Send welcome message
+	g.defaultChannel.createMessage("Hey there! I'm JukeBot! To get started, send `$help`. Please report any issues to CrimsonXV#0387!")
 	init(g.id);
 })
 
 client.on("messageCreate", msg => {
+	if (msg.channel.type === 'dm' || msg.author.bot || !guilds[msg.channel.guild.id]) return;
 	msg.guild = msg.channel.guild;
-	if (msg.channel.type === 'dm' || msg.author.bot || !guilds[msg.guild.id]) return;
+
+	// ALIASES
+
+	let { blocked } = require(`./data/${msg.guild.id}.json`);
+	delete require.cache[require.resolve(`./data/${msg.guild.id}.json`)];
+
+	if (blocked.includes(msg.author.id)) return;
 
 	if (msg.mentions.find(u => u.id === client.user.id) && msg.content.toLowerCase().includes("help"))
 		return client.createMessage(msg.channel.id, {
@@ -34,6 +41,7 @@ client.on("messageCreate", msg => {
 
 	let command = msg.content.substring(guilds[msg.guild.id].prefix.length).toLowerCase().split(" ")[0];
 	let args    = msg.content.split(" ").slice(1)
+	console.log(`${msg.author.username} > ${msg.content}`)
 
 	if (fs.existsSync(`./aliases.json`)) {
 		delete require.cache[require.resolve("./aliases.json")];

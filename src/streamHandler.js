@@ -13,18 +13,37 @@ exports.play = async function play(guild, client) {
 
 	if (song.src === "youtube") {
 
+		let vinf = await ytutil.getFormats(song.id);
+		if (!vinf.streamable) {
+			guild.msgc.createMessage({embed: {
+				color: 0x1E90FF,
+				title: "Song Unplayable",
+				description: "No audio formats found."
+			}});
+			return queueCheck(guild, client)
+		}
+
 		song.duration = await ytutil.getDuration(song.id);
 		song.started = Date.now();
 
-		let buffer = new sbuffer();
-		yt(song.id, { filter: "audioonly" }).pipe(buffer);
+		if (vinf.opus && vinf.url) {
+
+			client.voiceConnections.get(guild.id).play(vinf.url);
+
+		} else {
+
+			let buffer = new sbuffer();
+			yt(song.id, { filter: "audioonly" }).pipe(buffer);
+			client.voiceConnections.get(guild.id).play(buffer);
+
+		}
 
 		guild.msgc.createMessage({embed: {
 			color: 0x1E90FF,
-				title: "Now Playing",
-				description: `[${song.title}](https://youtu.be/${song.id})`
+			title: "Now Playing",
+			description: `[${song.title}](https://youtu.be/${song.id})`
 		}});
-		client.voiceConnections.get(guild.id).play(buffer);
+
 		client.voiceConnections.get(guild.id).once("end", () => {
 			queueCheck(guild, client, song);
 		});
@@ -46,7 +65,7 @@ exports.play = async function play(guild, client) {
 }
 
 function queueCheck(guild, client, song) {
-	if (guild.repeat === "All") {
+	if (guild.repeat === "All" && song) {
 		delete song.started;
 		delete song.duration;
 		guild.queue.push(song);

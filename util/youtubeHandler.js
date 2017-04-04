@@ -1,5 +1,5 @@
 const superagent = require("superagent");
-//const yt         = require("ytdl-core");
+const yt         = require("ytdl-core");
 const ytk        = require("../src/config.json").youtube;
 
 const formats   = ["249", "250", "251", "140", "141", "171"];
@@ -41,6 +41,8 @@ module.exports = {
 			videos.push({ id: video.snippet.resourceId.videoId, title: video.snippet.title });
 		}
 
+		if (videos.length >= 50) return videos;
+
 		if (req.body.nextPageToken) return await module.exports.getPlaylist(id, req.body.nextPageToken, videos);
 		return videos;
 
@@ -57,6 +59,30 @@ module.exports = {
 		})
 
 		return result.body.items;
+	},
+
+	async getFormats(id) {
+
+		let sinfo = await yt.getInfo(id).catch(err => { return { streamable: false } });
+
+		if (!sinfo || !sinfo.formats || sinfo.formats.filter(f => formats.includes(f.itag)).length === 0)
+			return { streamable: false };
+
+		for (let i = 0; i < sinfo.formats.length; i++) {
+
+			if(sinfo.formats[i].itag === '250' || sinfo.formats[i].itag === '251' || sinfo.formats[i].itag === '249')
+				return { streamable: true, url: formats[i].url, opus: true };
+
+			if(sinfo.formats[i].container === 'mp4' && sinfo.formats[i].audioEncoding || sinfo.formats[i].container === 'webm' && sinfo.formats[i].audioEncoding)
+				return { streamable: true, url: formats[i].url, opus: false };
+
+			if(sinfo.formats[i].audioEncoding)
+				return { streamable: true, url: formats[i].url, opus: false };
+
+		}
+
+		return { streamable: false };
+
 	},
 
 	async getDuration(id) {

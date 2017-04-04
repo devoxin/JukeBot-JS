@@ -11,7 +11,7 @@ exports.run = async function (client, msg, args, guilds) {
 		embed: {
 			color: 0x1E90FF,
 			title: "You need to specify something",
-			description: "YouTube: Search Term or URL\nSoundCloud: URL"
+			description: "YouTube: Search Term, URL or Playlist URL\nSoundCloud: URL"
 		}
 	});
 	let guild = guilds[msg.guild.id]
@@ -68,13 +68,16 @@ exports.run = async function (client, msg, args, guilds) {
 					title: "Importing..."
 				}})
 				let res = await ytutil.getPlaylist(ytrxm[1]);
-				if (res.length === 0)
+				if (res.length === 0) {
+					if (client.voiceConnections.get(msg.guild.id).channelID && guild.queue.length === 0)
+						client.leaveVoiceChannel(client.voiceConnections.get(msg.guild.id).channelID);
 					return client.createMessage(msg.channel.id, {
 						embed: {
 							color: 0x1E90FF,
 							title: "No results found.",
 						}
 					});
+				}
 				res.map(v => guild.queue.push({ id: v.id, title: v.title, req: msg.author.id, src: "youtube" }));
 				m.delete();
 				sthandle.play(guild, client);
@@ -82,13 +85,16 @@ exports.run = async function (client, msg, args, guilds) {
 			} else {
 
 				let res = await ytutil.videoInfo(ytrxm[1])
-				if (res.length === 0)
+				if (res.length === 0) {
+					if (client.voiceConnections.get(msg.guild.id).channelID && guild.queue.length === 0)
+						client.leaveVoiceChannel(client.voiceConnections.get(msg.guild.id).channelID);
 					return client.createMessage(msg.channel.id, {
 						embed: {
 							color: 0x1E90FF,
 							title: "No results found.",
 						}
 					});
+				}
 
 				guild.queue.push({ id: res[0].id, title: res[0].snippet.title, req: msg.author.id, src: "youtube" });
 					msg.channel.createMessage({embed: {
@@ -103,13 +109,16 @@ exports.run = async function (client, msg, args, guilds) {
 		} else { // Search for it.
 
 			let res = await ytutil.search(args.join(" ").replace(/<|>/g, ""))
-			if (res.length === 0)
+			if (res.length === 0) {
+				if (client.voiceConnections.get(msg.guild.id).channelID && guild.queue.length === 0)
+					client.leaveVoiceChannel(client.voiceConnections.get(msg.guild.id).channelID);
 				return client.createMessage(msg.channel.id, {
 					embed: {
 						color: 0x1E90FF,
 						title: "No results found.",
 					}
 				});
+			}
 
 			let src = await client.createMessage(msg.channel.id, {
 				embed: {
@@ -129,9 +138,9 @@ exports.run = async function (client, msg, args, guilds) {
 				{ maxMatches: 1 }
 			);
 
-			collector[0].delete();
+			if (msg.channel.permissionsOf(client.user.id).has("manageMessages")) collector[0].delete();
 			if (collector[0].content === "c" && client.voiceConnections.get(msg.guild.id).channelID && guild.queue.length === 0)
-				client.leaveVoiceChannel(guild.id);
+				client.leaveVoiceChannel(client.voiceConnections.get(msg.guild.id).channelID);
 
 			if (collector[0].content.toLowerCase().startsWith(guild.prefix + "p") || collector[0].content === "c")
 				return src.delete();
@@ -149,13 +158,16 @@ exports.run = async function (client, msg, args, guilds) {
 	} else { // Soundcloud
 
 		let scinfo = await scutil.getTrack(args.join(" ").replace(/<|>/g, ""))
-		if (!scinfo)
+		if (!scinfo) {
+			if (client.voiceConnections.get(msg.guild.id).channelID && guild.queue.length === 0)
+				client.leaveVoiceChannel(client.voiceConnections.get(msg.guild.id).channelID);
 			return client.createMessage(msg.channel.id, {
 				embed: {
 					color: 0x1E90FF,
 					title: "No results found.",
 				}
 			});
+		}
 
 		guild.queue.push({ id: scinfo.id, title: scinfo.title, req: msg.author.id, src: "soundcloud" });
 
