@@ -71,13 +71,13 @@ module.exports = {
 		for (let i = 0; i < sinfo.formats.length; i++) {
 
 			if(sinfo.formats[i].itag === '250' || sinfo.formats[i].itag === '251' || sinfo.formats[i].itag === '249')
-				return { streamable: true, url: formats[i].url, opus: true };
+				return { streamable: true, url: sinfo.formats[i].url, opus: true };
 
 			if(sinfo.formats[i].container === 'mp4' && sinfo.formats[i].audioEncoding || sinfo.formats[i].container === 'webm' && sinfo.formats[i].audioEncoding)
-				return { streamable: true, url: formats[i].url, opus: false };
+				return { streamable: true, url: sinfo.formats[i].url, opus: false };
 
 			if(sinfo.formats[i].audioEncoding)
-				return { streamable: true, url: formats[i].url, opus: false };
+				return { streamable: true, url: sinfo.formats[i].url, opus: false };
 
 		}
 
