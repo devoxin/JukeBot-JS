@@ -1,6 +1,6 @@
 const ytutil     = require("../util/youtubeHandler.js");
 const yt         = require("ytdl-core");
-const sbuffer    = require("buffered2").BufferedStream;
+const rs         = require("retry-stream");
 
 exports.play = async function play(guild, client) {
 	if (!client.guilds.get(guild.id)                  ||
@@ -24,19 +24,10 @@ exports.play = async function play(guild, client) {
 		}
 
 		song.duration = await ytutil.getDuration(song.id);
+
+		client.voiceConnections.get(guild.id).play(rs(vinf.url));
+
 		song.started = Date.now();
-
-		if (vinf.opus && vinf.url) {
-
-			client.voiceConnections.get(guild.id).play(vinf.url);
-
-		} else {
-
-			let buffer = new sbuffer();
-			yt(song.id, { filter: "audioonly" }).pipe(buffer);
-			client.voiceConnections.get(guild.id).play(buffer);
-
-		}
 
 		guild.msgc.createMessage({embed: {
 			color: 0x1E90FF,

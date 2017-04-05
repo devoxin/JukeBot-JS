@@ -1,7 +1,8 @@
-const config  = require("./config.json");
-const fs      = require("fs");
-const Eris    = require("eris");
-const client  = new Eris(config.token);
+const config      = require("./config.json");
+const permissions = require("../util/Permissions.js");
+const fs          = require("fs");
+const Eris        = require("eris");
+const client      = new Eris(config.token);
 
 let guilds = {}
 let hasInit = false;
@@ -18,16 +19,16 @@ client.on("guildCreate", g => {
 	init(g.id);
 })
 
+client.on("guildDelete", g => {
+	if (fs.existsSync(`./data/${g.id}.json`)) fs.unlinkSync(`./data/${g.id}.json`);
+	delete guilds[g.id];
+})
+
 client.on("messageCreate", msg => {
 	if (msg.channel.type === 'dm' || msg.author.bot || !guilds[msg.channel.guild.id]) return;
 	msg.guild = msg.channel.guild;
 
-	// ALIASES
-
-	let { blocked } = require(`./data/${msg.guild.id}.json`);
-	delete require.cache[require.resolve(`./data/${msg.guild.id}.json`)];
-
-	if (blocked.includes(msg.author.id)) return;
+	if (permissions.isBlocked(msg.member.id, msg.guild.id)) return false;
 
 	if (msg.mentions.find(u => u.id === client.user.id) && msg.content.toLowerCase().includes("help"))
 		return client.createMessage(msg.channel.id, {
