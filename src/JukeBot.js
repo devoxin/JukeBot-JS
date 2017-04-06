@@ -1,6 +1,7 @@
 const config      = require("./config.json");
 const permissions = require("../util/Permissions.js");
-const fs          = require("fs");
+const bluebird    = require("bluebird");
+const fs          = bluebird.promisifyAll(require("fs"));
 const Eris        = require("eris");
 const client      = new Eris(config.token);
 
@@ -19,12 +20,12 @@ client.on("guildCreate", g => {
 	init(g.id);
 })
 
-client.on("guildDelete", g => {
-	if (fs.existsSync(`./data/${g.id}.json`)) fs.unlinkSync(`./data/${g.id}.json`);
+client.on("guildDelete", async g => {
+	if (fs.accessAsync(`./data/${g.id}.json`)) fs.unlinkAsync(`./data/${g.id}.json`);
 	delete guilds[g.id];
 })
 
-client.on("messageCreate", msg => {
+client.on("messageCreate", async msg => {
 	if (msg.channel.type === 'dm' || msg.author.bot || !guilds[msg.channel.guild.id]) return;
 	msg.guild = msg.channel.guild;
 
@@ -44,13 +45,13 @@ client.on("messageCreate", msg => {
 	let args    = msg.content.split(" ").slice(1)
 	console.log(`${msg.author.username} > ${msg.content}`)
 
-	if (fs.existsSync(`./aliases.json`)) {
+	if (fs.accessAsync(`./aliases.json`)) {
 		delete require.cache[require.resolve("./aliases.json")];
 		let aliases = require("./aliases.json");
 		if (aliases[command]) command = aliases[command];
 	}
 
-	if (fs.existsSync(`./commands/${command}.js`)) {
+	if (fs.accessAsync(`./commands/${command}.js`)) {
 		if (!client["cmdstats"]) client["cmdstats"] = 0;
 		client["cmdstats"]++;
 		try {
@@ -70,9 +71,9 @@ client.on("messageCreate", msg => {
 
 })
 
-function init(id) {
-	if (!fs.existsSync(`./data/`))           fs.mkdirSync(`./data/`)
-	if (!fs.existsSync(`./data/${id}.json`)) fs.writeFileSync(`./data/${id}.json`, JSON.stringify(template, "", "\t"))
+async function init(id) {
+	if (!fs.accessAsync(`./data/`))           fs.mkdirAsync(`./data/`)
+	if (!fs.accessAsync(`./data/${id}.json`)) fs.writeFileAsync(`./data/${id}.json`, JSON.stringify(template, "", "\t"))
 
 	load(id)
 }

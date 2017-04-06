@@ -14,11 +14,12 @@
   "author": "CrimsonXV",
   "license": "ISC",
   "dependencies": {
+    "bluebird": "^3.5.0",
     "eris": "^0.6.0",
     "eventemitter3": "^2.0.2",
     "gcc": "^1.0.2",
     "node-opus": "^0.2.4",
-    "ytdl-core": "github:crimsonxv/node-ytdl-core",
-	"retry-stream": "github:vexera/retry-stream"
+    "retry-stream": "github:vexera/retry-stream",
+    "ytdl-core": "github:crimsonxv/node-ytdl-core"
   }
 }
