@@ -98,3 +98,7 @@ const template = {
 }
 
 client.connect();
+
+process.on("uncaughtException", err => {
+	console.log(err.message)
+})

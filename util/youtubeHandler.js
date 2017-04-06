@@ -2,8 +2,6 @@ const superagent = require("superagent");
 const yt         = require("ytdl-core");
 const ytk        = require("../src/config.json").youtube;
 
-const formats   = ["249", "250", "251", "140", "141", "171"];
-
 module.exports = {
 
 	async search(query) {
@@ -65,15 +63,15 @@ module.exports = {
 
 		let sinfo = await yt.getInfo(id).catch(err => { return { streamable: false } });
 
-		if (!sinfo || !sinfo.formats || sinfo.formats.filter(f => formats.includes(f.itag)).length === 0)
+		if (!sinfo || !sinfo.formats)
 			return { streamable: false };
 
 		for (let i = 0; i < sinfo.formats.length; i++) {
 
-			if(sinfo.formats[i].itag === '250' || sinfo.formats[i].itag === '251' || sinfo.formats[i].itag === '249')
+			if(sinfo.formats[i].itag === "249" || sinfo.formats[i].itag === "250" || sinfo.formats[i].itag === "251")
 				return { streamable: true, url: sinfo.formats[i].url, opus: true };
 
-			if(sinfo.formats[i].container === 'mp4' && sinfo.formats[i].audioEncoding || sinfo.formats[i].container === 'webm' && sinfo.formats[i].audioEncoding)
+			if(sinfo.formats[i].audioEncoding && (sinfo.formats[i].container === "webm" || sinfo.formats[i].container === "mp4"))
 				return { streamable: true, url: sinfo.formats[i].url, opus: false };
 
 			if(sinfo.formats[i].audioEncoding)
@@ -107,7 +105,7 @@ module.exports = {
 		if(!match)  return 0;
 		let hours   = (parseInt(match[1]) || 0) * 3600;
 		let minutes = (parseInt(match[2]) || 0) * 60;
-		let seconds = parseInt(match[3]) || 0;
+		let seconds =  parseInt(match[3]) || 0;
 
 		return hours + minutes + seconds;
 	}
