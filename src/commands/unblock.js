@@ -33,3 +33,8 @@ exports.run = function (client, msg, args, guilds) {
 		}
 	})
 }
+
+exports.usage = {
+	main: "{prefix}{command}",
+	args: "@mention"
+};

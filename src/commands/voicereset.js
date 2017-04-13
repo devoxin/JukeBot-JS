@@ -30,3 +30,8 @@ exports.run = async function (client, msg, args, guilds) {
 	})
 
 }
+
+exports.usage = {
+	main: "{prefix}{command}",
+	args: ""
+};

@@ -12,7 +12,7 @@ exports.run = function (client, msg, args, guilds) {
         let code = eval(args.join(" "));
         if (typeof code !== 'string')
         code = require('util').inspect(code, {depth:0});
-        code = code.replace(new RegExp(client.user.email, "gi"), "--> [REDACTED] <--").replace(new RegExp(client.token.slice(4), "gi"), "--> [REDACTED] <--")
+        code = code.replace(new RegExp(client.token.slice(4), "gi"), "*")
         msg.channel.createMessage(`\`\`\`js\n${code}\n\`\`\``);
     }catch(e){
         msg.channel.createMessage(`\`\`\`js\n${e}\n\`\`\``);

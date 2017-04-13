@@ -15,11 +15,12 @@ exports.play = async function play(guild, client) {
 
 		let vinf = await ytutil.getFormats(song.id);
 		if (!vinf.streamable) {
-			guild.msgc.createMessage({embed: {
-				color: 0x1E90FF,
-				title: "Song Unplayable",
-				description: "No audio formats found."
-			}});
+			if (client.getChannel(guild.msgc) && client.getChannel(guild.msgc).permissionsOf(client.user.id).has("sendMessages"))
+				client.getChannel(guild.msgc).createMessage({embed: {
+					color: 0x1E90FF,
+					title: "Song Unplayable",
+					description: "No audio formats found."
+				}});
 			return queueCheck(guild, client)
 		}
 
@@ -29,11 +30,12 @@ exports.play = async function play(guild, client) {
 
 		song.started = Date.now();
 
-		guild.msgc.createMessage({embed: {
-			color: 0x1E90FF,
-			title: "Now Playing",
-			description: `[${song.title}](https://youtu.be/${song.id})`
-		}});
+		if (client.getChannel(guild.msgc) && client.getChannel(guild.msgc).permissionsOf(client.user.id).has("sendMessages"))
+			client.getChannel(guild.msgc).createMessage({embed: {
+				color: 0x1E90FF,
+				title: "Now Playing",
+				description: `[${song.title}](https://youtu.be/${song.id})`
+			}});
 
 		client.voiceConnections.get(guild.id).once("end", () => {
 			queueCheck(guild, client, song);
@@ -41,11 +43,12 @@ exports.play = async function play(guild, client) {
 
 	} else if (song.src === "soundcloud") {
 
-		guild.msgc.createMessage({embed: {
-			color: 0x1E90FF,
-			title: "Now Playing",
-			description: song.title
-		}});
+		if (client.getChannel(guild.msgc) && client.getChannel(guild.msgc).permissionsOf(client.user.id).has("sendMessages"))
+			client.getChannel(guild.msgc).createMessage({embed: {
+				color: 0x1E90FF,
+				title: "Now Playing",
+				description: song.title
+			}});
 		client.voiceConnections.get(guild.id).play(song.id);
 		client.voiceConnections.get(guild.id).once("end", () => {
 			queueCheck(guild, client, song);
@@ -64,9 +67,10 @@ function queueCheck(guild, client, song) {
 	if (guild.repeat === "None" || guild.repeat === "All") guild.queue.shift();
 	guild.svotes = [];
 	if (guild.queue.length > 0) return exports.play(guild, client);
-	guild.msgc.createMessage({embed: {
-		color: 0x1E90FF,
-		title: "Queue concluded!",
-	}});
+	if (client.getChannel(guild.msgc) && client.getChannel(guild.msgc).permissionsOf(client.user.id).has("sendMessages"))
+		client.getChannel(guild.msgc).createMessage({embed: {
+			color: 0x1E90FF,
+			title: "Queue concluded!",
+		}});
 	if (client.voiceConnections.get(guild.id).channelID) client.leaveVoiceChannel(guild.id);
 }

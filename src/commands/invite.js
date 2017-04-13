@@ -4,7 +4,7 @@ exports.run = function (client, msg, args, guilds) {
 		embed: {
 			color: 0x1E90FF,
 			fields: [
-				{ name: "Add me to your server!",  value: "[Click Here](http://bit.ly/2oqdc66)",      inline: true },
+				{ name: "Add me to your server!",  value: "[Click Here](http://bit.ly/2oBEE0Q)",      inline: true },
 				{ name: "Join my support server!", value: "[Click Here](https://discord.gg/xvtH2Yn)", inline: true }
 			]
 		}

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cd src && node --harmony ./JukeBot.js"
+    "start": "cd src && node ./JukeBot.js"
   },
   "repository": {
     "type": "git",
