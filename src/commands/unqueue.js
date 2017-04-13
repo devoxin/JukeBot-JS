@@ -1,4 +1,10 @@
 exports.run = function(client, msg, args, guilds, Discord, settings) {
+	msg.channel.createMessage({ embed: {
+		color: 0x1E90FF,
+		title: "This command is in development",
+		description: ":eyes:"
+	}})
+	/*
 	let guild = guilds[msg.guild.id]
 	if (guild.audio.queue.length <= 1) return msg.channel.sendEmbed(new Discord.RichEmbed().setColor("#1e90ff").setDescription("The queue is empty."));
 	let uqargs = parseInt(args[0])
@@ -9,4 +15,10 @@ exports.run = function(client, msg, args, guilds, Discord, settings) {
 	} else {
 		msg.channel.sendEmbed(new Discord.RichEmbed().setColor("#1e90ff").setDescription("You can't unqueue that."));
 	}
+	*/
 }
+
+exports.usage = {
+	main: "{prefix}{command}",
+	args: "<index>"
+};

@@ -26,3 +26,8 @@ function setAvatar(client, url) {
 		});
 	});
 }
+
+exports.usage = {
+	main: "{prefix}{command}",
+	args: "[ DEVELOPER COMMAND ]"
+};

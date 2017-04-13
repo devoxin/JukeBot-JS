@@ -19,3 +19,8 @@ exports.run = function (client, msg, args, guilds) {
 	client.voiceConnections.get(msg.guild.id).pause();
 
 }
+
+exports.usage = {
+	main: "{prefix}{command}",
+	args: ""
+};

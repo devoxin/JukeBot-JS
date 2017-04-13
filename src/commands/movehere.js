@@ -26,3 +26,8 @@ exports.run = function (client, msg, args, guilds) {
 	client.joinVoiceChannel(msg.member.voiceState.channelID)
 
 }
+
+exports.usage = {
+	main: "{prefix}{command}",
+	args: ""
+};

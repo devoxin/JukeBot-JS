@@ -6,7 +6,7 @@ exports.run = function (client, msg, args, guilds) {
 		embed: {
 			color: 0x1E90FF,
 			title: "Specify an action",
-			description: "< farm | leave | lookup | blacklist >"
+			description: "< farm | leave | lookup | blacklist | hm >"
 		}
 	})
 
@@ -46,6 +46,23 @@ exports.run = function (client, msg, args, guilds) {
 		}})
 	}
 
+	if (args[0] === "hm") {
+		if (!args[1]) return msg.channel.createMessage({ embed: {
+			color: 0x1E90FF,
+			title: "You need to specify a member ID"
+		}})
+
+		let servers = client.guilds.filter(g => g.members.has(args[1]));
+		msg.channel.createMessage({ embed: {
+			color: 0x1E90FF,
+			title: `Servers with member: ${args[1]}`,
+			fields: [
+				{ name: `${servers.length} results`, value: servers.map(s => s.name).join("\n"), inline: true }
+			]
+		}})
+
+	}
+
 	if (args[0] === "lookup") {
 		if (!args[1]) return msg.channel.createMessage({ embed: {
 			color: 0x1E90FF,
@@ -53,7 +70,7 @@ exports.run = function (client, msg, args, guilds) {
 		}})
 
 		if (isNaN(args[1])) {
-			let search = client.guilds.filter(g => g.name.toLowerCase().includes(args.slice(1).join(" ")))
+			let search = client.guilds.filter(g => g.name.toLowerCase().includes(args.slice(1).join(" ").toLowerCase()))
 			return msg.channel.createMessage({ embed: {
 				color: 0x1E90FF,
 				title: `Search Results (${search.length})`,
@@ -95,3 +112,8 @@ exports.run = function (client, msg, args, guilds) {
 		}})
 	}
 }
+
+exports.usage = {
+	main: "{prefix}{command}",
+	args: "[ DEVELOPER COMMAND ]"
+};

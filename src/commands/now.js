@@ -27,3 +27,8 @@ exports.run = function (client, msg, args, guilds) {
 	msg.channel.createMessage({ embed: embed })
 
 }
+
+exports.usage = {
+	main: "{prefix}{command}",
+	args: ""
+};

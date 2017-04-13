@@ -71,6 +71,10 @@ function queueCheck(guild, client, song) {
 		client.getChannel(guild.msgc).createMessage({embed: {
 			color: 0x1E90FF,
 			title: "Queue concluded!",
+			fields: [
+				{ name: "\u200B", value: "[Enjoying the music? Help keep JukeBot alive!](https://patreon.com/crimsonxv)", inline: true }
+			]
 		}});
+	delete guild.timeout;
 	if (client.voiceConnections.get(guild.id).channelID) client.leaveVoiceChannel(guild.id);
 }

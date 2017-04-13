@@ -1,6 +1,6 @@
 {
   "name": "jukebot",
-  "version": "5.1.0",
+  "version": "5.1.4",
   "description": "MusicBot for Discord",
   "main": "index.js",
   "scripts": {
@@ -18,7 +18,9 @@
     "eventemitter3": "^2.0.2",
     "gcc": "^1.0.2",
     "node-opus": "^0.2.4",
-    "ytdl-core": "github:crimsonxv/node-ytdl-core",
-	"retry-stream": "github:vexera/retry-stream"
+    "retry-stream": "github:vexera/retry-stream",
+    "sodium-native": "^1.8.0",
+    "superagent": "^3.5.2",
+    "ytdl-core": "github:crimsonxv/node-ytdl-core"
   }
 }

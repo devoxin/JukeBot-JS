@@ -70,6 +70,30 @@ client.on("messageCreate", msg => {
 
 })
 
+client.on("voiceChannelLeave", (member, oldC) => {
+	if (member.bot || permissions.isDonator(member.guild.ownerID) || !client.voiceConnections.get(member.guild.id) || !client.voiceConnections.get(member.guild.id).channelID ||
+	oldC.id !== client.voiceConnections.get(member.guild.id).channelID || !guilds[member.guild.id]) return;
+
+	let vc = client.voiceConnections.get(member.guild.id).channelID
+	if (client.getChannel(vc).voiceMembers.filter(m => !m.bot).length <= 0) {
+		if (client.getChannel(guilds[member.guild.id].msgc)) {
+			client.getChannel(guilds[member.guild.id].msgc).createMessage({ embed: {
+				color: 0x1E90FF,
+				title: "Empty voicechannel",
+				description: "JukeBot will leave the voicechannel if it's empty for 5 minutes."
+			}});
+		}
+		guilds[member.guild.id].timeout = Date.now() + 300000
+	}
+});
+
+client.on("voiceChannelJoin", (member, newC) => {
+	if (member.bot || !client.voiceConnections.get(member.guild.id) || !client.voiceConnections.get(member.guild.id).channelID ||
+	newC.id !== client.voiceConnections.get(member.guild.id).channelID || !guilds[member.guild.id]) return;
+
+	delete guilds[member.guild.id].timeout;
+})
+
 function init(id) {
 	if (!fs.existsSync(`./data/`))           fs.mkdirSync(`./data/`)
 	if (!fs.existsSync(`./data/${id}.json`)) fs.writeFileSync(`./data/${id}.json`, JSON.stringify(template, "", "\t"))
@@ -102,3 +126,14 @@ client.connect();
 process.on("uncaughtException", err => {
 	console.log(err.message)
 })
+
+setInterval(() => {
+
+	let expired = Object.keys(guilds).filter(g => guilds[g].timeout && Date.now() >= guilds[g].timeout);
+
+	expired.map(g => {
+		guilds[g].queue.splice(1, guilds[g].queue.length);
+		client.leaveVoiceChannel(client.voiceConnections.get(g).channelID);
+	})
+
+}, 20000); // SPAGHETTI CODE

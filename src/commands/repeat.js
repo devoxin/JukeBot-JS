@@ -21,3 +21,8 @@ exports.run = function (client, msg, args, guilds) {
 	}})
 
 }
+
+exports.usage = {
+	main: "{prefix}{command}",
+	args: "[ Repeat the command to cycle modes ]"
+};

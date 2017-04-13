@@ -31,3 +31,8 @@ exports.run = function (client, msg, args, guilds) {
 		description: `${guild.svotes.length}/${voiceMembers} vote(s) needed.`
 	}});
 }
+
+exports.usage = {
+	main: "{prefix}{command}",
+	args: ""
+};

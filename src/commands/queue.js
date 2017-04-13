@@ -40,3 +40,8 @@ exports.run = function (client, msg, args, guilds) {
 	msg.channel.createMessage({ embed: embed }).catch(e => {})
 
 }
+
+exports.usage = {
+	main: "{prefix}{command}",
+	args: "<page number>"
+};

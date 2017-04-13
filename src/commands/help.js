@@ -14,7 +14,9 @@ exports.run = async function (client, msg, args, guilds) {
 			description: commands.map(c => c.replace(".js", "")).sort().join(", "),
 			fields: [
 				{ name: "Aliases", value: `\`\`\`\n${aliases}\n\`\`\``, inline: true },
-				{ name: "Support", value: "Need help with JukeBot? [Join Here!](https://discord.gg/xvtH2Yn)", inline: true }
+				{ name: "Support", value: "Need help with JukeBot? [Join Here!](https://discord.gg/xvtH2Yn)\n\n" +
+										  "**Getting Started**\n1. Join a voicechannel\n2. $play <YouTube URL/Query | Soundcloud URL>\n3. If prompted, select a song (1-3)\n\n" +
+										  `**Current Prefix**\n${guilds[msg.guild.id].prefix}`, inline: true }
 			]
 		}
 	})
@@ -24,3 +26,8 @@ exports.run = async function (client, msg, args, guilds) {
 function pad(ln, str) {
 	return Array(ln - str.length).join(" ")
 }
+
+exports.usage = {
+	main: "{prefix}{command}",
+	args: ""
+};

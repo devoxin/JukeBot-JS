@@ -23,3 +23,8 @@ exports.run = async function(client, msg, args, guilds) {
 		msg.channel.deleteMessages(msgs)
 	}
 }
+
+exports.usage = {
+	main: "{prefix}{command}",
+	args: "<1-100>"
+};

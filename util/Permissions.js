@@ -18,10 +18,20 @@ module.exports = {
 	},
 
 	isBlocked(member, guild) {
-		let db = require(`../src/data/${guild}.json`);
+		let db = require(`../src/data/${guild}.json`).blocked;
+		let hdb = require(`../src/config.json`).hardblock;
 		delete require.cache[require.resolve(`../src/data/${guild}.json`)];
+		delete require.cache[require.resolve(`../src/config.json`)];
 
-		if (db.blocked.includes(member)) return true;
+		if (db.includes(member) || hdb.includes(member)) return true;
+		else return false;
+	},
+
+	isDonator(member) {
+		let donators = require(`../src/config.json`).donators;
+		delete require.cache[require.resolve(`../src/config.json`)];
+
+		if (donators.includes(member) || owners.includes(member)) return true;
 		else return false;
 	}
 

@@ -26,3 +26,8 @@ exports.run = function (client, msg, args, guilds) {
 	fs.writeFileSync(`./data/${msg.guild.id}.json`, JSON.stringify(rewrite, "", "\t"))
 
 }
+
+exports.usage = {
+	main: "{prefix}{command}",
+	args: "<prefix>"
+};
