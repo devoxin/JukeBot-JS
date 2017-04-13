@@ -131,6 +131,8 @@ setInterval(() => {
 
 	let expired = Object.keys(guilds).filter(g => guilds[g].timeout && Date.now() >= guilds[g].timeout);
 
+	if (expired.length === 0) return false;
+
 	expired.map(g => {
 		guilds[g].queue.splice(1, guilds[g].queue.length);
 		client.leaveVoiceChannel(client.voiceConnections.get(g).channelID);
