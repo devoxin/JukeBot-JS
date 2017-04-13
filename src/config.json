@@ -5,6 +5,8 @@
 	"youtube"    : "",
 	"soundcloud" : "",
 	"prefix"     : "",
-	"version"    : "5.1.0"
+	"version"    : "5.1.4",
+	"hardblock"  : [],
+	"donators"   : []
 
 }
