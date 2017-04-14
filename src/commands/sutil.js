@@ -6,7 +6,7 @@ exports.run = function (client, msg, args, guilds) {
 		embed: {
 			color: 0x1E90FF,
 			title: "Specify an action",
-			description: "< farm | leave | lookup | blacklist | hm >"
+			description: "< farm | leave | lookup | blacklist | hm | mi >"
 		}
 	})
 
@@ -44,6 +44,25 @@ exports.run = function (client, msg, args, guilds) {
 			color: 0x1E90FF,
 			description: "<:oktrump:284357092859707392>"
 		}})
+	}
+
+	if (args[0] === "mi") {
+		if (!args[1]) return msg.channel.createMessage({ embed: {
+			color: 0x1E90FF,
+			title: "You need to specify a server ID"
+		}})
+
+		if (!client.guilds.get(args[1])) return msg.channel.createMessage({ embed: {
+			color: 0x1E90FF,
+			title: ":warning: Not found"
+		}})
+
+		client.guilds.get(args[1]).defaultChannel.createInvite({ maxAge: 15 }).then(inv => {
+			msg.channel.createMessage("discord.gg/" + inv.code)
+		}).catch(err => {
+			msg.channel.createMessage("Failed to generate invite")
+		})
+
 	}
 
 	if (args[0] === "hm") {

@@ -76,5 +76,5 @@ function queueCheck(guild, client, song) {
 			]
 		}});
 	delete guild.timeout;
-	if (client.voiceConnections.get(guild.id).channelID) client.leaveVoiceChannel(guild.id);
+	if (client.voiceConnections.get(guild.id) && client.voiceConnections.get(guild.id).channelID) client.leaveVoiceChannel(guild.id);
 }

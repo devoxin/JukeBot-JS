@@ -55,7 +55,7 @@ exports.run = async function (client, msg, args, guilds) {
 
 		if (ytrxm && ytrxm[1]) {
 
-			if (ytrxm[1].length >= 18) { //treat as playlist
+			if (ytrxm[1].length >= 15) { //treat as playlist
 
 				let m = await msg.channel.createMessage({ embed: {
 					color: 0x1E90FF,
@@ -129,7 +129,11 @@ exports.run = async function (client, msg, args, guilds) {
 				}
 			);
 
-			if (collector.length === 0) return src.delete();
+			if (collector.length === 0) {
+				if (client.voiceConnections.get(msg.guild.id).channelID && guild.queue.length === 0)
+					client.leaveVoiceChannel(client.voiceConnections.get(msg.guild.id).channelID);
+				return src.delete();
+			}
 
 			if (msg.channel.permissionsOf(client.user.id).has("manageMessages")) collector[0].delete();
 			if (collector[0].content === "c" && client.voiceConnections.get(msg.guild.id).channelID && guild.queue.length === 0)
