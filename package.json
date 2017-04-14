@@ -12,7 +12,7 @@
     "url": "https://github.com/CrimsonXV/JukeBot/JukeBot.git"
   },
   "author": "CrimsonXV",
-  "license": "AGPL",
+  "license": "AGPL-3.0",
   "dependencies": {
     "eris": "^0.6.0",
     "eventemitter3": "^2.0.2",
