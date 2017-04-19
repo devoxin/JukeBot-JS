@@ -12,7 +12,7 @@ exports.play = async function play(guild, client) {
 	let song = guild.queue[0];
 
 	if (song.src === "youtube") {
-
+		/*
 		let vinf = await ytutil.getFormats(song.id);
 		if (!vinf.streamable) {
 			if (client.getChannel(guild.msgc) && client.getChannel(guild.msgc).permissionsOf(client.user.id).has("sendMessages"))
@@ -23,10 +23,11 @@ exports.play = async function play(guild, client) {
 				}});
 			return queueCheck(guild, client)
 		}
+		*/
 
 		song.duration = await ytutil.getDuration(song.id);
 
-		client.voiceConnections.get(guild.id).play(rs(vinf.url));
+		client.voiceConnections.get(guild.id).play(yt(song.id));
 
 		song.started = Date.now();
 

@@ -23,7 +23,7 @@ exports.run = async function(client, msg, args, guilds) {
 		}
 	}
 
-	queue.reverse().splice(0, 0, guilds[msg.guild.id].queue[0])
+	queue.splice(0, 0, guilds[msg.guild.id].queue[0])
 	guilds[msg.guild.id].queue = queue;
 
 	m.edit({ embed: {

@@ -48,6 +48,12 @@ exports.run = async function (client, msg, args, guilds) {
 			title: "Join my voicechannel to queue.",
 		}});
 
+	if (guild.queue.length >= 20) return msg.channel.createMessage({ embed: {
+		color: 0x1E90FF,
+		title: "Queue Limit Reached",
+		description: "You've hit the server queue limit. Wait for the queue to deplete before queueing more songs."
+	}})
+
 	let ytrxm = args.join(" ").replace(/<|>/g, "").match(ytrx)
 	let scrxm = args.join(" ").replace(/<|>/g, "").match(scrx)
 

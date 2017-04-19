@@ -8,12 +8,6 @@ exports.run = function(client, msg, args, guilds) {
         description: `You need to specify a command\n(e.g. ${guilds[msg.guild.id].prefix}usage play)`
     }});
 
-    if (msg.author.id !== "180093157554388993") return msg.channel.createMessage({ embed: {
-        color: 0x1E90FF,
-        title: "Placeholder",
-        description: "This command is coming soon. It will allow you to view in-depth help for each command."
-    }});
-
     if (!fs.existsSync(`./commands/${args[0]}.js`)) return msg.channel.createMessage({ embed: {
         color: 0x1E90FF,
         title: "Command Not Found",

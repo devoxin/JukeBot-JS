@@ -12,7 +12,7 @@
     "url": "https://github.com/CrimsonXV/JukeBot/JukeBot.git"
   },
   "author": "CrimsonXV",
-  "license": "AGPL-3.0",
+  "license": "ISC",
   "dependencies": {
     "eris": "^0.6.0",
     "eventemitter3": "^2.0.2",
@@ -21,6 +21,6 @@
     "retry-stream": "github:vexera/retry-stream",
     "sodium-native": "^1.8.0",
     "superagent": "^3.5.2",
-    "ytdl-core": "github:crimsonxv/node-ytdl-core"
+    "ytdl-core": "^0.12.1"
   }
 }
