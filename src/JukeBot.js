@@ -64,7 +64,7 @@ client.on("messageCreate", async msg => {
 		require(`./commands/${command}`).run(client, msg, args, guilds, db);
 	} catch(e) {
 		console.log(e.message)
-		if (e.message.toLowerCase.includes("module not found")) return;
+		if (e.message.includes("Cannot find module")) return;
 		msg.channel.createMessage({ embed: {
 			color: 0x1E90FF,
 			title: `${command} failed`,
