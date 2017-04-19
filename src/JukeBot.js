@@ -63,7 +63,6 @@ client.on("messageCreate", async msg => {
 		delete require.cache[require.resolve(`./commands/${command}`)];
 		require(`./commands/${command}`).run(client, msg, args, guilds, db);
 	} catch(e) {
-		console.log(e.message)
 		if (e.message.includes("Cannot find module")) return;
 		msg.channel.createMessage({ embed: {
 			color: 0x1E90FF,
