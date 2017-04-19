@@ -41,4 +41,4 @@ npm install && npm start
 
 This will install the necessary modules and start JukeBot.
 
-The last step is inviting the bot to your server. [Head Here](https://finitereality.github.io/permissions/?v=0) and paste your bot's client ID from the discord developers page into the box at the bottom left, and then click on the generated link. You'll be taken to the Discord page to invite the bot to your server, select the appropriate server and hit Authorize! You may now begin using the bot :)
+The last step is inviting the bot to your server. [Head Here](https://finitereality.github.io/permissions/?v=36793345) and paste your bot's client ID from the discord developers page into the box at the bottom left, and then click on the generated link. You'll be taken to the Discord page to invite the bot to your server, select the appropriate server and hit Authorize! You may now begin using the bot :)
