@@ -8,8 +8,8 @@ exports.run = function (client, msg, args) {
 		fields: [
 			{
 				name: "Donator Benefits",
-				value: "*- Doubled playlist song importing limit (100 songs)\n" +
-					   "- No voicechannel timeout\n" +
+				value: "- Import up to 75 songs from a playlist instead of 20\n" +
+					   "- No server queue limit\n" +
 					   "- Patreon role in JukeBot's Support server\n" +
 					   "\nMore benefits will be listed soon. Feel free to suggest some!",
 				inline: true
@@ -18,7 +18,7 @@ exports.run = function (client, msg, args) {
 		footer: {
 			text: "Any benefits marked with * are still yet to be added. Early support is still appreciated!"
 		}
-	}})
+	}});
 
 }
 

@@ -1,22 +1,28 @@
-exports.run = function(client, msg, args, guilds, Discord, settings) {
+exports.run = function(client, msg, args, guilds, db) {
+
+	if (guilds[msg.guild.id].queue.length <= 1) return msg.channel.createMessage({ embed: {
+		color: 0x1E90FF,
+		title: "The queue is empty."
+	}});
+
+	if (!parseInt(args[0]) || args[0] <= 1 || args[0] >= guilds[msg.guild.id].queue.length) return msg.channel.createMessage({ embed: {
+		color: 0x1E90FF,
+		title: `You need to specify a number higher than 1, and less than ${guilds[msg.guild.id].queue.length}`
+	}});
+
+	if (guilds[msg.guild.id].queue[args[0]].req !== msg.author.id && permissions.isAdmin(msg.member.id, msg.guild.id, db))
+		return msg.channel.createMessage({ embed: {
+			color: 0x1E90FF,
+			title: "You can't unqueue that."
+		}});
+
 	msg.channel.createMessage({ embed: {
 		color: 0x1E90FF,
-		title: "This command is in development",
-		description: ":eyes:"
-	}})
-	/*
-	let guild = guilds[msg.guild.id]
-	if (guild.audio.queue.length <= 1) return msg.channel.sendEmbed(new Discord.RichEmbed().setColor("#1e90ff").setDescription("The queue is empty."));
-	let uqargs = parseInt(args[0])
-	if (isNaN(uqargs) || uqargs < 1 || uqargs > guild.audio.queue.length - 1) return msg.channel.sendMessage("Invalid position specified.")
-	if (guild.audio.queue[uqargs].user.id === msg.author.id || settings.ownerID === msg.author.id || guild.general.admins.includes(msg.author.id) || msg.author.id === msg.guild.owner.user.id) {
-		guild.audio.queue.splice(uqargs, 1)
-		msg.channel.sendEmbed(new Discord.RichEmbed().setColor("#1e90ff").setDescription("Song unqueued."));
-	} else {
-		msg.channel.sendEmbed(new Discord.RichEmbed().setColor("#1e90ff").setDescription("You can't unqueue that."));
-	}
-	*/
-}
+		title: `Unqueued ${guilds[msg.guild.id].queue[args[0]].title}`
+	}});
+
+	guilds[msg.guild.id].queue.splice(args[0], 1);
+};
 
 exports.usage = {
 	main: "{prefix}{command}",

@@ -1,12 +1,9 @@
-const permissions = require("../../util/Permissions.js");
+exports.run = function (client, msg, args, guilds, db) {
 
-exports.run = function (client, msg, args, guilds) {
-	if (!permissions.isAdmin(msg.member, msg.guild.id)) return msg.channel.createMessage({
-		embed: {
-			color: 0x1E90FF,
-			title: "Insufficient Permissions",
-		}
-	})
+	if (!permissions.isAdmin(msg.member, msg.guild.id, db)) return msg.channel.createMessage({ embed: {
+		color: 0x1E90FF,
+		title: "Insufficient Permissions",
+	}});
 
 	let guild = guilds[msg.guild.id];
 
@@ -18,7 +15,7 @@ exports.run = function (client, msg, args, guilds) {
 		color: 0x1E90FF,
 		title: "Repeat Toggled",
 		description: `Repeating ${guild.repeat}`
-	}})
+	}});
 
 }
 

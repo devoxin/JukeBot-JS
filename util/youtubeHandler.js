@@ -18,11 +18,11 @@ module.exports = {
 		return results.body.items;
 	},
 
-	async getPlaylist(id, page = "", videos = []) {
+	async getPlaylist(id, limit, page = "", videos = []) {
 
 		let req = await superagent.get('https://www.googleapis.com/youtube/v3/playlistItems').query({
-			maxResults    : '50',
-			part          : 'snippet',
+			maxResults    : "50",
+			part          : "snippet",
 			nextPageToken : null,
 			pageToken     : page,
 			playlistId    : id,
@@ -39,9 +39,9 @@ module.exports = {
 			videos.push({ id: video.snippet.resourceId.videoId, title: video.snippet.title });
 		}
 
-		if (videos.length >= 50) return videos;
+		if (videos.length >= limit) return videos.slice(0, limit);
 
-		if (req.body.nextPageToken) return await module.exports.getPlaylist(id, req.body.nextPageToken, videos);
+		if (req.body.nextPageToken) return await module.exports.getPlaylist(id, limit, req.body.nextPageToken, videos);
 		return videos;
 
 	},

@@ -1,8 +1,15 @@
 exports.run = async function(client, msg, args, guilds) {
-	if (parseInt(args[0]) && args[0] === 0) return msg.channel.createMessage({ embed: {
+
+	if (guilds[msg.guild.id].queue.length <= 1) return msg.channel.createMessage({ embed: {
+		color: 0x1E90FF,
+		title: "The queue is empty."
+	}});
+
+	if (!parseInt(args[0]) || args[0] === 0) return msg.channel.createMessage({ embed: {
 		color: 0x1E90FF,
 		title: "You need to specify a number between 1 and 100"
-	}})
+	}});
+
 	let queue = guilds[msg.guild.id].queue.slice(1);
 
 	let remove = parseInt(args[0]) ? parseInt(args[0]) : 1

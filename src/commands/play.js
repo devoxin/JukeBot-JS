@@ -6,14 +6,14 @@ const messageCollector = require("../../util/messageCollector.js");
 const ytrx = new RegExp("(?:youtube\\.com.*(?:\\?|&)(?:v|list)=|youtube\\.com.*embed\\/|youtube\\.com.*v\\/|youtu\\.be\\/)((?!videoseries)[a-zA-Z0-9_-]*)");
 const scrx = new RegExp("((https:\/\/)|(http:\/\/)|(www.)|(s))+(soundcloud.com\/)+[a-zA-Z0-9-.]+(\/)+[a-zA-Z0-9-.]+");
 
-exports.run = async function (client, msg, args, guilds) {
+exports.run = async function (client, msg, args, guilds, db) {
 	if (!args[0]) return msg.channel.createMessage({ embed: {
 		color: 0x1E90FF,
 		title: "You need to specify something",
 		description: "YouTube: Search Term, URL or Playlist URL\nSoundCloud: URL"
 	}});
 
-	let guild = guilds[msg.guild.id]
+	let guild = guilds[msg.guild.id];
 
 	if (!client.voiceConnections.get(msg.guild.id)) {
 		if (!msg.member.voiceState.channelID)
@@ -26,7 +26,8 @@ exports.run = async function (client, msg, args, guilds) {
 			!msg.guild.channels.get(msg.member.voiceState.channelID).permissionsOf(client.user.id).has("voiceSpeak"))
 			return msg.channel.createMessage({ embed: {
 				color: 0x1E90FF,
-				title: ":warning: Permissions 'Connect' or 'Speak' are missing.",
+				title: "Unable to Connect",
+				description: "This channel doesn't allow me to connect/speak."
 			}});
 
 
@@ -34,7 +35,7 @@ exports.run = async function (client, msg, args, guilds) {
 		.catch(e => {
 			msg.channel.createMessage({ embed: {
 				color: 0x1E90FF,
-				title: "Failed to join voicechannel",
+				title: "Unable to Connect",
 				description: e.message
 			}});
 		});
@@ -48,14 +49,14 @@ exports.run = async function (client, msg, args, guilds) {
 			title: "Join my voicechannel to queue.",
 		}});
 
-	if (guild.queue.length >= 20) return msg.channel.createMessage({ embed: {
+	if (guild.queue.length >= 20 && !permissions.isDonator(msg.guild.ownerID)) return msg.channel.createMessage({ embed: {
 		color: 0x1E90FF,
 		title: "Queue Limit Reached",
 		description: "You've hit the server queue limit. Wait for the queue to deplete before queueing more songs."
 	}})
 
-	let ytrxm = args.join(" ").replace(/<|>/g, "").match(ytrx)
-	let scrxm = args.join(" ").replace(/<|>/g, "").match(scrx)
+	const ytrxm = args.join(" ").replace(/<|>/g, "").match(ytrx)
+	const scrxm = args.join(" ").replace(/<|>/g, "").match(scrx)
 
 	if ((ytrxm && ytrxm[1]) || (!scrxm || !scrxm[1])) {
 
@@ -67,7 +68,7 @@ exports.run = async function (client, msg, args, guilds) {
 					color: 0x1E90FF,
 					title: "Importing..."
 				}})
-				let res = await ytutil.getPlaylist(ytrxm[1]);
+				let res = await ytutil.getPlaylist(ytrxm[1], (permissions.isDonator(msg.member.id) ? "75" : "20"));
 				if (res.length === 0) {
 					if (client.voiceConnections.get(msg.guild.id).channelID && guild.queue.length === 0) client.leaveVoiceChannel(client.voiceConnections.get(msg.guild.id).channelID);
 					return m.edit({ embed: {
@@ -114,21 +115,19 @@ exports.run = async function (client, msg, args, guilds) {
 				}});
 			}
 
-			let src = await client.createMessage(msg.channel.id, {
-				embed: {
-					color: 0x1E90FF,
-					title: "Select Song",
-					description: res.map((v, i) => `**${i + 1}.** ${v.snippet.title}`).join("\n"),
-					footer: {
-						text: "1, 2 or 3 || c to cancel selection"
-					}
+			let src = await msg.channel.createMessage({embed: {
+				color: 0x1E90FF,
+				title: "Select Song",
+				description: res.map((v, i) => `**${i + 1}.** ${v.snippet.title}`).join("\n"),
+				footer: {
+					text: "1, 2 or 3 || c to cancel selection"
 				}
-			})
+			}});
 
 			const collector = await messageCollector.awaitMessages(
 				client,
 				msg.channel,
-				(m => m.author.id === msg.author.id && ((parseInt(m.content) && m.content >= 1 && m.content <= res.length) || m.content.toLowerCase().startsWith(guild.prefix + "p") || m.content === "c")),
+				(m => m.author.id === msg.author.id && ((parseInt(m.content) && m.content >= 1 && m.content <= res.length) || m.content.toLowerCase().startsWith(db.prefix + "p") || m.content === "c")),
 				{
 					maxMatches: 1,
 					time      : 10000
@@ -145,7 +144,7 @@ exports.run = async function (client, msg, args, guilds) {
 			if (collector[0].content === "c" && client.voiceConnections.get(msg.guild.id).channelID && guild.queue.length === 0)
 				client.leaveVoiceChannel(client.voiceConnections.get(msg.guild.id).channelID);
 
-			if (collector[0].content.toLowerCase().startsWith(guild.prefix + "p") || collector[0].content === "c")
+			if (collector[0].content.toLowerCase().startsWith(db.prefix + "p") || collector[0].content === "c")
 				return src.delete();
 
 			guild.queue.push({ id: res[collector[0].content - 1].id.videoId, title: res[collector[0].content - 1].snippet.title, req: msg.author.id, src: "youtube" });

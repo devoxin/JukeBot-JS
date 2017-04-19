@@ -1,6 +1,6 @@
 const fs = require("fs");
 
-exports.run = async function (client, msg, args, guilds) {
+exports.run = async function (client, msg, args, guilds, db) {
 
 	let commands = await fs.readdirSync("./commands/");
 	let aliases  = require(`../aliases.json`);
@@ -16,7 +16,7 @@ exports.run = async function (client, msg, args, guilds) {
 				{ name: "Aliases", value: `\`\`\`\n${aliases}\n\`\`\``, inline: true },
 				{ name: "Support", value: "Need help with JukeBot? [Join Here!](https://discord.gg/xvtH2Yn)\n\n" +
 										  "**Getting Started**\n1. Join a voicechannel\n2. $play <YouTube URL/Query | Soundcloud URL>\n3. If prompted, select a song (1-3)\n\n" +
-										  `**Current Prefix**\n${guilds[msg.guild.id].prefix}`, inline: true }
+										  `**Current Prefix**\n${db.prefix}`, inline: true }
 			]
 		}
 	})

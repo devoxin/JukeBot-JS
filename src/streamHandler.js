@@ -12,7 +12,7 @@ exports.play = async function play(guild, client) {
 	let song = guild.queue[0];
 
 	if (song.src === "youtube") {
-		/*
+
 		let vinf = await ytutil.getFormats(song.id);
 		if (!vinf.streamable) {
 			if (client.getChannel(guild.msgc) && client.getChannel(guild.msgc).permissionsOf(client.user.id).has("sendMessages"))
@@ -23,20 +23,18 @@ exports.play = async function play(guild, client) {
 				}});
 			return queueCheck(guild, client)
 		}
-		*/
 
 		song.duration = await ytutil.getDuration(song.id);
 
-		client.voiceConnections.get(guild.id).play(yt(song.id));
+		client.voiceConnections.get(guild.id).play(rs(vinf.url));
 
 		song.started = Date.now();
 
-		if (client.getChannel(guild.msgc) && client.getChannel(guild.msgc).permissionsOf(client.user.id).has("sendMessages"))
-			client.getChannel(guild.msgc).createMessage({embed: {
-				color: 0x1E90FF,
-				title: "Now Playing",
-				description: `[${song.title}](https://youtu.be/${song.id})`
-			}});
+		client.getChannel(guild.msgc).createMessage({embed: {
+			color: 0x1E90FF,
+			title: "Now Playing",
+			description: `[${song.title}](https://youtu.be/${song.id})`
+		}}).catch(err => {});
 
 		client.voiceConnections.get(guild.id).once("end", () => {
 			queueCheck(guild, client, song);
@@ -44,12 +42,11 @@ exports.play = async function play(guild, client) {
 
 	} else if (song.src === "soundcloud") {
 
-		if (client.getChannel(guild.msgc) && client.getChannel(guild.msgc).permissionsOf(client.user.id).has("sendMessages"))
-			client.getChannel(guild.msgc).createMessage({embed: {
-				color: 0x1E90FF,
-				title: "Now Playing",
-				description: song.title
-			}});
+		client.getChannel(guild.msgc).createMessage({embed: {
+			color: 0x1E90FF,
+			title: "Now Playing",
+			description: song.title
+		}}).catch(err => {});
 		client.voiceConnections.get(guild.id).play(song.id);
 		client.voiceConnections.get(guild.id).once("end", () => {
 			queueCheck(guild, client, song);
@@ -68,14 +65,12 @@ function queueCheck(guild, client, song) {
 	if (guild.repeat === "None" || guild.repeat === "All") guild.queue.shift();
 	guild.svotes = [];
 	if (guild.queue.length > 0) return exports.play(guild, client);
-	if (client.getChannel(guild.msgc) && client.getChannel(guild.msgc).permissionsOf(client.user.id).has("sendMessages"))
-		client.getChannel(guild.msgc).createMessage({embed: {
-			color: 0x1E90FF,
-			title: "Queue concluded!",
-			fields: [
-				{ name: "\u200B", value: "[Enjoying the music? Help keep JukeBot alive!](https://patreon.com/crimsonxv)", inline: true }
-			]
-		}});
-	delete guild.timeout;
+	client.getChannel(guild.msgc).createMessage({embed: {
+		color: 0x1E90FF,
+		title: "Queue concluded!",
+		fields: [
+			{ name: "\u200B", value: "[Enjoying the music? Help keep JukeBot alive!](https://patreon.com/crimsonxv)", inline: true }
+		]
+	}}).catch(err => {});
 	if (client.voiceConnections.get(guild.id) && client.voiceConnections.get(guild.id).channelID) client.leaveVoiceChannel(guild.id);
 }

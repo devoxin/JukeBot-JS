@@ -2,9 +2,15 @@ const superagent = require("superagent");
 const bash       = require("child_process");
 
 exports.run = async function(client, msg, args) {
-	if (msg.author.id !== "180093157554388993") return false;
+	if (msg.author.id !== "180093157554388993") return msg.channel.createMessage({ embed: {
+		color: 0x1E90FF,
+		title: ":warning: Restricted Command",
+		description: "This command is locked to the developer only."
+	}});
+
 	if (!args[0]) return msg.channel.createMessage("No arguments passed");
-	let m = await msg.channel.createMessage("❯_ " + args.join(" "))
+
+	let m = await msg.channel.createMessage("❯_ " + args.join(" "));
 	bash.exec(`${args.join(" ")}`, async (e, stdout, stderr) => {
 		if (e) return m.edit(`\`\`\`js\n${e.message}\n\`\`\``);
 		if (stdout.length > 2000 || stderr.length > 2000) {
@@ -19,7 +25,7 @@ exports.run = async function(client, msg, args) {
 			if (!stdout && !stderr) return m.addReaction("\u2611")
 			stdout && msg.channel.createMessage("**Info**\n" + (stdout !== "" ? "```js\n" + stdout + "```" : "No information."));
 			stderr && msg.channel.createMessage("**Errors**\n" + (stderr !== "" ? "```js\n" + stderr + "```" : "No errors."));
-		}
+		};
 	});
 }
 

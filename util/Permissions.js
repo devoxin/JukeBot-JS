@@ -9,21 +9,16 @@ module.exports = {
 		else return false;
 	},
 
-	isAdmin(member, guild) {
-		let db = require(`../src/data/${guild}.json`);
-		delete require.cache[require.resolve(`../src/data/${guild}.json`)];
-
+	isAdmin(member, guild, db) {
 		if (db.admins.includes(member.id) || owners.includes(member.id) || member.guild.ownerID === member.id) return true;
 		else return false;
 	},
 
-	isBlocked(member, guild) {
-		let db = require(`../src/data/${guild}.json`).blocked;
+	isBlocked(member, guild, db) {
 		let hdb = require(`../src/config.json`).hardblock;
-		delete require.cache[require.resolve(`../src/data/${guild}.json`)];
 		delete require.cache[require.resolve(`../src/config.json`)];
 
-		if (db.includes(member) || hdb.includes(member)) return true;
+		if ((db.blocked.includes(member) || hdb.includes(member)) && !owners.includes(member) && guild.ownerID !== member) return true;
 		else return false;
 	},
 
