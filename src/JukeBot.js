@@ -15,7 +15,7 @@ client.on("ready", () => {
 })
 
 client.on("guildCreate", g => {
-	if (g.members.filter(m => m.bot).size / g.members.size >= 70) return g.leave();
+	if (g.members.filter(m => m.bot).size / g.members.size >= 0.7) return g.leave();
 	g.defaultChannel.createMessage("Hey there, I'm JukeBot! You can view my commands with `$help`. Please report any issues to CrimsonXV#0387!")
 	init(g.id);
 })
