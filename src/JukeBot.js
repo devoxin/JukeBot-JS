@@ -46,7 +46,7 @@ client.on("messageCreate", async msg => {
 			title: `Use ${db.prefix}help for commands`
 		}});
 
-	if (!msg.content.startsWith(db.prefix)) return;
+	if (!msg.content.startsWith(db.prefix) || !msg.channel.permissionsOf(client.user.id).has("sendMessages")) return;
 
 	msg.guild = msg.channel.guild;
 	let command = msg.content.substring(db.prefix.length).toLowerCase().split(" ")[0];
