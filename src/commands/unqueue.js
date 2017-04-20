@@ -10,7 +10,7 @@ exports.run = function(client, msg, args, guilds, db) {
 		title: `You need to specify a number higher than 1, and less than ${guilds[msg.guild.id].queue.length}`
 	}});
 
-	if (guilds[msg.guild.id].queue[args[0]].req !== msg.author.id && permissions.isAdmin(msg.member.id, msg.guild.id, db))
+	if (guilds[msg.guild.id].queue[Math.round(args[0])].req !== msg.author.id && permissions.isAdmin(msg.member.id, msg.guild.id, db))
 		return msg.channel.createMessage({ embed: {
 			color: 0x1E90FF,
 			title: "You can't unqueue that."
