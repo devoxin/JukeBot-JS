@@ -35,7 +35,7 @@ client.on("guildDelete", g => {
 })
 
 client.on("messageCreate", async msg => {
-	if (msg.channel.type === 'dm' || msg.author.bot || !guilds[msg.channel.guild.id]) return;
+	if (msg.channel.type === 1 || msg.author.bot || !guilds[msg.channel.guild.id]) return;
 
 	let db = await rethonk.db("data").table("guilds").get(msg.channel.guild.id).run();
 	if (!db || permissions.isBlocked(msg.member.id, msg.channel.guild, db)) return;
