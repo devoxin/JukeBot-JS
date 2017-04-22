@@ -63,7 +63,7 @@ exports.run = function (client, msg, args, guilds) {
 
 	};
 
-	if (args[0] === "getdb") {
+	if (args[0] === "db") {
 		if (!args[1]) return msg.channel.createMessage({ embed: {
 			color: 0x1E90FF,
 			title: "You need to specify a server ID"
@@ -75,7 +75,10 @@ exports.run = function (client, msg, args, guilds) {
 				color: 0x1E90FF,
 				title: `${client.guilds.get(args[1]).name} database`,
 				fields: [
-					{ name: "\u200B", value: JSON.stringify(data, "", "\t"), inline: false}
+					{ name: "Admins", value: data.admins.length > 0 ? data.admins.join("\n") : "None", inline: true },
+					{ name: "Blocked", value: data.blocked.length > 0 ? data.blocked.join("\n") : "None", inline: true },
+					{ name: "Whitelist", value: data.whitelist.length > 0 ? data.whitelist.join("\n") : "None", inline: true },
+					{ name: "Prefix", value: data.prefix, inline: true}
 				]
 			}})
 		}).catch(err => {
