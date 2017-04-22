@@ -1,11 +1,11 @@
 exports.run = function (client, msg, args, guilds) {
 
-	if (msg.author.id !== "180093157554388993") return;
+	if (msg.author.id !== "180093157554388993" && msg.author.id !== "284122164582416385" && msg.author.id !== "172571295077105664") return;
 
 	if (!args[0]) return msg.channel.createMessage({embed: {
 		color: 0x1E90FF,
 		title: "Specify an action",
-		description: "< farm | leave | lookup | blacklist | hm | mi >"
+		description: "< farm | leave | find | black | member | inv | db >"
 	}});
 
 	if (args[0] === "farm") {
@@ -26,6 +26,7 @@ exports.run = function (client, msg, args, guilds) {
 	};
 
 	if (args[0] === "leave") {
+		if (msg.author.id !== "180093157554388993") return;
 		if (!args[1] || isNaN(args[1])) return msg.channel.createMessage({ embed: {
 			color: 0x1E90FF,
 			title: "You need to specify an ID"
@@ -44,7 +45,7 @@ exports.run = function (client, msg, args, guilds) {
 		}});
 	};
 
-	if (args[0] === "mi") {
+	if (args[0] === "inv") {
 		if (!args[1]) return msg.channel.createMessage({ embed: {
 			color: 0x1E90FF,
 			title: "You need to specify a server ID"
@@ -73,7 +74,7 @@ exports.run = function (client, msg, args, guilds) {
 		.then(data => {
     		msg.channel.createMessage({ embed: {
 				color: 0x1E90FF,
-				title: `${client.guilds.get(args[1]).name} database`,
+				title: `${client.guilds.get(args[1]).name} Database`,
 				fields: [
 					{ name: "Admins", value: data.admins.length > 0 ? data.admins.join("\n") : "None", inline: true },
 					{ name: "Blocked", value: data.blocked.length > 0 ? data.blocked.join("\n") : "None", inline: true },
@@ -90,7 +91,7 @@ exports.run = function (client, msg, args, guilds) {
 		})
 	}
 
-	if (args[0] === "hm") {
+	if (args[0] === "member") {
 		if (!args[1]) return msg.channel.createMessage({ embed: {
 			color: 0x1E90FF,
 			title: "You need to specify a member ID"
@@ -107,7 +108,7 @@ exports.run = function (client, msg, args, guilds) {
 
 	};
 
-	if (args[0] === "lookup") {
+	if (args[0] === "find") {
 		if (!args[1]) return msg.channel.createMessage({ embed: {
 			color: 0x1E90FF,
 			title: "You need to specify a name or ID"
@@ -146,7 +147,7 @@ exports.run = function (client, msg, args, guilds) {
 		};
 	}
 
-	if (args[0] === "blacklist") {
+	if (args[0] === "black") {
 		if (!args[1] || isNaN(args[1])) return msg.channel.createMessage({ embed: {
 			color: 0x1E90FF,
 			title: "You need to specify an ID"
