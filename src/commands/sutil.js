@@ -63,6 +63,30 @@ exports.run = function (client, msg, args, guilds) {
 
 	};
 
+	if (args[0] === "getdb") {
+		if (!args[1]) return msg.channel.createMessage({ embed: {
+			color: 0x1E90FF,
+			title: "You need to specify a server ID"
+		}});
+
+		rethonk.db("data").table("guilds").get(args[1]).run()
+		.then(data => {
+    		msg.channel.createMessage({ embed: {
+				color: 0x1E90FF,
+				title: `${client.guilds.get(args[1]).name} database`,
+				fields: [
+					{ name: "\u200B", value: JSON.stringify(data, "", "\t"), inline: false}
+				]
+			}})
+		}).catch(err => {
+			msg.channel.createMessage({ embed: {
+				color: 0x1E90FF,
+				title: "RethinkDB Error",
+				description: err.message
+			}})
+		})
+	}
+
 	if (args[0] === "hm") {
 		if (!args[1]) return msg.channel.createMessage({ embed: {
 			color: 0x1E90FF,
