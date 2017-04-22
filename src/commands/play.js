@@ -55,8 +55,8 @@ exports.run = async function (client, msg, args, guilds, db) {
 		description: "You've hit the server queue limit. Wait for the queue to deplete before queueing more songs."
 	}})
 
-	const ytrxm = args.join(" ").replace(/<|>/g, "").match(ytrx)
-	const scrxm = args.join(" ").replace(/<|>/g, "").match(scrx)
+	let ytrxm = args.join(" ").replace(/<|>/g, "").match(ytrx)
+	let scrxm = args.join(" ").replace(/<|>/g, "").match(scrx)
 
 	if ((ytrxm && ytrxm[1]) || (!scrxm || !scrxm[1])) {
 
