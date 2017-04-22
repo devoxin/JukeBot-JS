@@ -5,6 +5,7 @@ const Eris        = require("eris");
 const client      = new Eris(config.token);
 
 let guilds = {}
+cmdUsage = {}
 
 client.on("ready", async () => {
 	console.log(`[SYSTEM] Ready! (User: ${client.user.username})`);
@@ -57,13 +58,13 @@ client.on("messageCreate", async msg => {
 	let aliases = require("./aliases.json");
 	if (aliases[command]) command = aliases[command];
 
-	if (!client["cmdstats"]) client["cmdstats"] = 0;
-	client["cmdstats"]++;
+	if (!cmdUsage[command]) cmdUsage[command] = "0";
+	cmdUsage[command]++;
 	try {
 		delete require.cache[require.resolve(`./commands/${command}`)];
 		require(`./commands/${command}`).run(client, msg, args, guilds, db);
 	} catch(e) {
-		if (e.message.includes("Cannot find module")) return;
+		if (e.message.includes("Cannot find module") || e.message.includes("ENOENT")) return;
 		msg.channel.createMessage({ embed: {
 			color: 0x1E90FF,
 			title: `${command} failed`,
