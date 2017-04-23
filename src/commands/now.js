@@ -10,7 +10,7 @@ exports.run = function (client, msg, args, guilds) {
 
 	let guild   = guilds[msg.guild.id];
 
-	//let track   = guild.queue[0];
+	let track   = guild.queue[0];
 	//let finish  = track.started ? track.started + (track.duration * 1000) + 2000 : undefined;
 	//let time    = finish ? Date.now() - track.started : undefined;
 
