@@ -34,7 +34,7 @@ exports.play = async function play(guild, client) {
 				return exports.play(guild, client);
 			if (client.getChannel(guild.msgc)) client.getChannel(guild.msgc).createMessage({embed: {
 				color: 0x1E90FF,
-				title: "Queue concluded!"
+				title: "Queue concluded!",
 				description: "[Enjoying the music? Help keep JukeBot alive!](https://patreon.com/crimsonxv)",
 				footer: {
 					text: "Becoming a patron will also bag you some nice benefits too!"
