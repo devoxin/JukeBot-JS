@@ -5,6 +5,7 @@ const ytk        = require("../src/config.json").youtube;
 module.exports = {
 
 	async search(query) {
+
 		let results = await superagent.get("https://www.googleapis.com/youtube/v3/search").query({
 			part       : "snippet",
 			maxResults : "3",
@@ -16,6 +17,7 @@ module.exports = {
 		})
 
 		return results.body.items;
+		
 	},
 
 	async getPlaylist(id, limit, page = "", videos = []) {
