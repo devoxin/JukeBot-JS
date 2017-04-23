@@ -14,7 +14,7 @@ exports.play = async function play(guild, client) {
 			title: "Queue concluded!",
 			description: "[Enjoying the music? Help keep JukeBot alive!](https://patreon.com/crimsonxv)",
 			footer: {
-				text: "Becoming a patron will also bag you some nice benefits too!"
+				text: "Becoming a patron will also bag you some nice benefits!"
 			}
 		}});
 		if (client.voiceConnections.get(guild.id) && client.voiceConnections.get(guild.id).channelID) client.leaveVoiceChannel(guild.id);
