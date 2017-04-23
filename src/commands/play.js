@@ -178,6 +178,7 @@ exports.run = async function (client, msg, args, guilds, db) {
 		sthandle.play(guild, client);
 
 	}
+
 }
 
 exports.usage = {

@@ -20,15 +20,15 @@ exports.run = function (client, msg, args, guilds) {
 	let startQueue = ((page - 1) * 10) + 1;
 	let endQueue   = startQueue + 10 > guild.queue.length ? guild.queue.length : startQueue + 10;
 
-	let track   = guild.queue[0];
-	let finish  = track.started ? track.started + (track.duration * 1000) + 2000 : undefined;
-	let time    = finish ? Date.now() - track.started : undefined;
+	//let track   = guild.queue[0];
+	//let finish  = track.started ? track.started + (track.duration * 1000) + 2000 : undefined;
+	//let time    = finish ? Date.now() - track.started : undefined;
 
 	let embed = {
 		color       : 0x1E90FF,
 		title       : track.title,
 		url         : track.src !== "soundcloud" ? `https://youtu.be/${track.id}` : undefined,
-		description : track.src !== "soundcloud" ? `${timeParser.formatSeconds(time / 1000)}/${timeParser.formatSeconds(track.duration)}` : undefined,
+		//description : track.src !== "soundcloud" ? `${timeParser.formatSeconds(time / 1000)}/${timeParser.formatSeconds(track.duration)}` : undefined,
 		fields: [
 			{
 				name: "Queue",
@@ -39,7 +39,7 @@ exports.run = function (client, msg, args, guilds) {
 			text: `Page ${page}/${maxPage}`
 		}
 	};
-	
+
 	msg.channel.createMessage({ embed: embed }).catch(e => {});
 
 }
