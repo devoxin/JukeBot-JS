@@ -23,7 +23,7 @@ exports.play = async function play(guild, client) {
 
 	let song;
 
-	if (guild.queue[0].src === "youtube")
+	if (guild.queue[0].src === "youtube") {
 		let duration = await ytutil.getDuration(guild.queue[0].id);
 		if (duration > 3600) {
 			if ((duration > 3600 && !permissions.isDonator(guild.queue[0].req)) || (duration > 7200 && permissions.isDonator(guild.queue[0].req))) {

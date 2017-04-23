@@ -16,15 +16,20 @@ client.on("ready", async () => {
 		await rethonk.dbCreate("data").run();
 		await rethonk.db("data").tableCreate("guilds");
 	}
+	let success = 0,
+		failed  = 0;
 	client.guilds.map(async g => {
 		guilds[g.id] = { id: g.id, msgc: "", queue: [], svotes: [],	repeat: "None" };
 		if (!await rethonk.db("data").table("guilds").get(g.id).run())
 			rethonk.db("data").table("guilds").insert({ id: g.id, prefix: config.prefix, whitelist: [], blocked: [], admins: [] }).run().then(() => {
-				console.log("RethinkDB: Added " + g.id)
+				console.log("RethinkDB: Added " + g.id);
+				success++;
 			}).catch(err => {
-				console.log("RethinkDB Error: " + g.id + "\n" + err.message)
+				console.log("RethinkDB Error: " + g.id + "\n" + err.message);
+				failed++;
 			});
 	});
+	console.log("Added: " + success + "\nFailed: " + failed);
 });
 
 client.on("guildCreate", g => {
