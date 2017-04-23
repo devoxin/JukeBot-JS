@@ -17,7 +17,7 @@ module.exports = {
 		})
 
 		return results.body.items;
-		
+
 	},
 
 	async getPlaylist(id, limit, page = "", videos = []) {
@@ -66,22 +66,22 @@ module.exports = {
 		let sinfo = await yt.getInfo(id).catch(err => { return { streamable: false } });
 
 		if (!sinfo || !sinfo.formats)
-			return { streamable: false };
+			return { url: "" }
 
 		for (let i = 0; i < sinfo.formats.length; i++) {
 
 			if(sinfo.formats[i].itag === "249" || sinfo.formats[i].itag === "250" || sinfo.formats[i].itag === "251")
-				return { streamable: true, url: sinfo.formats[i].url, opus: true };
+				return { url: sinfo.formats[i].url };
 
 			if(sinfo.formats[i].audioEncoding && (sinfo.formats[i].container === "webm" || sinfo.formats[i].container === "mp4"))
-				return { streamable: true, url: sinfo.formats[i].url, opus: false };
+				return { url: sinfo.formats[i].url };
 
 			if(sinfo.formats[i].audioEncoding)
-				return { streamable: true, url: sinfo.formats[i].url, opus: false };
+				return { url: sinfo.formats[i].url };
 
 		}
 
-		return { streamable: false };
+		return { url: "" };
 
 	},
 
