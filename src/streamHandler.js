@@ -23,7 +23,16 @@ exports.play = async function play(guild, client) {
 					title: "This song exceeds the duration limit"
 				}});
 				guild.queue.shift();
-				return exports.play(guild, client);
+				if (guild.queue.length > 0)
+					return exports.play(guild, client);
+				if (client.getChannel(guild.msgc)) client.getChannel(guild.msgc).createMessage({embed: {
+					color: 0x1E90FF,
+					title: "Queue concluded!",
+					description: "[Enjoying the music? Help keep JukeBot alive!](https://patreon.com/crimsonxv)",
+					footer: {
+						text: "Becoming a patron will also bag you some nice benefits too!"
+					}
+				}});
 			}
 		}
 		//song.started = Date.now();
