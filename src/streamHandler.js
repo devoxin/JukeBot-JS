@@ -20,7 +20,7 @@ exports.play = async function play(guild, client) {
 					color: 0x1E90FF,
 					title: "Song Unplayable",
 					description: "No audio formats found."
-				}});
+				}}).catch(err => { console.log("Couldn't post to " + guild.msgc )});
 			return queueCheck(guild, client)
 		}
 
@@ -30,11 +30,11 @@ exports.play = async function play(guild, client) {
 
 		song.started = Date.now();
 
-		client.getChannel(guild.msgc).createMessage({embed: {
+		if (client.getChannel(guild.msgc)) client.getChannel(guild.msgc).createMessage({embed: {
 			color: 0x1E90FF,
 			title: "Now Playing",
 			description: `[${song.title}](https://youtu.be/${song.id})`
-		}}).catch(err => {});
+		}}).catch(err => { console.log("Couldn't post to " + guild.msgc )});
 
 		client.voiceConnections.get(guild.id).once("end", () => {
 			queueCheck(guild, client, song);
@@ -42,11 +42,11 @@ exports.play = async function play(guild, client) {
 
 	} else if (song.src === "soundcloud") {
 
-		client.getChannel(guild.msgc).createMessage({embed: {
+		if (client.getChannel(guild.msgc)) client.getChannel(guild.msgc).createMessage({embed: {
 			color: 0x1E90FF,
 			title: "Now Playing",
 			description: song.title
-		}}).catch(err => {});
+		}}).catch(err => { console.log("Couldn't post to " + guild.msgc )});
 		client.voiceConnections.get(guild.id).play(song.id);
 		client.voiceConnections.get(guild.id).once("end", () => {
 			queueCheck(guild, client, song);
@@ -65,12 +65,12 @@ function queueCheck(guild, client, song) {
 	if (guild.repeat === "None" || guild.repeat === "All") guild.queue.shift();
 	guild.svotes = [];
 	if (guild.queue.length > 0) return exports.play(guild, client);
-	client.getChannel(guild.msgc).createMessage({embed: {
+	if (client.getChannel(guild.msgc)) client.getChannel(guild.msgc).createMessage({embed: {
 		color: 0x1E90FF,
 		title: "Queue concluded!",
 		fields: [
 			{ name: "\u200B", value: "[Enjoying the music? Help keep JukeBot alive!](https://patreon.com/crimsonxv)", inline: true }
 		]
-	}}).catch(err => {});
+	}}).catch(err => { console.log("Couldn't post to " + guild.msgc )});
 	if (client.voiceConnections.get(guild.id) && client.voiceConnections.get(guild.id).channelID) client.leaveVoiceChannel(guild.id);
 }
