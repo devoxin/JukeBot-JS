@@ -41,7 +41,7 @@ exports.run = function (client, msg, args, guilds) {
 
 		msg.channel.createMessage({ embed: {
 			color: 0x1E90FF,
-			description: "<:oktrump:284357092859707392>"
+			description: "Success."
 		}});
 	};
 
