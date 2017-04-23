@@ -14,10 +14,17 @@ exports.play = async function play(guild, client) {
 	if (guild.queue[0].src === "youtube")
 		yt(guild.queue[0].id, { filter: "audioonly" }).pipe(song);
 
-/*
-		song.duration = await ytutil.getDuration(song.id);
-		song.started = Date.now();
-*/
+
+		let duration = await ytutil.getDuration(guild.queue[0].id);
+		if (duration > 3600 && !permissions.isDonator(guild.queue[0].req)) {
+			if (client.getChannel(guild.msgc)) client.getChannel(guild.msgc).createMessage({ embed: {
+				color: 0x1E90FF,
+				title: "This song exceeds the duration limit"
+			}});
+			guild.queue.shift();
+			return exports.play(guild, client);
+		}
+		//song.started = Date.now();
 
 		client.voiceConnections.get(guild.id).play(song);
 
@@ -28,6 +35,7 @@ exports.play = async function play(guild, client) {
 		}}).catch(err => { console.log("Couldn't post to " + guild.msgc )});
 
 		client.voiceConnections.get(guild.id).once("end", () => {
+			song = undefined;
 			guild.queue.shift();
 			guild.svotes = [];
 			if (guild.queue.length > 0)
