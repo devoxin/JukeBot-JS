@@ -48,7 +48,7 @@ client.on("messageCreate", async msg => {
 
 	if (msg.channel.type === 1 || msg.author.bot || !guilds[msg.channel.guild.id]) return;
 
-	if (!await rethonk.db("data").table("guilds").get(g.id).run()))
+	if (!await rethonk.db("data").table("guilds").get(g.id).run())
 		rethonk.db("data").table("guilds").insert({ id: g.id, prefix: config.prefix, whitelist: [], blocked: [], admins: [] }).run();
 
 	let db = await rethonk.db("data").table("guilds").get(msg.channel.guild.id).run();
