@@ -17,7 +17,7 @@ exports.play = async function play(guild, client) {
 
 		let duration = await ytutil.getDuration(guild.queue[0].id);
 		if (duration > 3600) {
-			if ((duration > 3600 && !permissions.isDonator(msg.member.id)) || (duration > 7200 && permissions.isDonator(msg.member.id))) {
+			if ((duration > 3600 && !permissions.isDonator(guild.queue[0].req)) || (duration > 7200 && permissions.isDonator(guild.queue[0].req))) {
 				if (client.getChannel(guild.msgc)) client.getChannel(guild.msgc).createMessage({ embed: {
 					color: 0x1E90FF,
 					title: "This song exceeds the duration limit"
