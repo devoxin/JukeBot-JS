@@ -24,11 +24,17 @@ client.on("ready", async () => {
 });
 
 client.on("guildCreate", g => {
-	if (g.members.filter(m => m.bot).length / g.members.size >= 0.7) return g.leave();
+	if ((g.members.filter(m => m.bot).length / g.members.size) >= 0.68) return g.leave();
 	g.defaultChannel.createMessage("Hey there, I'm JukeBot! You can view my commands with `$help`. Please report any issues to CrimsonXV#0387!");
 
 	rethonk.db("data").table("guilds").insert({ id: g.id, prefix: config.prefix, whitelist: [], blocked: [], admins: [] }).run();
 	guilds[g.id] = { id: g.id, msgc: "", queue: [], svotes: [], repeat: "None" };
+
+	if (!config.botlists._clientid) return;
+	if (config.botlists.dbots)
+		superagent.post(`https://bots.discord.pw/api/bots/${config.botlists._clientid}/stats`).send({ "server_count": client.guilds.size }).set("Authorization", config.botlists.dbots).end();
+	if (config.botlists.dbl)
+		superagent.post(`https://discordbots.org/api/bots/${config.botlists._clientid}/stats`).send({ "server_count": client.guilds.size }).set("Authorization", config.botlists.dbl).end();
 })
 
 client.on("guildDelete", g => {
