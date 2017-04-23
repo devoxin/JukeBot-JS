@@ -44,12 +44,12 @@ client.on("guildDelete", g => {
 
 client.on("messageCreate", async msg => {
 	if (!guilds[msg.channel.guild.id])
-		guilds[g.id] = { id: g.id, msgc: "", queue: [], svotes: [],	repeat: "None" };
+		guilds[msg.channel.guild.id] = { id: msg.channel.guild.id, msgc: "", queue: [], svotes: [],	repeat: "None" };
 
 	if (msg.channel.type === 1 || msg.author.bot || !guilds[msg.channel.guild.id]) return;
 
-	if (!await rethonk.db("data").table("guilds").get(g.id).run())
-		rethonk.db("data").table("guilds").insert({ id: g.id, prefix: config.prefix, whitelist: [], blocked: [], admins: [] }).run();
+	if (!await rethonk.db("data").table("guilds").get(msg.channel.guild.id).run())
+		await rethonk.db("data").table("guilds").insert({ id: msg.channel.guild.id, prefix: config.prefix, whitelist: [], blocked: [], admins: [] }).run();
 
 	let db = await rethonk.db("data").table("guilds").get(msg.channel.guild.id).run();
 	if (!db || permissions.isBlocked(msg.member.id, msg.channel.guild, db)) return;
