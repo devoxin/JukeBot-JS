@@ -6,7 +6,6 @@ const Eris        = require("eris");
 const client      = new Eris(config.token);
 
 let guilds = {}
-cmdUsage = {}
 
 client.on("ready", async () => {
 	console.log(`[SYSTEM] Ready! (User: ${client.user.username})`);
@@ -16,20 +15,6 @@ client.on("ready", async () => {
 		await rethonk.dbCreate("data").run();
 		await rethonk.db("data").tableCreate("guilds");
 	}
-	let success = 0,
-		failed  = 0;
-	client.guilds.map(async g => {
-		guilds[g.id] = { id: g.id, msgc: "", queue: [], svotes: [],	repeat: "None" };
-		if (!await rethonk.db("data").table("guilds").get(g.id).run())
-			rethonk.db("data").table("guilds").insert({ id: g.id, prefix: config.prefix, whitelist: [], blocked: [], admins: [] }).run().then(() => {
-				success++;
-				console.log(`RethinkDB: Added ${g.id} (${success}|${failed})`);
-			}).catch(err => {
-				failed++;
-				console.log(`RethinkDB Error: ${g.id} (${success}|${failed})\n${err.message}`);
-			});
-	});
-	console.log("Added: " + success + "\nFailed: " + failed);
 });
 
 client.on("guildCreate", g => {
@@ -58,7 +43,13 @@ client.on("guildDelete", g => {
 })
 
 client.on("messageCreate", async msg => {
+	if (!guilds[msg.channel.guild.id])
+		guilds[g.id] = { id: g.id, msgc: "", queue: [], svotes: [],	repeat: "None" };
+
 	if (msg.channel.type === 1 || msg.author.bot || !guilds[msg.channel.guild.id]) return;
+
+	if (!await rethonk.db("data").table("guilds").get(g.id).run()))
+		rethonk.db("data").table("guilds").insert({ id: g.id, prefix: config.prefix, whitelist: [], blocked: [], admins: [] }).run();
 
 	let db = await rethonk.db("data").table("guilds").get(msg.channel.guild.id).run();
 	if (!db || permissions.isBlocked(msg.member.id, msg.channel.guild, db)) return;
@@ -80,8 +71,6 @@ client.on("messageCreate", async msg => {
 	let aliases = require("./aliases.json");
 	if (aliases[command]) command = aliases[command];
 
-	if (!cmdUsage[command]) cmdUsage[command] = "0";
-	cmdUsage[command]++;
 	try {
 		delete require.cache[require.resolve(`./commands/${command}`)];
 		require(`./commands/${command}`).run(client, msg, args, guilds, db);
