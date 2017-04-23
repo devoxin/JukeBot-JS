@@ -35,11 +35,11 @@ client.on("guildDelete", g => {
 	rethonk.db("data").table("guilds").get(g.id).delete().run();
 	delete guilds[g.id];
 
-	if (!config.botlists.clientid) return;
+	if (!config.botlists._clientid) return;
 	if (config.botlists.dbots)
-		superagent.post(`https://bots.discord.pw/api/bots/${config.botlists.clientid}/stats`).send({ "server_count": client.guilds.size }).set("Authorization", config.botlists.dbots).end();
+		superagent.post(`https://bots.discord.pw/api/bots/${config.botlists._clientid}/stats`).send({ "server_count": client.guilds.size }).set("Authorization", config.botlists.dbots).end();
 	if (config.botlists.dbl)
-		superagent.post(`https://discordbots.org/api/bots/${config.botlists.clientid}/stats`).send({ "server_count": client.guilds.size }).set("Authorization", config.botlists.dbl).end();
+		superagent.post(`https://discordbots.org/api/bots/${config.botlists._clientid}/stats`).send({ "server_count": client.guilds.size }).set("Authorization", config.botlists.dbl).end();
 })
 
 client.on("messageCreate", async msg => {
