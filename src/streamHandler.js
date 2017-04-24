@@ -2,14 +2,11 @@ const ytutil = require("../util/youtubeHandler.js");
 const rs     = require("retry-stream");
 
 exports.play = async function play(guild, client) {
-	if (!client.guilds.get(guild.id)                  ||
-		!client.voiceConnections.get(guild.id)        ||
-		client.voiceConnections.get(guild.id).playing ||
-		client.voiceConnections.get(guild.id).paused
-	) return;
+	if (!client.guilds.get(guild.id) ||	!client.voiceConnections.get(guild.id) || client.voiceConnections.get(guild.id).playing || client.voiceConnections.get(guild.id).paused) return;
 
 	if (guild.queue.length === 0) {
-		if (client.getChannel(guild.msgc)) client.getChannel(guild.msgc).createMessage({ embed: {
+		if (client.voiceConnections.get(guild.id) && client.voiceConnections.get(guild.id).channelID) client.leaveVoiceChannel(guild.id);
+		return client.getChannel(guild.msgc).createMessage({ embed: {
 			color: 0x1E90FF,
 			title: "Queue concluded!",
 			description: "[Enjoying the music? Help keep JukeBot alive!](https://patreon.com/crimsonxv)",
@@ -17,8 +14,6 @@ exports.play = async function play(guild, client) {
 				text: "Becoming a patron will also bag you some nice benefits!"
 			}
 		}});
-		if (client.voiceConnections.get(guild.id) && client.voiceConnections.get(guild.id).channelID) client.leaveVoiceChannel(guild.id);
-		return;
 	}
 
 	let song;
@@ -27,23 +22,23 @@ exports.play = async function play(guild, client) {
 		let duration = await ytutil.getDuration(guild.queue[0].id);
 		if (duration > 3600) {
 			if ((duration > 3600 && !permissions.isDonator(guild.queue[0].req)) || (duration > 7200 && permissions.isDonator(guild.queue[0].req))) {
-				if (client.getChannel(guild.msgc)) client.getChannel(guild.msgc).createMessage({ embed: {
+				guild.queue.shift();
+				exports.play(guild, client);
+				client.getChannel(guild.msgc).createMessage({ embed: {
 					color: 0x1E90FF,
 					title: "This song exceeds the duration limit"
 				}});
-				guild.queue.shift();
-				exports.play(guild, client);
-			}
-		}
+			};
+		};
 
 		let res = await ytutil.getFormats(guild.queue[0].id);
 		if (!res.url) {
-			if (client.getChannel(guild.msgc)) client.getChannel(guild.msgc).createMessage({ embed: {
+			guild.queue.shift();
+			exports.play(guild, client);
+			client.getChannel(guild.msgc).createMessage({ embed: {
 				color: 0x1E90FF,
 				title: "This song is unplayable"
 			}});
-			guild.queue.shift();
-			exports.play(guild, client);
 		} else {
 			song = res.url;
 		}
@@ -52,7 +47,7 @@ exports.play = async function play(guild, client) {
 	}
 	//song.started = Date.now();
 
-	if (client.getChannel(guild.msgc)) client.getChannel(guild.msgc).createMessage({embed: {
+	client.getChannel(guild.msgc).createMessage({embed: {
 		color: 0x1E90FF,
 		title: "Now Playing",
 		description: `${guild.queue[0].title}` //(https://youtu.be/${guild.queue[0].id})`
