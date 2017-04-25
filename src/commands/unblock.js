@@ -1,6 +1,6 @@
-exports.run = function (client, msg, args, guilds, db) {
+exports.run = function (client, msg, args, db) {
 
-	if (!permissions.isAdmin(msg.member, msg.guild.id, db)) return msg.channel.createMessage({ embed: {
+	if (!permissions.isAdmin(msg.member, msg.channel.guild.id, db)) return msg.channel.createMessage({ embed: {
 		color: 0x1E90FF,
 		title: "Insufficient Permissions",
 	}});
@@ -12,7 +12,7 @@ exports.run = function (client, msg, args, guilds, db) {
 
 	let ids = msg.mentions.map(u => u.id);
 	
-	rethonk.db("data").table("guilds").update({ id: msg.guild.id, blocked: db.blocked.filter(id => !ids.includes(id)) }).run()
+	rethonk.db("data").table("guilds").update({ id: msg.channel.guild.id, blocked: db.blocked.filter(id => !ids.includes(id)) }).run()
 	.then(() => {
 		msg.channel.createMessage({	embed: {
 			color: 0x1E90FF,

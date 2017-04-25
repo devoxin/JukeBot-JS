@@ -1,6 +1,6 @@
-exports.run = function (client, msg, args, guilds, db) {
+exports.run = function (client, msg, args, db) {
 
-	if (!permissions.isAdmin(msg.member, msg.guild.id, db)) return msg.channel.createMessage({ embed: {
+	if (!permissions.isAdmin(msg.member, msg.channel.guild.id, db)) return msg.channel.createMessage({ embed: {
 		color: 0x1E90FF,
 		title: "Insufficient Permissions",
 	}});
@@ -10,8 +10,8 @@ exports.run = function (client, msg, args, guilds, db) {
 		title: "You need to be in a voicechannel."
 	}});
 
-	if (!msg.guild.channels.get(msg.member.voiceState.channelID).permissionsOf(client.user.id).has("voiceConnect") ||
-		!msg.guild.channels.get(msg.member.voiceState.channelID).permissionsOf(client.user.id).has("voiceSpeak"))
+	if (!msg.channel.guild.channels.get(msg.member.voiceState.channelID).permissionsOf(client.user.id).has("voiceConnect") ||
+		!msg.channel.guild.channels.get(msg.member.voiceState.channelID).permissionsOf(client.user.id).has("voiceSpeak"))
 		return msg.channel.createMessage({ embed: {
 			color: 0x1E90FF,
 			title: "Unable to Connect",

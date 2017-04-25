@@ -11,21 +11,21 @@ module.exports = {
 			client_id : sck
 		})
 		.catch(err => {
-			return undefined;
+			return [];
 		})
 
-		if (!req || !req.body || req.body.kind !== "track") return undefined;
+		if (!req || !req.body || req.body.kind !== "track") return [];
 
 		let stream = await superagent.get(`https://api.soundcloud.com/i1/tracks/${req.body.id}/streams`).query({
 			client_id : sck
 		})
 
-		if(!stream.body.http_mp3_128_url) return undefined;
+		if(!stream.body.http_mp3_128_url) return [];
 
-		return {
+		return [{
 			id    : stream.body.http_mp3_128_url,
 			title : req.body.user.username + " - " + req.body.title
-		}
+		}];
 		// duration : req.body.duration
 
 	}

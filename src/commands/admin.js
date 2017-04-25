@@ -1,6 +1,6 @@
-exports.run = function (client, msg, args, guilds, db) {
+exports.run = function (client, msg, args, db) {
 
-	if (!permissions.isAdmin(msg.member, msg.guild.id, db)) return msg.channel.createMessage({ embed: {
+	if (!permissions.isAdmin(msg.member, msg.channel.guild.id, db)) return msg.channel.createMessage({ embed: {
 		color: 0x1E90FF,
 		title: "Insufficient Permissions",
 	}});
@@ -10,7 +10,7 @@ exports.run = function (client, msg, args, guilds, db) {
 		title: "Specify a user"
 	}});
 
-	let usr = msg.guild.members.filter(u => u.username.toLowerCase().includes(args.join(" ").toLowerCase()));
+	let usr = msg.channel.guild.members.filter(u => u.username.toLowerCase().includes(args.join(" ").toLowerCase()));
 	if (usr.length === 0) return msg.channel.createMessage({ embed: {
 		color: 0x1E90FF,
 		title: "No users found matching the specified name"
@@ -19,7 +19,7 @@ exports.run = function (client, msg, args, guilds, db) {
 	if (db.admins.indexOf(usr[0].id) === -1 && !db.blocked.includes(usr[0].id))
 		db.admins.push(usr[0].id);
 
-	rethonk.db("data").table("guilds").update({ id: msg.guild.id, admins: db.admins }).run()
+	rethonk.db("data").table("guilds").update({ id: msg.channel.guild.id, admins: db.admins }).run()
 	.then(() => {
 		msg.channel.createMessage({	embed: {
 			color: 0x1E90FF,

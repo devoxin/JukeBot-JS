@@ -1,4 +1,4 @@
-exports.run = function (client, msg, args, guilds, db) {
+exports.run = function (client, msg, args, db) {
 
 	let page    = parseInt(args[0]) ? parseInt(args[0]) : 1
 	let maxPage = Math.ceil(db.blocked.length / 10)

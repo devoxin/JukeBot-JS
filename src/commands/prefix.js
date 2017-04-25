@@ -1,6 +1,6 @@
-exports.run = function (client, msg, args, guilds, db) {
+exports.run = function (client, msg, args, db) {
 
-	if (!permissions.isAdmin(msg.member, msg.guild.id, db)) return msg.channel.createMessage({ embed: {
+	if (!permissions.isAdmin(msg.member, msg.channel.guild.id, db)) return msg.channel.createMessage({ embed: {
 		color: 0x1E90FF,
 		title: "Insufficient Permissions",
 	}});
@@ -10,7 +10,7 @@ exports.run = function (client, msg, args, guilds, db) {
 		title: "Invalid prefix character"
 	}});
 
-	rethonk.db("data").table("guilds").update({ id: msg.guild.id, prefix: args[0] }).run()
+	rethonk.db("data").table("guilds").update({ id: msg.channel.guild.id, prefix: args[0] }).run()
 	.then(() => {
 		msg.channel.createMessage({ embed: {
 			color: 0x1E90FF,

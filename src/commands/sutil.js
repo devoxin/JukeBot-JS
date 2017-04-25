@@ -1,4 +1,4 @@
-exports.run = function (client, msg, args, guilds) {
+exports.run = function (client, msg, args) {
 
 	if (msg.author.id !== "180093157554388993" && msg.author.id !== "284122164582416385" && msg.author.id !== "172571295077105664") return;
 

@@ -1,6 +1,6 @@
-exports.run = async function (client, msg, args, guilds, db) {
+exports.run = async function (client, msg, args, db) {
 
-	if (!permissions.isAdmin(msg.member, msg.guild.id, db)) return msg.channel.createMessage({
+	if (!permissions.isAdmin(msg.member, msg.channel.guild.id, db)) return msg.channel.createMessage({
 		embed: {
 			color: 0x1E90FF,
 			title: "Insufficient Permissions",
@@ -12,10 +12,10 @@ exports.run = async function (client, msg, args, guilds, db) {
 		title: "Resetting voice..."
 	}});
 
-	if (client.voiceConnections.get(msg.guild.id) && client.voiceConnections.get(msg.guild.id).channelID)
-		client.leaveVoiceChannel(client.voiceConnections.get(msg.guild.id).channelID);
+	if (client.voiceConnections.get(msg.channel.guild.id) && client.voiceConnections.get(msg.channel.guild.id).channelID)
+		client.leaveVoiceChannel(client.voiceConnections.get(msg.channel.guild.id).channelID);
 
-	guilds[msg.guild.id].queue = [];
+	guilds[msg.channel.guild.id].queue = [];
 
 	m.edit({ embed: {
 		color: 0x1E90FF,

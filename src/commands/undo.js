@@ -1,6 +1,6 @@
-exports.run = async function(client, msg, args, guilds) {
+exports.run = async function(client, msg, args) {
 
-	if (guilds[msg.guild.id].queue.length <= 1) return msg.channel.createMessage({ embed: {
+	if (guilds[msg.channel.guild.id].queue.length <= 1) return msg.channel.createMessage({ embed: {
 		color: 0x1E90FF,
 		title: "The queue is empty."
 	}});
@@ -10,7 +10,7 @@ exports.run = async function(client, msg, args, guilds) {
 		title: "You need to specify a number between 1 and 100"
 	}});
 
-	let queue = guilds[msg.guild.id].queue.slice(1);
+	let queue = guilds[msg.channel.guild.id].queue.slice(1);
 
 	let remove = parseInt(args[0]) ? parseInt(args[0]) : 1
 	let removed = 0;
@@ -30,8 +30,8 @@ exports.run = async function(client, msg, args, guilds) {
 		}
 	}
 
-	queue.splice(0, 0, guilds[msg.guild.id].queue[0])
-	guilds[msg.guild.id].queue = queue;
+	queue.splice(0, 0, guilds[msg.channel.guild.id].queue[0])
+	guilds[msg.channel.guild.id].queue = queue;
 
 	m.edit({ embed: {
 		color: 0x1E90FF,

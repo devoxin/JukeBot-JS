@@ -1,15 +1,15 @@
 const timeParser = require("../../util/timeParser.js");
 
-exports.run = function (client, msg, args, guilds) {
+exports.run = function (client, msg, args) {
 
-	if (guilds[msg.guild.id].queue.length <= 1)
+	if (guilds[msg.channel.guild.id].queue.length <= 1)
 		return msg.channel.createMessage({ embed: {
 			color: 0x1E90FF,
 			title: "There's nothing queued"
 		}});
 
 
-	let guild = guilds[msg.guild.id];
+	let guild = guilds[msg.channel.guild.id];
 
 	let page = parseInt(args[0]) ? parseInt(args[0]) : 1;
 	let maxPage = Math.ceil(guild.queue.length / 10);

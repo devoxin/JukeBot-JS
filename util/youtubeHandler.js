@@ -58,7 +58,8 @@ module.exports = {
 			return [];
 		})
 
-		return result.body.items;
+		if (result.body.items.length === 0) return [];
+		return [{ id: result.body.items[0].id, title: result.body.items[0].snippet.title }];
 	},
 
 	async getFormats(id) {

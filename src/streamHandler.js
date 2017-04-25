@@ -22,7 +22,6 @@ exports.play = async function play(guild, client) {
 		let duration = await ytutil.getDuration(guild.queue[0].id);
 		if (duration > 3600) {
 			if ((duration > 3600 && !permissions.isDonator(guild.queue[0].req)) || (duration > 7200 && permissions.isDonator(guild.queue[0].req))) {
-				guild.queue.shift();
 				exports.play(guild, client);
 				client.getChannel(guild.msgc).createMessage({ embed: {
 					color: 0x1E90FF,
@@ -33,7 +32,6 @@ exports.play = async function play(guild, client) {
 
 		let res = await ytutil.getFormats(guild.queue[0].id);
 		if (!res.url) {
-			guild.queue.shift();
 			exports.play(guild, client);
 			client.getChannel(guild.msgc).createMessage({ embed: {
 				color: 0x1E90FF,
@@ -56,7 +54,8 @@ exports.play = async function play(guild, client) {
 	client.voiceConnections.get(guild.id).play(rs(song));
 
 	client.voiceConnections.get(guild.id).once("end", () => {
-		guild.queue.shift();
+		if (guild.repeat === "All") guild.queue.push(guild.queue[0]);
+		if (guild.repeat !== "Current") guild.queue.shift();
 		guild.svotes = [];
 		exports.play(guild, client);
 	});

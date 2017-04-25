@@ -2,7 +2,7 @@
 
 	"token"      : "",
 	"prefix"     : "",
-	"version"    : "",
+	"version"    : "5.1.6",
 	"owners"     : [],
 	"botlists"   : {
 		"_clientid" : "",

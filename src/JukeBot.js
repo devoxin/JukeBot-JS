@@ -1,11 +1,14 @@
-const config      = require("./config.json");
+config     		  = require("./config.json");
 permissions       = require("../util/Permissions.js");
 rethonk           = require("rethinkdbdash")();
 const superagent  = require("superagent");
 const Eris        = require("eris");
-const client      = new Eris(config.token);
+const client      = new Eris(config.token, {
+	disableEvents: ["CHANNEL_CREATE", "CHANNEL_DELETE", "CHANNEL_UPDATE", "GUILD_BAN_ADD", "GUILD_BAN_REMOVE", "GUILD_MEMBER_ADD", "GUILD_MEMBER_REMOVE", "GUILD_MEMBER_UPDATE", "GUILD_ROLE_CREATE", "GUILD_ROLE_DELETE", "GUILD_ROLE_UPDATE", "GUILD_UPDATE", "MESSAGE_DELETE", "MESSAGE_DELETE_BULK", "MESSAGE_UPDATE", "PRESENCE_UPDATE", "TYPING_START", "USER_UPDATE", "VOICE_STATE_UPDATE"],
+	messageLimit: 20
+});
 
-let guilds = {}
+guilds = {}
 
 client.on("ready", async () => {
 	console.log(`[SYSTEM] Ready! (User: ${client.user.username})`);
@@ -62,7 +65,6 @@ client.on("messageCreate", async msg => {
 
 	if (!msg.content.startsWith(db.prefix) || !msg.channel.permissionsOf(client.user.id).has("sendMessages") || !msg.channel.permissionsOf(client.user.id).has("embedLinks")) return;
 
-	msg.guild = msg.channel.guild;
 	let command = msg.content.substring(db.prefix.length).toLowerCase().split(" ")[0];
 	const args  = msg.content.split(" ").slice(1);
 	console.log(`${msg.author.username} > ${msg.content}`);
@@ -73,7 +75,7 @@ client.on("messageCreate", async msg => {
 
 	try {
 		delete require.cache[require.resolve(`./commands/${command}`)];
-		require(`./commands/${command}`).run(client, msg, args, guilds, db);
+		require(`./commands/${command}`).run(client, msg, args, db);
 	} catch(e) {
 		if (e.message.includes("Cannot find module") || e.message.includes("ENOENT")) return;
 		msg.channel.createMessage({ embed: {

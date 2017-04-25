@@ -1,6 +1,6 @@
 const fs = require("fs");
 
-exports.run = async function (client, msg, args, guilds, db) {
+exports.run = async function (client, msg, args, db) {
 
 	let commands = await fs.readdirSync("./commands/");
 	let aliases  = require(`../aliases.json`);
