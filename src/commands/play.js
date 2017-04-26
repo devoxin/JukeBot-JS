@@ -105,15 +105,9 @@ exports.run = async function (client, msg, args, db) {
 			color: 0x1E90FF,
 			title: `Enqueued ${res.items[0].title}`
 		}
-		if (res.type === "url") {
-			embed.url = `https://youtu.be/${res.items[0].id}`;
-			msg.channel.createMessage({ embed: embed });
-		}
-		if (res.type === "playlist") {
-			embed.description = `...and ${res.items.slice(1).length} songs.`
-			msg.channel.createMessage({ embed: embed });
-		}
-		if (res.type === "soundcloud") msg.channel.createMessage({ embed: embed });
+		if (res.type === "playlist") embed.description = `...and ${res.items.slice(1).length} songs.`;
+
+		msg.channel.createMessage({ embed: embed });
 
 	} else {
 
