@@ -22,6 +22,7 @@ exports.play = async function play(guild, client) {
 		let duration = await ytutil.getDuration(guild.queue[0].id);
 		if (duration > 3600) {
 			if ((duration > 3600 && !permissions.isDonator(guild.queue[0].req)) || (duration > 7200 && permissions.isDonator(guild.queue[0].req))) {
+				guild.queue.shift();
 				exports.play(guild, client);
 				client.getChannel(guild.msgc).createMessage({ embed: {
 					color: 0x1E90FF,
@@ -32,6 +33,7 @@ exports.play = async function play(guild, client) {
 
 		let res = await ytutil.getFormats(guild.queue[0].id);
 		if (!res.url) {
+			guild.queue.shift();
 			exports.play(guild, client);
 			client.getChannel(guild.msgc).createMessage({ embed: {
 				color: 0x1E90FF,
