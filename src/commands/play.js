@@ -100,7 +100,7 @@ exports.run = async function (client, msg, args, db) {
 
 	if (res.type !== "search") {
 
-		res.items.map(v => guild.queue.push({ id: v.id, title: v.title, req: msg.author.id, src: res.src }));
+		res.items.map(v => guild.queue.push({ id: v.id, title: v.title, req: msg.author.id, src: res.src, durl: (res.src === "soundcloud" ? scrxm[1] : undefined) }));
 		let embed = {
 			color: 0x1E90FF,
 			title: `Enqueued ${res.items[0].title}`

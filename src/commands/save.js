@@ -12,7 +12,7 @@ exports.run = function (client, msg, args) {
 		channel.createMessage({ embed: {
 			color: 0x1E90FF,
 			title: song.title,
-			url  : `https://youtu.be/${song.id}`
+			url  : (song.src === "youtube" ? `https://youtu.be/${song.id}` : song.durl)
 		}});
 	});
 }
