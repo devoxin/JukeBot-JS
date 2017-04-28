@@ -11,6 +11,7 @@ exports.run = function (client, msg, args, db) {
 	}});
 
 	let usr = isNaN(args.join(" ")) ? msg.channel.guild.members.filter(u => u.username.toLowerCase().includes(args.join(" ").toLowerCase())) : msg.channel.guild.members.get(args.join(" "));
+	if (typeof usr === Array && usr[0]) usr = usr[0];
 	if (usr.length === 0) return msg.channel.createMessage({ embed: {
 		color: 0x1E90FF,
 		title: "No users found matching the specified name"
