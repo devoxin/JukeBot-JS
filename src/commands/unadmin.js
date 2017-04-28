@@ -1,4 +1,4 @@
-exports.run = function (client, msg, args, db) {
+exports.run = function (client, msg, args) {
 
 	if (!permissions.isAdmin(msg.member, msg.channel.guild.id, db)) return msg.channel.createMessage({ embed: {
 		color: 0x1E90FF,
@@ -16,7 +16,7 @@ exports.run = function (client, msg, args, db) {
 		title: "No users found matching the specified name"
 	}});
 
-	rethonk.db("data").table("guilds").update({ id: msg.channel.guild.id, admins: db.admins.filter(id => !db.admins.includes(usr[0].id)) }).run()
+	rethonk.db("data").table("guilds").update({ id: msg.channel.guild.id, admins: db.admins.filter(id => !db.admins.includes(id)) }).run()
 	.then(() => {
 		msg.channel.createMessage({	embed: {
 			color: 0x1E90FF,
