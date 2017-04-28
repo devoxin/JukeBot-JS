@@ -17,11 +17,11 @@ exports.run = function (client, msg, args, db) {
 		title: "No users found matching the specified name"
 	}});
 	let admins = db.admins.filter;
-	rethonk.db("data").table("guilds").update({ id: msg.channel.guild.id, admins: db.admins.filter(id => id !== usr[0].id) }).run()
+	rethonk.db("data").table("guilds").update({ id: msg.channel.guild.id, admins: db.admins.filter(id => id !== usr.id) }).run()
 	.then(() => {
 		msg.channel.createMessage({	embed: {
 			color: 0x1E90FF,
-			title: `Removed ${usr[0].username}#${usr[0].discriminator} from admins.`
+			title: `Removed ${usr[0].username}#${usr.discriminator} from admins.`
 		}});
 	})
 	.catch(err => {
