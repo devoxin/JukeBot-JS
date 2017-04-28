@@ -15,7 +15,8 @@ exports.run = function (client, msg, args, db) {
 		color: 0x1E90FF,
 		title: "No users found matching the specified name"
 	}});
-
+	let admins = db.admins.filter(() => !db.admins.includes(usr[0].id));
+	console.log(admins)
 	rethonk.db("data").table("guilds").update({ id: msg.channel.guild.id, admins: db.admins.filter(id => !db.admins.includes(id)) }).run()
 	.then(() => {
 		msg.channel.createMessage({	embed: {
