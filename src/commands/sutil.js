@@ -136,7 +136,7 @@ exports.run = function (client, msg, args) {
 			msg.channel.createMessage({ embed: {
 				color: 0x1E90FF,
 				title: g.name,
-				description: `Owner: ${client.users.get(g.ownerID) ? client.users.get(g.ownerID).username + client.users.get(g.ownerID).discriminator + " (" + g.ownerID + ")" : "Unknown"}`,
+				description: `Owner: ${client.users.get(g.ownerID) ? client.users.get(g.ownerID).username + "#" + client.users.get(g.ownerID).discriminator + " (" + g.ownerID + ")" : "Unknown"}`,
 				fields: [
 					{ name: "Overall Users", value: g.members.size, inline: true },
 					{ name: "Bots", value: g.members.filter(m => m.bot).length, inline: true },
