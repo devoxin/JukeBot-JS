@@ -48,10 +48,10 @@ exports.run = async function (client, msg, args, db) {
 	let guild = guilds[msg.channel.guild.id];
 	guild.msgc = msg.channel.id;
 
-	if (guild.queue.length >= 20 && !permissions.isDonator(msg.channel.guild.ownerID)) return msg.channel.createMessage({ embed: {
+	if (guild.queue.length >= 20 && !permissions.isDonator(msg.member.id)) return msg.channel.createMessage({ embed: {
 		color: 0x1E90FF,
 		title: "Queue Limit Reached",
-		description: "You've hit the server queue limit. Wait for the queue to deplete before queueing more songs."
+		description: "You've hit the queue limit. Wait for the queue to deplete before queueing more songs.\nAlternatively, you can bypass the queue limit by [becoming a donator](https://patreon.com/CrimsonXV)"
 	}})
 
 	const query = args.join(" ").replace(/<|>g/g, "");
