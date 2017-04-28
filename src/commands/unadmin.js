@@ -21,7 +21,7 @@ exports.run = function (client, msg, args, db) {
 	.then(() => {
 		msg.channel.createMessage({	embed: {
 			color: 0x1E90FF,
-			title: `Removed ${usr[0].username}#${usr.discriminator} from admins.`
+			title: `Removed ${usr.username}#${usr.discriminator} from admins.`
 		}});
 	})
 	.catch(err => {
