@@ -74,7 +74,7 @@ exports.run = async function (client, msg, args, db) {
 
 			if (ytrxm[1].length >= 15) {
 				res.type = "playlist";
-				res.items = await ytutil.getPlaylist(ytrxm[1], (permissions.isDonator(msg.member.id) ? "75" : "20"));
+				res.items = await ytutil.getPlaylist(ytrxm[1], (permissions.isDonator(msg.member.id) ? "100" : "20"));
 			} else {
 				res.type = "url";
 				res.items = await ytutil.videoInfo(ytrxm[1]);
