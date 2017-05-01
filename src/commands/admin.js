@@ -1,4 +1,4 @@
-exports.run = function (client, msg, args, db) {
+exports.run = async function (client, msg, args, db) {
 
 	if (!permissions.isAdmin(msg.member, msg.channel.guild.id, db)) return msg.channel.createMessage({ embed: {
 		color: 0x1E90FF,
@@ -7,25 +7,25 @@ exports.run = function (client, msg, args, db) {
 
 	if (!args[0]) return msg.channel.createMessage({ embed: {
 		color: 0x1E90FF,
-		title: "Specify a user"
+		title: "Specify a user name, ID or mention."
 	}});
 
-	let usr = msg.channel.guild.members.filter(u => u.username.toLowerCase().includes(args.join(" ").toLowerCase()));
-	if (usr.length === 0) return msg.channel.createMessage({ embed: {
+	let usr;
+	if (msg.mentions.length > 0) usr = msg.mentions[0];
+	else if (isNaN(args.join(" "))) usr = msg.channel.guild.members.filter(u => u.username.toLowerCase().includes(args.join(" ").toLowerCase()));
+	else usr = msg.channel.guild.members.get(args.join(" "));
+
+	if (!usr) return msg.channel.createMessage({ embed: {
 		color: 0x1E90FF,
 		title: "No users found matching the specified name"
 	}});
 
-	if (db.admins.indexOf(usr[0].id) === -1 && !db.blocked.includes(usr[0].id))
-		db.admins.push(usr[0].id);
+	if (usr[0]) usr = usr[0].user;
+	else if (usr.user) usr = usr.user;
 
-	rethonk.db("data").table("guilds").update({ id: msg.channel.guild.id, admins: db.admins }).run()
-	.then(() => {
-		msg.channel.createMessage({	embed: {
-			color: 0x1E90FF,
-			title: `Added ${usr[0].username}#${usr[0].discriminator} to admins.`
-		}});
-	})
+	if (db.admins.indexOf(usr.id) === -1 && !db.blocked.includes(usr.id)) db.admins.push(usr.id);
+
+	await rethonk.db("data").table("guilds").update({ id: msg.channel.guild.id, admins: db.admins }).run()
 	.catch(err => {
 		msg.channel.createMessage({	embed: {
 			color: 0x1E90FF,
@@ -34,9 +34,14 @@ exports.run = function (client, msg, args, db) {
 		}});
 	});
 
+	msg.channel.createMessage({	embed: {
+		color: 0x1E90FF,
+		title: `Added ${usr.username}#${usr.discriminator} to admins.`
+	}});
+
 }
 
 exports.usage = {
 	main: "{prefix}{command}",
-	args: "<@mention>"
+	args: "< ID | Username | @Mention >"
 };

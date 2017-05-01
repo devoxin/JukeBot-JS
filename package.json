@@ -14,15 +14,14 @@
   "author": "CrimsonXV",
   "license": "AGPL-3.0",
   "dependencies": {
-    "buffered2": "^1.0.0",
     "eris": "^0.6.0",
-    "eventemitter3": "^2.0.2",
+    "eventemitter3": "^2.0.3",
     "gcc": "^1.0.2",
-    "node-opus": "^0.2.4",
+    "node-opus": "^0.2.6",
     "rethinkdbdash": "^2.3.28",
     "retry-stream": "github:vexera/retry-stream",
-    "sodium-native": "^1.8.0",
+    "sodium-native": "^1.9.0",
     "superagent": "^3.5.2",
-    "ytdl-core": "^0.12.1"
+    "ytdl-core": "^0.13.1"
   }
 }
