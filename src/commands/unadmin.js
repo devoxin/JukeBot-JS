@@ -18,11 +18,12 @@ exports.run = async function (client, msg, args, db) {
 	}});
 	await rethonk.db("data").table("guilds").update({ id: msg.channel.guild.id, admins: db.admins.filter(id => id !== usr.id) }).run()
 	.catch(err => {
-	msg.channel.createMessage({	embed: {
-		color: 0x1E90FF,
-		title: "Failed to update admins",
-		description: err.message
-	}});
+		return msg.channel.createMessage({	embed: {
+			color: 0x1E90FF,
+			title: "Failed to update admins",
+			description: err.message
+		}});
+	});
 
 	msg.channel.createMessage({	embed: {
 		color: 0x1E90FF,
