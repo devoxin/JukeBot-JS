@@ -1,4 +1,4 @@
-exports.run = function (client, msg, args, db) {
+exports.run = async function (client, msg, args, db) {
 
 	if (!permissions.isAdmin(msg.member, msg.channel.guild.id, db)) return msg.channel.createMessage({ embed: {
 		color: 0x1E90FF,
@@ -16,21 +16,18 @@ exports.run = function (client, msg, args, db) {
 		color: 0x1E90FF,
 		title: "No users found matching the specified name"
 	}});
-	let admins = db.admins.filter;
-	rethonk.db("data").table("guilds").update({ id: msg.channel.guild.id, admins: db.admins.filter(id => id !== usr.id) }).run()
-	.then(() => {
-		msg.channel.createMessage({	embed: {
-			color: 0x1E90FF,
-			title: `Removed ${usr.username}#${usr.discriminator} from admins.`
-		}});
-	})
+	await rethonk.db("data").table("guilds").update({ id: msg.channel.guild.id, admins: db.admins.filter(id => id !== usr.id) }).run()
 	.catch(err => {
-		msg.channel.createMessage({	embed: {
-			color: 0x1E90FF,
-			title: "Failed to update admins",
-			description: err.message
-		}});
-	});
+	msg.channel.createMessage({	embed: {
+		color: 0x1E90FF,
+		title: "Failed to update admins",
+		description: err.message
+	}});
+
+	msg.channel.createMessage({	embed: {
+		color: 0x1E90FF,
+		title: `Removed ${usr.username}#${usr.discriminator} from admins.`
+	}});
 
 }
 
