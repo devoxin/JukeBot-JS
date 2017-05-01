@@ -11,12 +11,11 @@ exports.run = async function (client, msg, args, db) {
 	}});
 
 	let usr = isNaN(args.join(" ")) ? msg.channel.guild.members.filter(u => u.username.toLowerCase().includes(args.join(" ").toLowerCase())) : msg.channel.guild.members.get(args.join(" "));
-	if (typeof usr === Array && usr[0]) usr = usr[0].user;
-	console.log(usr)
 	if (!usr) return msg.channel.createMessage({ embed: {
 		color: 0x1E90FF,
 		title: "No users found matching the specified name"
 	}});
+	usr = usr.user;
 	await rethonk.db("data").table("guilds").update({ id: msg.channel.guild.id, admins: db.admins.filter(id => id !== usr.id) }).run()
 	.catch(err => {
 		return msg.channel.createMessage({	embed: {
