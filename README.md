@@ -33,6 +33,18 @@ Inside config.json, enter your youtube key, bot token, desired prefix & paste yo
 
 (You can get a youtube key from the Google API page. Create a project & enable the 'YouTube Data API v3' for it).
 
+Property Breakdown: 
+```
+token          - This is your bot token
+owners       - This acts as a bot override ensuring full permissions.
+youtube      - This is your Google API key, used for accessing YouTube data
+soundcloud - This is your SoundCloud API key, used for accessing SoundCloud data
+prefix          - This is the character users will need to prefix their messages with to use the bot
+version       - DO NOT CHANGE. This helps diagnose issues should you encounter any.
+hardblock   - Users blocked from using the bot everywhere
+donators    - Users that have access to additional benefits within the bot
+```
+
 Once you've filled in config.json with the relevant info, return to your command window and type in
 ```
 npm install && npm start
