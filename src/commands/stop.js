@@ -10,6 +10,7 @@ exports.run = function (client, msg, args, db) {
 		title: "There's no playback activity."
 	}});
 
+	guilds[msg.guild.id].repeat = "None";
 	guilds[msg.channel.guild.id].queue.splice(1, guilds[msg.channel.guild.id].queue.length);
 	client.voiceConnections.get(msg.channel.guild.id).stopPlaying();
 
