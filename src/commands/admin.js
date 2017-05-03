@@ -15,7 +15,7 @@ exports.run = async function (client, msg, args, db) {
 	else if (isNaN(args.join(" "))) usr = msg.channel.guild.members.filter(u => u.username.toLowerCase().includes(args.join(" ").toLowerCase()));
 	else usr = msg.channel.guild.members.get(args.join(" "));
 
-	if (!usr) return msg.channel.createMessage({ embed: {
+	if (!usr && !(usr[0].user || usr.user)) return msg.channel.createMessage({ embed: {
 		color: 0x1E90FF,
 		title: "No users found matching the specified name"
 	}});
@@ -23,9 +23,17 @@ exports.run = async function (client, msg, args, db) {
 	if (usr[0]) usr = usr[0].user;
 	else if (usr.user) usr = usr.user;
 
+	console.log(usr);
+
 	if (db.admins.indexOf(usr.id) === -1 && !db.blocked.includes(usr.id)) db.admins.push(usr.id);
 
-	await rethonk.db("data").table("guilds").update({ id: msg.channel.guild.id, admins: db.admins }).run()
+	rethonk.db("data").table("guilds").update({ id: msg.channel.guild.id, admins: db.admins }).run()
+	.then(() => {
+		msg.channel.createMessage({	embed: {
+			color: 0x1E90FF,
+			title: `Added ${usr.username}#${usr.discriminator} to admins.`
+		}});
+	})
 	.catch(err => {
 		msg.channel.createMessage({	embed: {
 			color: 0x1E90FF,
@@ -34,10 +42,7 @@ exports.run = async function (client, msg, args, db) {
 		}});
 	});
 
-	msg.channel.createMessage({	embed: {
-		color: 0x1E90FF,
-		title: `Added ${usr.username}#${usr.discriminator} to admins.`
-	}});
+
 
 }
 
