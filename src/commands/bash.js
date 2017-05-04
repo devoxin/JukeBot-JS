@@ -31,5 +31,6 @@ exports.run = async function(client, msg, args) {
 
 exports.usage = {
 	main: "{prefix}{command}",
-	args: "[ DEVELOPER COMMAND ]"
+	args: "",
+	description: "Developer command"
 };

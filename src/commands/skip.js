@@ -33,5 +33,6 @@ exports.run = function (client, msg, args) {
 
 exports.usage = {
 	main: "{prefix}{command}",
-	args: ""
+	args: "",
+	description: "Vote skip the currently playing song"
 };

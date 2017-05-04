@@ -1,11 +1,11 @@
 exports.run = function (client, msg, args) {
 
-	if (msg.author.id !== "180093157554388993" && msg.author.id !== "284122164582416385" && msg.author.id !== "172571295077105664") return;
+	if (!config.owners.includes(msg.author.id)) return false;
 
 	if (!args[0]) return msg.channel.createMessage({embed: {
 		color: 0x1E90FF,
 		title: "Specify an action",
-		description: "< farm | leave | find | black | member | inv | db >"
+		description: "< farm | leave | find | black | member | inv >"
 	}});
 
 	if (args[0] === "farm") {
@@ -63,33 +63,6 @@ exports.run = function (client, msg, args) {
 		});
 
 	};
-
-	if (args[0] === "db") {
-		if (!args[1]) return msg.channel.createMessage({ embed: {
-			color: 0x1E90FF,
-			title: "You need to specify a server ID"
-		}});
-
-		rethonk.db("data").table("guilds").get(args[1]).run()
-		.then(data => {
-    		msg.channel.createMessage({ embed: {
-				color: 0x1E90FF,
-				title: `${client.guilds.get(args[1]).name} Database`,
-				fields: [
-					{ name: "Admins", value: data.admins.length > 0 ? data.admins.join("\n") : "None", inline: true },
-					{ name: "Blocked", value: data.blocked.length > 0 ? data.blocked.join("\n") : "None", inline: true },
-					{ name: "Whitelist", value: data.whitelist.length > 0 ? data.whitelist.join("\n") : "None", inline: true },
-					{ name: "Prefix", value: data.prefix, inline: true}
-				]
-			}})
-		}).catch(err => {
-			msg.channel.createMessage({ embed: {
-				color: 0x1E90FF,
-				title: "RethinkDB Error",
-				description: err.message
-			}})
-		})
-	}
 
 	if (args[0] === "member") {
 		if (!args[1]) return msg.channel.createMessage({ embed: {
@@ -162,5 +135,6 @@ exports.run = function (client, msg, args) {
 
 exports.usage = {
 	main: "{prefix}{command}",
-	args: "[ DEVELOPER COMMAND ]"
+	args: "< farm | leave | find | black | member | inv > < id/number >",
+	description: "Developer command"
 };

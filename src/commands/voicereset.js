@@ -1,11 +1,9 @@
-exports.run = async function (client, msg, args, db) {
+exports.run = async function (client, msg, args) {
 
-	if (!permissions.isAdmin(msg.member, msg.channel.guild.id, db)) return msg.channel.createMessage({
-		embed: {
-			color: 0x1E90FF,
-			title: "Insufficient Permissions",
-		}
-	})
+	if (!permissions.isAdmin(msg.member)) return msg.channel.createMessage({ embed: {
+		color: 0x1E90FF,
+		title: "Insufficient Permissions",
+	}});
 
 	let m = await msg.channel.createMessage({ embed: {
 		color: 0x1E90FF,
@@ -27,5 +25,6 @@ exports.run = async function (client, msg, args, db) {
 
 exports.usage = {
 	main: "{prefix}{command}",
-	args: ""
+	args: "",
+	description: "Resets the voiceconnection if the bot is stuck"
 };

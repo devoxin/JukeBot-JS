@@ -24,5 +24,6 @@ exports.run = function (client, msg, args) {
 
 exports.usage = {
 	main: "{prefix}{command}",
-	args: ""
+	args: "",
+	description: "Shows patreon benefits and general info"
 };

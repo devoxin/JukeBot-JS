@@ -20,15 +20,13 @@ exports.run = function (client, msg, args) {
 	let startQueue = ((page - 1) * 10) + 1;
 	let endQueue   = startQueue + 10 > guild.queue.length ? guild.queue.length : startQueue + 10;
 
-	let track   = guild.queue[0];
-	//let finish  = track.started ? track.started + (track.duration * 1000) + 2000 : undefined;
-	//let time    = finish ? Date.now() - track.started : undefined;
+	let track = guild.queue[0];
 
 	let embed = {
 		color       : 0x1E90FF,
 		title       : track.title,
 		url         : track.src !== "soundcloud" ? `https://youtu.be/${track.id}` : undefined,
-		//description : track.src !== "soundcloud" ? `${timeParser.formatSeconds(time / 1000)}/${timeParser.formatSeconds(track.duration)}` : undefined,
+		description : `${timeParser.formatSeconds(client.voiceConnections.get(msg.channel.guild.id).current.playTime / 1000)}${track.src === "youtube" ? "/" + timeParser.formatSeconds(track.duration) : ""}`,
 		fields: [
 			{
 				name: "Queue",
@@ -46,5 +44,6 @@ exports.run = function (client, msg, args) {
 
 exports.usage = {
 	main: "{prefix}{command}",
-	args: "<page number>"
+	args: "<page number>",
+	description: "View the specified queue page"
 };

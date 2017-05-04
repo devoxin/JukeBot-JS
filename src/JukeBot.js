@@ -1,30 +1,29 @@
 config     		  = require("./config.json");
 permissions       = require("../util/Permissions.js");
-rethonk           = require("rethinkdbdash")();
 const superagent  = require("superagent");
 const Eris        = require("eris");
 const client      = new Eris(config.token, {
-	disableEvents: ["CHANNEL_CREATE", "CHANNEL_DELETE", "CHANNEL_UPDATE", "GUILD_BAN_ADD", "GUILD_BAN_REMOVE", "GUILD_MEMBER_ADD", "GUILD_MEMBER_REMOVE", "GUILD_MEMBER_UPDATE", "GUILD_ROLE_CREATE", "GUILD_ROLE_DELETE", "GUILD_ROLE_UPDATE", "GUILD_UPDATE", "MESSAGE_DELETE", "MESSAGE_DELETE_BULK", "MESSAGE_UPDATE", "PRESENCE_UPDATE", "TYPING_START", "USER_UPDATE", "VOICE_STATE_UPDATE"],
-	messageLimit: 20
+	disableEvents: ["CHANNEL_CREATE", "CHANNEL_DELETE", "CHANNEL_UPDATE", "GUILD_BAN_ADD", "GUILD_BAN_REMOVE", "GUILD_MEMBER_ADD", "GUILD_MEMBER_REMOVE", "GUILD_MEMBER_UPDATE", "GUILD_ROLE_CREATE", "GUILD_ROLE_DELETE", "GUILD_ROLE_UPDATE", "GUILD_UPDATE", "MESSAGE_DELETE", "MESSAGE_DELETE_BULK", "MESSAGE_UPDATE", "PRESENCE_UPDATE", "TYPING_START", "USER_UPDATE", "VOICE_STATE_UPDATE"]
 });
 
-guilds = {}
+guilds   = {};
+prefixes = require("./prefixes.json");
 
 client.on("ready", async () => {
 	console.log(`[SYSTEM] Ready! (User: ${client.user.username})`);
 	client.editStatus("online", { name: `${config.prefix}help | v${config.version}` });
-	let dbs = await rethonk.dbList().run()
-	if (!dbs.includes("data")) {
-		await rethonk.dbCreate("data").run();
-		await rethonk.db("data").tableCreate("guilds");
-	}
+
+	client.guilds.forEach(g => {
+		if (!prefixes[g.id]) prefixes[g.id] = config.prefix;
+		if (!guilds[g.id]) guilds[g.id] = { id: g.id, msgc: "", queue: [], svotes: [], repeat: "None" };
+	});
 });
 
 client.on("guildCreate", g => {
 	if ((g.members.filter(m => m.bot).length / g.members.size) >= 0.68) return g.leave();
 	g.defaultChannel.createMessage("Hey there, I'm JukeBot! You can view my commands with `$help`. Please report any issues to CrimsonXV#0387!");
 
-	rethonk.db("data").table("guilds").insert({ id: g.id, prefix: config.prefix, whitelist: [], blocked: [], admins: [] }).run();
+	prefixes[g.id] = config.prefix;
 	guilds[g.id] = { id: g.id, msgc: "", queue: [], svotes: [], repeat: "None" };
 
 	if (!config.botlists._clientid) return;
@@ -35,7 +34,7 @@ client.on("guildCreate", g => {
 })
 
 client.on("guildDelete", g => {
-	rethonk.db("data").table("guilds").get(g.id).delete().run();
+	delete prefixes[g.id];
 	delete guilds[g.id];
 
 	if (!config.botlists._clientid) return;
@@ -46,26 +45,17 @@ client.on("guildDelete", g => {
 })
 
 client.on("messageCreate", async msg => {
-	if (!guilds[msg.channel.guild.id])
-		guilds[msg.channel.guild.id] = { id: msg.channel.guild.id, msgc: "", queue: [], svotes: [],	repeat: "None" };
-
-	if (msg.channel.type === 1 || msg.author.bot || !guilds[msg.channel.guild.id]) return;
-
-	if (!await rethonk.db("data").table("guilds").get(msg.channel.guild.id).run())
-		await rethonk.db("data").table("guilds").insert({ id: msg.channel.guild.id, prefix: config.prefix, whitelist: [], blocked: [], admins: [] }).run();
-
-	let db = await rethonk.db("data").table("guilds").get(msg.channel.guild.id).run();
-	if (!db || permissions.isBlocked(msg.member.id, msg.channel.guild, db)) return;
+	if (msg.channel.type === 1 || msg.author.bot || !guilds[msg.channel.guild.id] || permissions.isBlocked(msg.member, msg.channel.guild)) return;
 
 	if (msg.mentions.find(u => u.id === client.user.id) && msg.content.toLowerCase().includes("help"))
 		return msg.channel.createMessage({ embed: {
 			color: 0x1E90FF,
-			title: `Use ${db.prefix}help for commands`
+			title: `Use ${prefixes[msg.channel.guild.id]}help for commands`
 		}});
 
-	if (!msg.content.startsWith(db.prefix) || !msg.channel.permissionsOf(client.user.id).has("sendMessages") || !msg.channel.permissionsOf(client.user.id).has("embedLinks")) return;
+	if (!msg.content.startsWith(prefixes[msg.channel.guild.id]) || !msg.channel.permissionsOf(client.user.id).has("sendMessages") || !msg.channel.permissionsOf(client.user.id).has("embedLinks")) return;
 
-	let command = msg.content.substring(db.prefix.length).toLowerCase().split(" ")[0];
+	let command = msg.content.substring(prefixes[msg.channel.guild.id].length).toLowerCase().split(" ")[0];
 	const args  = msg.content.split(" ").slice(1);
 	console.log(`${msg.author.username} > ${msg.content}`);
 
@@ -75,7 +65,7 @@ client.on("messageCreate", async msg => {
 
 	try {
 		delete require.cache[require.resolve(`./commands/${command}`)];
-		require(`./commands/${command}`).run(client, msg, args, db);
+		require(`./commands/${command}`).run(client, msg, args);
 	} catch(e) {
 		if (e.message.includes("Cannot find module") || e.message.includes("ENOENT")) return;
 		msg.channel.createMessage({ embed: {

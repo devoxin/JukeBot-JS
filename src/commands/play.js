@@ -6,7 +6,7 @@ const messageCollector = require("../../util/messageCollector.js");
 const ytrx = new RegExp("(?:youtube\\.com.*(?:\\?|&)(?:v|list)=|youtube\\.com.*embed\\/|youtube\\.com.*v\\/|youtu\\.be\\/)((?!videoseries)[a-zA-Z0-9_-]*)");
 const scrx = new RegExp("((https:\/\/)|(http:\/\/)|(www.)|(s))+(soundcloud.com\/)+[a-zA-Z0-9-.]+(\/)+[a-zA-Z0-9-.]+");
 
-exports.run = async function (client, msg, args, db) {
+exports.run = async function (client, msg, args) {
 	if (!args[0]) return msg.channel.createMessage({ embed: {
 		color: 0x1E90FF,
 		title: "You need to specify something",
@@ -120,13 +120,13 @@ exports.run = async function (client, msg, args, db) {
 			}
 		}});
 
-		const collector = await messageCollector.awaitMessages(client, msg.channel, (m => m.author.id === msg.author.id && ((parseInt(m.content) && m.content >= 1 && m.content <= res.items.length) || m.content.toLowerCase().startsWith(db.prefix + "p") || m.content === "c")), {
+		const collector = await messageCollector.awaitMessages(client, msg.channel, (m => m.author.id === msg.author.id && ((parseInt(m.content) && m.content >= 1 && m.content <= res.items.length) || m.content.toLowerCase().startsWith(prefixes[msg.channel.guild.id] + "p") || m.content === "c")), {
 			maxMatches: 1,
 			time: 10000
 		});
 
-		if (collector.length === 0 || collector[0].content.toLowerCase().startsWith(db.prefix + "p") || collector[0].content === "c") {
-			if (client.voiceConnections.get(msg.channel.guild.id).channelID && guild.queue.length === 0) client.leaveVoiceChannel(client.voiceConnections.get(msg.channel.guild.id).channelID);
+		if (collector.length === 0 || collector[0].content.toLowerCase().startsWith(prefixes[msg.channel.guild.id] + "p") || collector[0].content === "c") {
+			if (collector[0].content === "c" && client.voiceConnections.get(msg.channel.guild.id).channelID && guild.queue.length === 0) client.leaveVoiceChannel(client.voiceConnections.get(msg.channel.guild.id).channelID);
 			return src.delete();
 		};
 
@@ -147,5 +147,6 @@ exports.run = async function (client, msg, args, db) {
 
 exports.usage = {
 	main: "{prefix}{command}",
-	args: "<YouTube URL/Playlist/Search | Soundcloud URL>"
+	args: "<YouTube URL/Playlist/Search | Soundcloud URL>",
+	description: "Play the specified song"
 };

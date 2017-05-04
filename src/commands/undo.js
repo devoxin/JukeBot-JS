@@ -41,5 +41,6 @@ exports.run = async function(client, msg, args) {
 
 exports.usage = {
 	main: "{prefix}{command}",
-	args: "<1-100>"
+	args: "<1-100>",
+	description: "Removes the last `x` songs from the queue"
 };

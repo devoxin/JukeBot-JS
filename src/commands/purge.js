@@ -1,6 +1,6 @@
-exports.run = async function(client, msg, args, db) {
+exports.run = async function(client, msg, args) {
 
-	if (!permissions.isAdmin(msg.member, msg.channel.guild.id, db)) return msg.channel.createMessage({ embed: {
+	if (!permissions.isAdmin(msg.member, msg.channel.guild.id)) return msg.channel.createMessage({ embed: {
 		color: 0x1E90FF,
 		title: "Insufficient Permissions",
 	}});
@@ -22,5 +22,6 @@ exports.run = async function(client, msg, args, db) {
 
 exports.usage = {
 	main: "{prefix}{command}",
-	args: "<1-100>"
+	args: "<1-100>",
+	description: "Removes the specified amount of messages sent by JukeBot"
 };

@@ -1,4 +1,4 @@
-exports.run = function(client, msg, args, db) {
+exports.run = function(client, msg, args) {
 
 	if (guilds[msg.channel.guild.id].queue.length <= 1) return msg.channel.createMessage({ embed: {
 		color: 0x1E90FF,
@@ -10,7 +10,7 @@ exports.run = function(client, msg, args, db) {
 		title: `You need to specify a number higher than 1, and less than ${guilds[msg.channel.guild.id].queue.length}`
 	}});
 
-	if (guilds[msg.channel.guild.id].queue[Math.round(args[0])].req !== msg.author.id && permissions.isAdmin(msg.member.id, msg.channel.guild.id, db))
+	if (guilds[msg.channel.guild.id].queue[Math.round(args[0])].req !== msg.author.id && permissions.isAdmin(msg.member))
 		return msg.channel.createMessage({ embed: {
 			color: 0x1E90FF,
 			title: "You can't unqueue that."
@@ -26,5 +26,6 @@ exports.run = function(client, msg, args, db) {
 
 exports.usage = {
 	main: "{prefix}{command}",
-	args: "<index>"
+	args: "<index>",
+	description: "Unqueues the song at the specified position"
 };

@@ -8,17 +8,14 @@ exports.run = function (client, msg, args) {
 			title: "There's nothing playing"
 		}});
 
-	let guild   = guilds[msg.channel.guild.id];
-
-	let track   = guild.queue[0];
-	//let finish  = track.started ? track.started + (track.duration * 1000) + 2000 : undefined;
-	//let time    = finish ? Date.now() - track.started : undefined;
+	let guild = guilds[msg.channel.guild.id];
+	let track = guild.queue[0];
 
 	let embed = {
 		color       : 0x1E90FF,
 		title       : track.title,
 		url         : track.src !== "soundcloud" ? `https://youtu.be/${track.id}` : undefined,
-		//description : track.src !== "soundcloud" ? `${timeParser.formatSeconds(time / 1000)}/${timeParser.formatSeconds(track.duration)}` : undefined,
+		description : `${timeParser.formatSeconds(client.voiceConnections.get(msg.channel.guild.id).current.playTime / 1000)}${track.src === "youtube" ? "/" + timeParser.formatSeconds(track.duration) : ""}`,
 		footer: {
 			text: `Requested by ${client.users.get(track.req) ? client.users.get(track.req).username : "Unknown"}`
 		}
@@ -30,5 +27,6 @@ exports.run = function (client, msg, args) {
 
 exports.usage = {
 	main: "{prefix}{command}",
-	args: ""
+	args: "",
+	description: "Shows info about the currently playing song"
 };

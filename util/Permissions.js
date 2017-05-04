@@ -1,4 +1,4 @@
-const owners = require("../src/config.json").owners;
+const owners = config.owners;
 
 module.exports = {
 
@@ -9,16 +9,16 @@ module.exports = {
 		else return false;
 	},
 
-	isAdmin(member, guild, db) {
-		if (db.admins.includes(member.id) || owners.includes(member.id) || member.guild.ownerID === member.id) return true;
+	isAdmin(member) {
+		if (module.exports.hasRole(member, "DJ") || owners.includes(member.id) || member.guild.ownerID === member.id) return true;
 		else return false;
 	},
 
-	isBlocked(member, guild, db) {
+	isBlocked(member) {
 		let hdb = require(`../src/config.json`).hardblock;
 		delete require.cache[require.resolve(`../src/config.json`)];
 
-		if ((db.blocked.includes(member) || hdb.includes(member)) && !owners.includes(member) && guild.ownerID !== member) return true;
+		if ((module.exports.hasRole(member, "NoMusic") || hdb.includes(member)) && !owners.includes(member) && member.guild.ownerID !== member) return true;
 		else return false;
 	},
 

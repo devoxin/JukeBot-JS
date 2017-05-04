@@ -12,7 +12,7 @@ exports.run = function(client, msg, args) {
 			{ name: `Library`,		  value: "Eris",															inline: true },
 			{ name: `Streams`,        value: `► ${client.voiceConnections.filter(vc => vc.playing).length}, ❚❚ ${client.voiceConnections.filter(vc => vc.paused).length}`, inline: true },
 			{ name: `Servers`,		  value: client.guilds.size,												inline: true },
-			{ name: "Latency",		  value: `${msg.channel.guild.shard.latency}ms`,									inline: true }
+			{ name: "Latency",		  value: `${msg.channel.guild.shard.latency}ms`,							inline: true }
 		]
 	}});
 
@@ -20,5 +20,6 @@ exports.run = function(client, msg, args) {
 
 exports.usage = {
 	main: "{prefix}{command}",
-	args: ""
+	args: "",
+	description: "View statistics of the bot"
 };

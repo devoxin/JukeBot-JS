@@ -20,16 +20,16 @@ exports.play = async function play(guild, client) {
 
 	if (guild.queue[0].src === "youtube") {
 		let duration = await ytutil.getDuration(guild.queue[0].id);
-		if (duration > 3600) {
-			if ((duration > 3600 && !permissions.isDonator(guild.queue[0].req)) || (duration > 7200 && permissions.isDonator(guild.queue[0].req))) {
-				guild.queue.shift();
-				exports.play(guild, client);
-				client.getChannel(guild.msgc).createMessage({ embed: {
-					color: 0x1E90FF,
-					title: "This song exceeds the duration limit"
-				}});
-			};
-		};
+		if (duration > 3600 && !permissions.isDonator(guild.queue[0].req) || duration > 7200 && permissions.isDonator(guild.queue[0].req)) {
+			guild.queue.shift();
+			exports.play(guild, client);
+			client.getChannel(guild.msgc).createMessage({ embed: {
+				color: 0x1E90FF,
+				title: "This song exceeds the duration limit"
+			}});
+		} else {
+			guild.queue[0].duration = duration;
+		}
 
 		let res = await ytutil.getFormats(guild.queue[0].id);
 		if (!res.url) {
@@ -45,7 +45,6 @@ exports.play = async function play(guild, client) {
 	} else {
 		song = guild.queue[0].id
 	}
-	//song.started = Date.now();
 
 	client.getChannel(guild.msgc).createMessage({embed: {
 		color: 0x1E90FF,
