@@ -126,7 +126,7 @@ exports.run = async function (client, msg, args) {
 		});
 
 		if (collector.length === 0 || collector[0].content.toLowerCase().startsWith(prefixes[msg.channel.guild.id] + "p") || collector[0].content === "c") {
-			if (collector[0].content === "c" && client.voiceConnections.get(msg.channel.guild.id).channelID && guild.queue.length === 0) client.leaveVoiceChannel(client.voiceConnections.get(msg.channel.guild.id).channelID);
+			if ((collector.length === 0 || collector[0].content === "c") && client.voiceConnections.get(msg.channel.guild.id).channelID && guild.queue.length === 0) client.leaveVoiceChannel(client.voiceConnections.get(msg.channel.guild.id).channelID);
 			return src.delete();
 		};
 
