@@ -1,6 +1,6 @@
 const fs = require("fs");
 
-exports.run = function (client, msg, args) {
+exports.run = async function (client, msg, args) {
 
 	if (guilds[msg.channel.guild.id].queue.length === 0)
 		return msg.channel.createMessage({ embed: {
