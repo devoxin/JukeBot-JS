@@ -1,3 +1,5 @@
+const fs = require("fs");
+
 exports.run = function (client, msg, args) {
 
 	if (guilds[msg.channel.guild.id].queue.length === 0)
@@ -5,6 +7,44 @@ exports.run = function (client, msg, args) {
 			color: 0x1E90FF,
 			title: "Nothing is queued."
 		}});
+
+	let dmc = await msg.author.getDMChannel()
+	.catch(err => return undefined);
+
+	if (!dmc) return msg.channel.createMessage({ embed: {
+		color: 0x1E90FF,
+		title: "There was an error fetching a DM channel."
+	}});
+
+	if (args[0] && args[0] === "-q") {
+		let m = await msg.channel.createMessage({ embed: {
+			color: 0x1E90FF,
+			title: "Compiling queue..."
+		}});
+
+		let queue = guilds[msg.channel.guild.id].map(s => {
+			`${s.title} (${s.src === "youtube" ? `https://youtu.be/${s.id}` : s.durl})`
+		}).join("\n");
+
+		dmc.createMessage({ file: {
+			name: "queue.txt",
+			content: queue
+		}})
+		.catch(err => {
+			msg.channel.createMessage({ embed: {
+				color: 0x1E90FF,
+				title: err.message
+			}})
+		});
+	} else {
+		let song = guilds[msg.channel.guild.id].queue[0];
+
+		dmc.createMessage({ embed: {
+			color: 0x1E90FF,
+			title: song.title,
+			url  : song.src === "youtube" ? `https://youtu.be/${song.id}` : song.durl
+		}});
+	}
 
 	let song = guilds[msg.channel.guild.id].queue[0];
 
@@ -19,6 +59,6 @@ exports.run = function (client, msg, args) {
 
 exports.usage = {
 	main: "{prefix}{command}",
-	args: "",
-	description: "DMs you info about the currently playing song"
+	args: "[-q]",
+	description: "DMs you info about the currently playing song (or queue, if '-q' is specified)"
 };
