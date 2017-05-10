@@ -9,7 +9,9 @@ exports.run = async function (client, msg, args) {
 		}});
 
 	let dmc = await msg.author.getDMChannel()
-	.catch(err => return undefined);
+	.catch(err => {
+		return undefined
+	});
 
 	if (!dmc) return msg.channel.createMessage({ embed: {
 		color: 0x1E90FF,
