@@ -30,7 +30,7 @@ exports.run = async function (client, msg, args) {
 
 		dmc.createMessage("", {
 			name: "queue.txt",
-			file: Buffer.from(queue, "utf8")
+			file: queue
 		})
 		.catch(err => {
 			msg.channel.createMessage({ embed: {
@@ -47,16 +47,6 @@ exports.run = async function (client, msg, args) {
 			url  : song.src === "youtube" ? `https://youtu.be/${song.id}` : song.durl
 		}});
 	}
-
-	let song = guilds[msg.channel.guild.id].queue[0];
-
-	msg.author.getDMChannel().then(channel => {
-		channel.createMessage({ embed: {
-			color: 0x1E90FF,
-			title: song.title,
-			url  : (song.src === "youtube" ? `https://youtu.be/${song.id}` : song.durl)
-		}});
-	});
 }
 
 exports.usage = {
