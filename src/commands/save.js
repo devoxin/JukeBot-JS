@@ -28,10 +28,10 @@ exports.run = async function (client, msg, args) {
 			`${s.title} (${s.src === "youtube" ? `https://youtu.be/${s.id}` : s.durl})`
 		}).join("\n");
 
-		dmc.createMessage("", { file: {
+		dmc.createMessage("", {
 			name: "queue.txt",
 			file: Buffer.from(queue, "utf8")
-		}})
+		})
 		.catch(err => {
 			msg.channel.createMessage({ embed: {
 				color: 0x1E90FF,
