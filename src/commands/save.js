@@ -30,7 +30,7 @@ exports.run = async function (client, msg, args) {
 
 		dmc.createMessage({ file: {
 			name: "queue.txt",
-			content: queue
+			file: Buffer.from(queue, "utf8")
 		}})
 		.catch(err => {
 			msg.channel.createMessage({ embed: {
