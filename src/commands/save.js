@@ -24,16 +24,20 @@ exports.run = async function (client, msg, args) {
 			title: "Compiling queue..."
 		}});
 
-		let queue = guilds[msg.channel.guild.id].queue.map(s => {
-			`${s.title} (${s.src === "youtube" ? `https://youtu.be/${s.id}` : s.durl})`
-		}).join("\n");
+		let queue = guilds[msg.channel.guild.id].queue.map(s => `${s.title} (${s.src === "youtube" ? `https://youtu.be/${s.id}` : s.durl})`).join("\r\n");
 
 		dmc.createMessage("", {
 			name: "queue.txt",
-			file: queue
+			file: Buffer.from(queue, "utf8")
+		})
+		.then(() => {
+			m.edit({ embed: {
+				color: 0x1E90FF,
+				title: "You have been DM'd the queue."
+			}})
 		})
 		.catch(err => {
-			msg.channel.createMessage({ embed: {
+			m.edit({ embed: {
 				color: 0x1E90FF,
 				title: err.message
 			}})
