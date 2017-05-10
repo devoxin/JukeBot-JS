@@ -24,7 +24,7 @@ exports.run = async function (client, msg, args) {
 			title: "Compiling queue..."
 		}});
 
-		let queue = guilds[msg.channel.guild.id].map(s => {
+		let queue = guilds[msg.channel.guild.id].queue.map(s => {
 			`${s.title} (${s.src === "youtube" ? `https://youtu.be/${s.id}` : s.durl})`
 		}).join("\n");
 
