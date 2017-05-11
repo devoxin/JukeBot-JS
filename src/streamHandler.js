@@ -20,7 +20,7 @@ exports.play = async function play(guild, client) {
 
 	if (guild.queue[0].src === "youtube") {
 		let duration = await ytutil.getDuration(guild.queue[0].id);
-		if (duration > 3600 && !permissions.isDonator(guild.queue[0].req) || duration > 7200 && permissions.isDonator(guild.queue[0].req)) {
+		if (duration > 3700 && !permissions.isDonator(guild.queue[0].req) || duration > 7300 && permissions.isDonator(guild.queue[0].req)) {
 			guild.queue.shift();
 			exports.play(guild, client);
 			client.getChannel(guild.msgc).createMessage({ embed: {
