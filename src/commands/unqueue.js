@@ -5,9 +5,9 @@ exports.run = function(client, msg, args) {
 		title: "The queue is empty."
 	}});
 
-	if (!parseInt(args[0]) || args[0] <= 1 || args[0] >= guilds[msg.channel.guild.id].queue.length) return msg.channel.createMessage({ embed: {
+	if (!parseInt(args[0]) || args[0] <= 0|| args[0] >= guilds[msg.channel.guild.id].queue.length) return msg.channel.createMessage({ embed: {
 		color: 0x1E90FF,
-		title: `You need to specify a number higher than 1, and less than ${guilds[msg.channel.guild.id].queue.length}`
+		title: `You need to specify a number higher than 0, and less than ${guilds[msg.channel.guild.id].queue.length}`
 	}});
 
 	if (guilds[msg.channel.guild.id].queue[Math.round(args[0])].req !== msg.author.id && permissions.isAdmin(msg.member))
