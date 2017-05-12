@@ -17,6 +17,7 @@
     "eris": "^0.6.0",
     "eventemitter3": "^2.0.3",
     "gcc": "^1.0.2",
+    "heapdump": "^0.3.9",
     "node-opus": "^0.2.6",
     "retry-stream": "github:vexera/retry-stream",
     "sodium-native": "^1.9.0",
