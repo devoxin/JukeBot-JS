@@ -7,5 +7,6 @@
 	"mh" : "movehere",
 	"fs" : "forceskip",
 	"r"  : "resume",
-	"ps" : "pause"
+	"ps" : "pause",
+	"vcr": "voicereset"
 }
