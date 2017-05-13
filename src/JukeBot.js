@@ -22,7 +22,8 @@ const client = new Eris.Client(config.token, {
 		"TYPING_START" : true,
 		"USER_UPDATE" : true
 	},
-	messageLimit: 0
+	messageLimit: 0,
+	maxShards: (config.useSharding ? 3 : 1)
 });
 
 guilds   = {};
@@ -74,7 +75,7 @@ client.on("messageCreate", async msg => {
 
 	if (!msg.content.startsWith(prefixes[msg.channel.guild.id]) || !msg.channel.permissionsOf(client.user.id).has("sendMessages") || !msg.channel.permissionsOf(client.user.id).has("embedLinks")) return;
 
-	let command = msg.content.substring(prefixes[msg.channel.guild.id].length).toLowerCase().split(" ")[0];
+	let command = msg.content.slice(prefixes[msg.channel.guild.id].length).toLowerCase().split(" ")[0];
 	const args  = msg.content.split(" ").slice(1);
 	console.log(`${msg.author.username} > ${msg.content}`);
 
