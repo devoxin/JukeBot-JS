@@ -46,7 +46,7 @@ client.on("guildCreate", g => {
 	prefixes[g.id] = config.prefix;
 	guilds[g.id] = { id: g.id, msgc: "", queue: [], svotes: [], repeat: "None" };
 
-	if (!config.botlists._clientid) return;
+	if (!config.botlists || !config.botlists._clientid) return;
 	if (config.botlists.dbots)
 		superagent.post(`https://bots.discord.pw/api/bots/${config.botlists._clientid}/stats`).send({ "server_count": client.guilds.size }).set("Authorization", config.botlists.dbots).end();
 	if (config.botlists.dbl)
@@ -57,7 +57,7 @@ client.on("guildDelete", g => {
 	delete prefixes[g.id];
 	delete guilds[g.id];
 
-	if (!config.botlists._clientid) return;
+	if (!config.botlists || !config.botlists._clientid) return;
 	if (config.botlists.dbots)
 		superagent.post(`https://bots.discord.pw/api/bots/${config.botlists._clientid}/stats`).send({ "server_count": client.guilds.size }).set("Authorization", config.botlists.dbots).end();
 	if (config.botlists.dbl)
