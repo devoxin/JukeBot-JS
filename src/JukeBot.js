@@ -2,8 +2,26 @@ config     		  = require("./config.json");
 permissions       = require("../util/Permissions.js");
 const superagent  = require("superagent");
 const Eris        = require("eris");
-const client      = new Eris(config.token, {
-	disableEvents: ["CHANNEL_CREATE", "CHANNEL_DELETE", "CHANNEL_UPDATE", "GUILD_BAN_ADD", "GUILD_BAN_REMOVE", "GUILD_MEMBER_ADD", "GUILD_MEMBER_REMOVE", "GUILD_MEMBER_UPDATE", "GUILD_ROLE_CREATE", "GUILD_ROLE_DELETE", "GUILD_ROLE_UPDATE", "GUILD_UPDATE", "MESSAGE_DELETE", "MESSAGE_DELETE_BULK", "MESSAGE_UPDATE", "PRESENCE_UPDATE", "TYPING_START", "USER_UPDATE", "VOICE_STATE_UPDATE"],
+const client = new Eris.Client(config.token, {
+	disableEvents: {
+		"CHANNEL_CREATE" : true,
+		"CHANNEL_DELETE" : true,
+		"CHANNEL_UPDATE" : true,
+		"GUILD_BAN_ADD"  : true,
+		"GUILD_BAN_REMOVE" : true,
+		"GUILD_MEMBER_REMOVE" : true,
+		"GUILD_MEMBER_UPDATE" : true,
+		"GUILD_ROLE_CREATE" : true,
+		"GUILD_ROLE_DELETE" : true,
+		"GUILD_ROLE_UPDATE" : true,
+		"GUILD_UPDATE" : true,
+		"MESSAGE_DELETE" : true,
+		"MESSAGE_DELETE_BULK" : true,
+		"MESSAGE_UPDATE" : true,
+		"PRESENCE_UPDATE" : true,
+		"TYPING_START" : true,
+		"USER_UPDATE" : true
+	},
 	messageLimit: 0
 });
 

@@ -1,5 +1,6 @@
 const ytutil = require("../util/youtubeHandler.js");
-const rs     = require("retry-stream");
+const ytdl   = require("ytdl-core");
+const buffer = require("buffered2").BufferedStream;
 
 exports.play = async function play(guild, client) {
 	if (!client.guilds.get(guild.id) ||	!client.voiceConnections.get(guild.id) || client.voiceConnections.get(guild.id).playing || client.voiceConnections.get(guild.id).paused) return;
@@ -40,7 +41,8 @@ exports.play = async function play(guild, client) {
 				title: "This song is unplayable"
 			}});
 		} else {
-			song = res.url;
+			song = new buffer();
+			ytdl(guild.queue[0].id, { filter: "audioonly" }).pipe(song);
 		}
 	} else {
 		song = guild.queue[0].id
@@ -52,7 +54,7 @@ exports.play = async function play(guild, client) {
 		description: `${guild.queue[0].title}` //(https://youtu.be/${guild.queue[0].id})`
 	}});
 
-	client.voiceConnections.get(guild.id).play(rs(song));
+	client.voiceConnections.get(guild.id).play(song);
 
 	client.voiceConnections.get(guild.id).once("end", () => {
 		if (guild.repeat === "All") guild.queue.push(guild.queue[0]);
