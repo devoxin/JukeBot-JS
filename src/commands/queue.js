@@ -12,7 +12,7 @@ exports.run = function (client, msg, args) {
 	let guild = guilds[msg.channel.guild.id];
 
 	let page = parseInt(args[0]) ? parseInt(args[0]) : 1;
-	let maxPage = Math.ceil(guild.queue.length / 10);
+	let maxPage = Math.ceil(guild.queue.slice(1).length / 10);
 
 	if (page < 1)       page = 1;
 	if (page > maxPage) page = maxPage;
