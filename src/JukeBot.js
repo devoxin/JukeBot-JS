@@ -1,4 +1,4 @@
-config 			  = require("./config.json");
+config            = require("./config.json");
 permissions       = require("../util/Permissions.js");
 const superagent  = require("superagent");
 const Eris        = require("eris");
@@ -85,7 +85,7 @@ client.on("messageCreate", async msg => {
 			title: `${command} failed`,
 			description: `The command failed to run. The error has been logged.`
 		}});
-		console.log(`E: ${command} failed\n\n${e.message}\n${e.stack}`);
+		console.error(e.message + "\n" + e.stack.split("\n")[0] + "\n" + e.stack.split("\n")[1]);
 	}
 })
 
