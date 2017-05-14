@@ -1,4 +1,4 @@
-config     		  = require("./config.json");
+config 			  = require("./config.json");
 permissions       = require("../util/Permissions.js");
 const superagent  = require("superagent");
 const Eris        = require("eris");
