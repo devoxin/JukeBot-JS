@@ -15,7 +15,7 @@ const client = new Eris.Client(config.token, {
 		"USER_UPDATE" : true
 	},
 	messageLimit: 0,
-	maxShards: (config.useSharding ? 3 : 1)
+	maxShards: config.shards
 });
 
 guilds   = {};
