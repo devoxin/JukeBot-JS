@@ -1,12 +1,11 @@
-config            = require("./config.json");
-permissions       = require("../util/Permissions.js");
-const superagent  = require("superagent");
-const Eris        = require("eris");
+config       = require("./config.json");
+permissions  = require("../util/Permissions.js");
+const sf     = require("snekfetch");
+const Eris   = require("eris");
 const client = new Eris.Client(config.token, {
 	disableEvents: {
 		"GUILD_BAN_ADD"  : true,
 		"GUILD_BAN_REMOVE" : true,
-		"GUILD_UPDATE" : true,
 		"MESSAGE_DELETE" : true,
 		"MESSAGE_DELETE_BULK" : true,
 		"MESSAGE_UPDATE" : true,
@@ -40,9 +39,9 @@ client.on("guildCreate", g => {
 
 	if (!config.botlists || !config.botlists._clientid) return;
 	if (config.botlists.dbots)
-		superagent.post(`https://bots.discord.pw/api/bots/${config.botlists._clientid}/stats`).send({ "server_count": client.guilds.size }).set("Authorization", config.botlists.dbots).end();
+		sf.post(`https://bots.discord.pw/api/bots/${config.botlists._clientid}/stats`).send({ "server_count": client.guilds.size }).set("Authorization", config.botlists.dbots).end();
 	if (config.botlists.dbl)
-		superagent.post(`https://discordbots.org/api/bots/${config.botlists._clientid}/stats`).send({ "server_count": client.guilds.size }).set("Authorization", config.botlists.dbl).end();
+		sf.post(`https://discordbots.org/api/bots/${config.botlists._clientid}/stats`).send({ "server_count": client.guilds.size }).set("Authorization", config.botlists.dbl).end();
 })
 
 client.on("guildDelete", g => {
@@ -51,9 +50,9 @@ client.on("guildDelete", g => {
 
 	if (!config.botlists || !config.botlists._clientid) return;
 	if (config.botlists.dbots)
-		superagent.post(`https://bots.discord.pw/api/bots/${config.botlists._clientid}/stats`).send({ "server_count": client.guilds.size }).set("Authorization", config.botlists.dbots).end();
+		sf.post(`https://bots.discord.pw/api/bots/${config.botlists._clientid}/stats`).send({ "server_count": client.guilds.size }).set("Authorization", config.botlists.dbots).end();
 	if (config.botlists.dbl)
-		superagent.post(`https://discordbots.org/api/bots/${config.botlists._clientid}/stats`).send({ "server_count": client.guilds.size }).set("Authorization", config.botlists.dbl).end();
+		sf.post(`https://discordbots.org/api/bots/${config.botlists._clientid}/stats`).send({ "server_count": client.guilds.size }).set("Authorization", config.botlists.dbl).end();
 })
 
 client.on("messageCreate", async msg => {
