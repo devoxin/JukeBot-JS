@@ -120,7 +120,7 @@ exports.run = async function (client, msg, args) {
 			}
 		}});
 
-		const collector = await messageCollector.awaitMessages(client, msg.channel, (m => m.author.id === msg.author.id && ((parseInt(m.content) && m.content >= 1 && m.content <= res.items.length) || m.content.toLowerCase().startsWith(prefixes[msg.channel.guild.id] + "p") || m.content === "c")), {
+		const collector = await messageCollector.awaitMessages(client, msg.channel, (m => m.author.id === msg.author.id && msg.channel.type !== 1 && ((parseInt(m.content) && m.content >= 1 && m.content <= res.items.length) || m.content.toLowerCase().startsWith(prefixes[msg.channel.guild.id] + "p") || m.content === "c")), {
 			maxMatches: 1,
 			time: 10000
 		});
