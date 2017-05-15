@@ -1,12 +1,12 @@
-const superagent = require("superagent");
-const yt         = require("ytdl-core");
-const ytk        = require("../src/config.json").youtube;
+const sf  = require("snekfetch");
+const yt  = require("ytdl-core");
+const ytk = require("../src/config.json").youtube;
 
 module.exports = {
 
 	async search(query) {
 
-		let results = await superagent.get("https://www.googleapis.com/youtube/v3/search").query({
+		let results = await sf.get("https://www.googleapis.com/youtube/v3/search").query({
 			part       : "snippet",
 			maxResults : "3",
 			type       : "video",
@@ -22,7 +22,7 @@ module.exports = {
 
 	async getPlaylist(id, limit, page = "", videos = []) {
 
-		let req = await superagent.get('https://www.googleapis.com/youtube/v3/playlistItems').query({
+		let req = await sf.get('https://www.googleapis.com/youtube/v3/playlistItems').query({
 			maxResults    : "50",
 			part          : "snippet",
 			nextPageToken : null,
@@ -50,7 +50,7 @@ module.exports = {
 
 	async videoInfo(id) {
 
-		let result = await superagent.get("https://www.googleapis.com/youtube/v3/videos").query({
+		let result = await sf.get("https://www.googleapis.com/youtube/v3/videos").query({
 			part : "snippet",
 			id   : id,
 			key  : ytk
@@ -64,21 +64,16 @@ module.exports = {
 
 	async getFormats(id) {
 
-		let sinfo = await yt.getInfo(id).catch(err => { return { streamable: false } });
+		let sinfo = await yt.getInfo(id).catch(err => { return { url: "" } });
 
 		if (!sinfo || !sinfo.formats)
 			return { url: "" }
 
 		for (let i = 0; i < sinfo.formats.length; i++) {
 
-			if(sinfo.formats[i].itag === "249" || sinfo.formats[i].itag === "250" || sinfo.formats[i].itag === "251")
+			if ((sinfo.formats[i].itag === "249" || sinfo.formats[i].itag === "250" || sinfo.formats[i].itag === "251") || (sinfo.formats[i].audioEncoding)) {
 				return { url: sinfo.formats[i].url };
-
-			if(sinfo.formats[i].audioEncoding && (sinfo.formats[i].container === "webm" || sinfo.formats[i].container === "mp4"))
-				return { url: sinfo.formats[i].url };
-
-			if(sinfo.formats[i].audioEncoding)
-				return { url: sinfo.formats[i].url };
+			}
 
 		}
 
@@ -88,7 +83,7 @@ module.exports = {
 
 	async getDuration(id) {
 
-		let req = await superagent.get('https://www.googleapis.com/youtube/v3/videos').query({
+		let req = await sf.get('https://www.googleapis.com/youtube/v3/videos').query({
 			part : 'contentDetails',
 			id   : id,
 			key  : ytk
