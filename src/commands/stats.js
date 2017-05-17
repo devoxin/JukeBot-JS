@@ -3,7 +3,7 @@ const timeParser = require("../../util/timeParser.js")
 exports.run = function(client, msg, args) {
 
 	msg.channel.createMessage({embed: {
-		color: 0x1E90FF,
+		color: config.options.embedColour,
 		title: `JukeBot v${config.version}`,
 		description: `Created by CrimsonXV#0387`,
 		fields: [

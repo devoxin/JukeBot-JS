@@ -8,7 +8,7 @@ exports.play = async function play(guild, client) {
 	if (guild.queue.length === 0) {
 		if (client.voiceConnections.get(guild.id) && client.voiceConnections.get(guild.id).channelID) client.leaveVoiceChannel(guild.id);
 		return client.getChannel(guild.msgc).createMessage({ embed: {
-			color: 0x1E90FF,
+			color: config.options.embedColour,
 			title: "Queue concluded!",
 			description: "[Enjoying the music? Help keep JukeBot alive!](https://patreon.com/crimsonxv)",
 			footer: {
@@ -25,7 +25,7 @@ exports.play = async function play(guild, client) {
 			guild.queue.shift();
 			exports.play(guild, client);
 			client.getChannel(guild.msgc).createMessage({ embed: {
-				color: 0x1E90FF,
+				color: config.options.embedColour,
 				title: "This song exceeds the duration limit"
 			}});
 		} else {
@@ -37,7 +37,7 @@ exports.play = async function play(guild, client) {
 			guild.queue.shift();
 			exports.play(guild, client);
 			client.getChannel(guild.msgc).createMessage({ embed: {
-				color: 0x1E90FF,
+				color: config.options.embedColour,
 				title: "This song is unplayable"
 			}});
 		} else {
@@ -49,7 +49,7 @@ exports.play = async function play(guild, client) {
 	}
 
 	client.getChannel(guild.msgc).createMessage({embed: {
-		color: 0x1E90FF,
+		color: config.options.embedColour,
 		title: "Now Playing",
 		description: `${guild.queue[0].title}` //(https://youtu.be/${guild.queue[0].id})`
 	}});

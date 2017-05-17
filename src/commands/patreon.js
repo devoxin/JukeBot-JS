@@ -1,7 +1,7 @@
 exports.run = function (client, msg, args) {
 
 	msg.channel.createMessage({ embed: {
-		color: 0x1E90FF,
+		color: config.options.embedColour,
 		title: "Become a patreon!",
 		url  : "https://patreon.com/crimsonxv",
 		description: "By becoming a patreon, you help keep the servers running & encourage me to continue developing new features",

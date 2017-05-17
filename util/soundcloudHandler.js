@@ -1,5 +1,5 @@
 const sf  = require("snekfetch");
-const sck = require("../src/config.json").soundcloud;
+const sck = require("../src/config.json").keys.soundcloud;
 
 module.exports = {
 
@@ -16,7 +16,7 @@ module.exports = {
 
 		if (!req || !req.body || req.body.kind !== "track") return [];
 
-		let stream = await superagent.get(`https://api.soundcloud.com/i1/tracks/${req.body.id}/streams`).query({
+		let stream = await sf.get(`https://api.soundcloud.com/i1/tracks/${req.body.id}/streams`).query({
 			client_id : sck
 		})
 

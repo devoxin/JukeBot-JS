@@ -1,8 +1,10 @@
 config       = require("./config.json");
+if (!config.keys.discord || config.keys.discord.length <= 30)
+	return console.log("Invalid token specified. Please ensure you haven't specified the ClientID/ClientSecret");
 permissions  = require("../util/Permissions.js");
 const sf     = require("snekfetch");
 const Eris   = require("eris");
-const client = new Eris.Client(config.token, {
+const client = new Eris.Client(config.keys.discord, {
 	disableEvents: {
 		"GUILD_BAN_ADD"  : true,
 		"GUILD_BAN_REMOVE" : true,
@@ -14,7 +16,7 @@ const client = new Eris.Client(config.token, {
 		"USER_UPDATE" : true
 	},
 	messageLimit: 0,
-	maxShards: config.shards
+	maxShards: config.options.shards
 });
 
 guilds   = {};
@@ -22,10 +24,10 @@ prefixes = require("./prefixes.json");
 
 client.on("ready", async () => {
 	console.log(`[SYSTEM] Ready! (User: ${client.user.username})`);
-	client.editStatus("online", { name: `${config.prefix}help | v${config.version}` });
+	client.editStatus("online", { name: `${config.options.prefix}help | v${config.version}` });
 
 	client.guilds.forEach(g => {
-		if (!prefixes[g.id]) prefixes[g.id] = config.prefix;
+		if (!prefixes[g.id]) prefixes[g.id] = config.options.prefix;
 		if (!guilds[g.id]) guilds[g.id] = { id: g.id, msgc: "", queue: [], svotes: [], repeat: "None" };
 	});
 });
@@ -34,7 +36,7 @@ client.on("guildCreate", g => {
 	if ((g.members.filter(m => m.bot).length / g.members.size) >= 0.68) return g.leave();
 	g.defaultChannel.createMessage("Hey there, I'm JukeBot! You can view my commands with `$help`. Please report any issues to CrimsonXV#0387!");
 
-	prefixes[g.id] = config.prefix;
+	prefixes[g.id] = config.options.prefix;
 	guilds[g.id] = { id: g.id, msgc: "", queue: [], svotes: [], repeat: "None" };
 
 	if (!config.botlists || !config.botlists._clientid) return;
@@ -56,11 +58,11 @@ client.on("guildDelete", g => {
 })
 
 client.on("messageCreate", async msg => {
-	if (msg.channel.type === 1 || msg.author.bot || !guilds[msg.channel.guild.id] || permissions.isBlocked(msg.member, msg.channel.guild)) return;
+	if (!msg.channel.guild || msg.author.bot || !guilds[msg.channel.guild.id] || permissions.isBlocked(msg.member)) return;
 
 	if (msg.mentions.find(u => u.id === client.user.id) && msg.content.toLowerCase().includes("help"))
 		return msg.channel.createMessage({ embed: {
-			color: 0x1E90FF,
+			color: config.options.embedColour,
 			title: `Use ${prefixes[msg.channel.guild.id]}help for commands`
 		}});
 
@@ -80,11 +82,11 @@ client.on("messageCreate", async msg => {
 	} catch(e) {
 		if (e.message.includes("Cannot find module") || e.message.includes("ENOENT")) return;
 		msg.channel.createMessage({ embed: {
-			color: 0x1E90FF,
+			color: config.options.embedColour,
 			title: `${command} failed`,
 			description: `The command failed to run. The error has been logged.`
 		}});
-		console.error(e.message + "\n" + e.stack.split("\n")[0] + "\n" + e.stack.split("\n")[1]);
+		console.error(`[ERROR] ${e.message}\n${e.stack.split("\n")[0]}\n${e.stack.split("\n")[1]}`);
 	}
 })
 

@@ -4,7 +4,7 @@ exports.run = function (client, msg, args) {
 
 	if (guilds[msg.channel.guild.id].queue.length <= 1)
 		return msg.channel.createMessage({ embed: {
-			color: 0x1E90FF,
+			color: config.options.embedColour,
 			title: "There's nothing queued"
 		}});
 
@@ -23,7 +23,7 @@ exports.run = function (client, msg, args) {
 	let track = guild.queue[0];
 
 	let embed = {
-		color       : 0x1E90FF,
+		color       : config.options.embedColour,
 		title       : track.title,
 		url         : track.src !== "soundcloud" ? `https://youtu.be/${track.id}` : undefined,
 		description : `${timeParser.formatSeconds(client.voiceConnections.get(msg.channel.guild.id).current.playTime / 1000)}${track.src === "youtube" ? "/" + timeParser.formatSeconds(track.duration) : ""}`,

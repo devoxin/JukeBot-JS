@@ -10,7 +10,7 @@ exports.run = async function (client, msg, args) {
 		aliases = Object.keys(aliases).map(a => `${a}${pad(10, a)}${aliases[a]}`).join("\n")
 
 		msg.channel.createMessage({ embed: {
-			color: 0x1E90FF,
+			color: config.options.embedColour,
 			title: "Help",
 			description: commands.map(c => c.replace(".js", "")).sort().join(", "),
 			fields: [
@@ -28,13 +28,13 @@ exports.run = async function (client, msg, args) {
 			let cmd = require(`./${args[0]}.js`).usage;
 			delete require.cache[require.resolve(`./${args[0]}.js`)];
 			msg.channel.createMessage({ embed: {
-				color: 0x1E90FF,
+				color: config.options.embedColour,
 				title: `${cmd.main.replace("{command}", args[0].toLowerCase()).replace("{prefix}", prefixes[msg.channel.guild.id])} ${cmd.args}`,
 				description: cmd.description
 			}});
 		} catch (err) {
 			msg.channel.createMessage({ embed: {
-				color: 0x1E90FF,
+				color: config.options.embedColour,
 				title: "Invalid command",
 				description: "Did you type the command correctly?"
 			}});

@@ -1,12 +1,12 @@
 exports.run = async function(client, msg, args) {
 
 	if (guilds[msg.channel.guild.id].queue.length <= 1) return msg.channel.createMessage({ embed: {
-		color: 0x1E90FF,
+		color: config.options.embedColour,
 		title: "The queue is empty."
 	}});
 
 	if (!parseInt(args[0]) || args[0] === 0) return msg.channel.createMessage({ embed: {
-		color: 0x1E90FF,
+		color: config.options.embedColour,
 		title: "You need to specify a number between 1 and 100"
 	}});
 
@@ -17,7 +17,7 @@ exports.run = async function(client, msg, args) {
 	let qi = queue.length - 1;
 
 	let m = await msg.channel.createMessage({ embed: {
-		color: 0x1E90FF,
+		color: config.options.embedColour,
 		title: `Removing up to ${remove} songs queued by you...`
 	}});
 
@@ -34,7 +34,7 @@ exports.run = async function(client, msg, args) {
 	guilds[msg.channel.guild.id].queue = queue;
 
 	m.edit({ embed: {
-		color: 0x1E90FF,
+		color: config.options.embedColour,
 		title: `${removed} songs unqueued`
 	}});
 }

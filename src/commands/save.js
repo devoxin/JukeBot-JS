@@ -4,7 +4,7 @@ exports.run = async function (client, msg, args) {
 
 	if (guilds[msg.channel.guild.id].queue.length === 0)
 		return msg.channel.createMessage({ embed: {
-			color: 0x1E90FF,
+			color: config.options.embedColour,
 			title: "Nothing is queued."
 		}});
 
@@ -14,13 +14,13 @@ exports.run = async function (client, msg, args) {
 	});
 
 	if (!dmc) return msg.channel.createMessage({ embed: {
-		color: 0x1E90FF,
+		color: config.options.embedColour,
 		title: "There was an error fetching a DM channel."
 	}});
 
 	if (args[0] && args[0] === "-q") {
 		let m = await msg.channel.createMessage({ embed: {
-			color: 0x1E90FF,
+			color: config.options.embedColour,
 			title: "Compiling queue..."
 		}});
 
@@ -32,13 +32,13 @@ exports.run = async function (client, msg, args) {
 		})
 		.then(() => {
 			m.edit({ embed: {
-				color: 0x1E90FF,
+				color: config.options.embedColour,
 				title: "You have been DM'd the queue."
 			}})
 		})
 		.catch(err => {
 			m.edit({ embed: {
-				color: 0x1E90FF,
+				color: config.options.embedColour,
 				title: err.message
 			}})
 		});
@@ -46,7 +46,7 @@ exports.run = async function (client, msg, args) {
 		let song = guilds[msg.channel.guild.id].queue[0];
 
 		dmc.createMessage({ embed: {
-			color: 0x1E90FF,
+			color: config.options.embedColour,
 			title: song.title,
 			url  : song.src === "youtube" ? `https://youtu.be/${song.id}` : song.durl
 		}});

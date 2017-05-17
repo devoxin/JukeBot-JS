@@ -1,19 +1,19 @@
 exports.run = function (client, msg, args) {
 
 	if (!client.voiceConnections.get(msg.channel.guild.id) || !client.voiceConnections.get(msg.channel.guild.id).channelID)	return msg.channel.createMessage({ embed: {
-		color: 0x1E90FF,
+		color: config.options.embedColour,
 		title: "There's no playback activity"
 	}});
 
 	if (msg.member.voiceState.channelID !== client.voiceConnections.get(msg.channel.guild.id).channelID)
 		return msg.channel.createMessage({ embed: {
-			color: 0x1E90FF,
+			color: config.options.embedColour,
 			title: "You need to be in my voicechannel to skip"
 		}});
 
 	if (guilds[msg.channel.guild.id].svotes.includes(msg.author.id))
 		return msg.channel.createMessage({ embed: {
-			color: 0x1E90FF,
+			color: config.options.embedColour,
 			title: "You've already voted"
 		}});
 
@@ -25,7 +25,7 @@ exports.run = function (client, msg, args) {
 		return client.voiceConnections.get(msg.channel.guild.id).stopPlaying();
 
 	msg.channel.createMessage({ embed: {
-		color: 0x1E90FF,
+		color: config.options.embedColour,
 		title: "Voted to skip",
 		description: `${guilds[msg.channel.guild.id].svotes.length}/${voiceMembers} vote(s) needed.`
 	}});

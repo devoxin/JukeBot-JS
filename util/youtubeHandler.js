@@ -1,6 +1,6 @@
 const sf  = require("snekfetch");
 const yt  = require("ytdl-core");
-const ytk = require("../src/config.json").youtube;
+const ytk = require("../src/config.json").keys.youtube;
 
 module.exports = {
 
