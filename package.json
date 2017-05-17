@@ -14,12 +14,12 @@
   "author": "CrimsonXV",
   "license": "AGPL-3.0",
   "dependencies": {
-    "buffered2": "^1.0.0",
-    "eris": "^0.6.0",
-    "eventemitter3": "^2.0.3",
-    "node-opus": "^0.2.6",
-    "snekfetch": "^3.1.7",
-    "sodium-native": "^1.9.0",
-    "ytdl-core": "^0.13.2"
+    "buffered2": "*",
+    "eris": "*",
+    "eventemitter3": "*",
+    "node-opus": "*",
+    "snekfetch": "*",
+    "sodium-native": "*",
+    "ytdl-core": "*"
   }
 }
