@@ -1,5 +1,5 @@
-const superagent = require("superagent");
-const fs         = require("fs");
+const sf = require("snekfetch");
+const fs = require("fs");
 
 exports.run = function (client, msg, args) {
 	if (msg.author.id !== "180093157554388993") return msg.channel.createMessage({ embed: {
@@ -21,7 +21,7 @@ exports.run = function (client, msg, args) {
 
 function setAvatar(client, url, local) {
 	if (!local) {
-		superagent.get(url).end((err, res) => {
+		sf.get(url).end((err, res) => {
 			client.editSelf({ avatar: `data:${res.header["content-type"]};base64,${res.body.toString("base64")}` });
 		});
 	} else {
