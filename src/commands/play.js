@@ -117,7 +117,7 @@ exports.run = async function (client, msg, args) {
 
 	};
 
-	if (res.length === 0) {
+	if (res.items.length === 0) {
 		if (client.voiceConnections.get(msg.channel.guild.id).channelID && guild.queue.length === 0) client.leaveVoiceChannel(client.voiceConnections.get(msg.channel.guild.id).channelID);
 		return msg.channel.createMessage({ embed: {
 			color: config.options.embedColour,
