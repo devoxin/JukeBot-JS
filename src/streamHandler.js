@@ -32,7 +32,7 @@ exports.play = async function play(guild, client) {
 			guild.queue[0].duration = duration;
 		}
 
-		let res = await ytutil.getFormats(guild.queue[0].id);
+		var res = await ytutil.getFormats(guild.queue[0].id);
 		if (!res.url) {
 			guild.queue.shift();
 			exports.play(guild, client);
@@ -54,7 +54,7 @@ exports.play = async function play(guild, client) {
 		description: `${guild.queue[0].title}` //(https://youtu.be/${guild.queue[0].id})`
 	}});
 
-	client.voiceConnections.get(guild.id).play(song);
+	client.voiceConnections.get(guild.id).play(res ? res.url : guild.queue[0].id);
 
 	client.voiceConnections.get(guild.id).once("end", () => {
 		if (guild.repeat === "All") guild.queue.push(guild.queue[0]);

@@ -1,6 +1,6 @@
 exports.run = function (client, msg, args) {
 
-	if (!config.owners.includes(msg.author.id)) return false;
+	if (!config.prop.owners.includes(msg.author.id)) return false;
 
 	if (!args[0]) return msg.channel.createMessage({embed: {
 		color: config.options.embedColour,
