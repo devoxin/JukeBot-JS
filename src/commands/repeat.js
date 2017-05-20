@@ -9,13 +9,15 @@ exports.run = function (client, msg, args) {
 	if (!args[0])
 		return msg.channel.createMessage({ embed: {
 			color: config.options.embedColour,
-			title: `Repeat mode: ${guilds[msg.channel.guild.id].repeat}\n\n${prefixes[msg.channel.guild.id]}repeat < a | c | n >\n\n[All, Current, None]`,
+			title: `Repeat mode: ${guilds[msg.channel.guild.id].repeat}`,
+			description: `${prefixes[msg.channel.guild.id]}repeat < a | c | n >\n\n[All, Current, None]`
 		}});
 
 	if (!(args[0] === "a" || args[0] === "c" || args[0] === "n"))
 		return msg.channel.createMessage({ embed: {
 			color: config.options.embedColour,
-			title: `Repeat mode can only be set to 'a', 'c' or 'n'.\n\n[All, Current, None]`,
+			title: `Repeat mode can only be set to 'a', 'c' or 'n'`,
+			description: `[All, Current, None]`
 		}});
 
 	if 		(args[0] === "a")  guilds[msg.channel.guild.id].repeat = "All";
