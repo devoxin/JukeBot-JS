@@ -23,11 +23,11 @@ exports.play = async function play(guild, client) {
 		let duration = await ytutil.getDuration(guild.queue[0].id);
 		if (duration > 3700 && !permissions.isDonator(guild.queue[0].req) || duration > 7300 && permissions.isDonator(guild.queue[0].req)) {
 			guild.queue.shift();
-			exports.play(guild, client);
 			client.getChannel(guild.msgc).createMessage({ embed: {
 				color: config.options.embedColour,
 				title: "This song exceeds the duration limit"
 			}});
+			return exports.play(guild, client);
 		} else {
 			guild.queue[0].duration = duration;
 		}
@@ -35,11 +35,11 @@ exports.play = async function play(guild, client) {
 		let res = await ytutil.getFormats(guild.queue[0].id);
 		if (!res.url) {
 			guild.queue.shift();
-			exports.play(guild, client);
 			client.getChannel(guild.msgc).createMessage({ embed: {
 				color: config.options.embedColour,
 				title: "This song is unplayable"
 			}});
+			return exports.play(guild, client);
 		} else {
 			song = new buffer();
 			ytdl(guild.queue[0].id, { filter: "audioonly" }).pipe(song);
