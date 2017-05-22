@@ -16,10 +16,12 @@
   "dependencies": {
     "buffered2": "*",
     "eris": "*",
+    "erlpack": "github:hammerandchisel/erlpack",
     "eventemitter3": "*",
     "node-opus": "*",
     "snekfetch": "*",
     "sodium-native": "*",
+    "uws": "*",
     "ytdl-core": "*"
   }
 }
