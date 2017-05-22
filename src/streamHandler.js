@@ -3,7 +3,7 @@ const ytdl   = require("ytdl-core");
 const buffer = require("buffered2").BufferedStream;
 
 exports.play = async function play(guild, client) {
-	if (!client.guilds.get(guild.id) ||	!client.voiceConnections.get(guild.id) || client.voiceConnections.get(guild.id).playing || client.voiceConnections.get(guild.id).paused) return;
+	if (!client.guilds.has(guild.id) ||	!client.voiceConnections.has(guild.id) || !client.voiceConnections.get(guild.id).channelID || client.voiceConnections.get(guild.id).playing || client.voiceConnections.get(guild.id).paused) return;
 
 	if (guild.queue.length === 0) {
 		if (client.voiceConnections.get(guild.id) && client.voiceConnections.get(guild.id).channelID) client.leaveVoiceChannel(guild.id);
