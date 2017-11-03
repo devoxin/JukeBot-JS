@@ -2,9 +2,10 @@ config       = require("./config.json");
 if (!config.keys.discord || config.keys.discord.length <= 30)
 	return console.log("Invalid token specified. Please ensure you haven't specified the ClientID/ClientSecret");
 
-permissions  = require("../util/Permissions.js");
 const sf     = require("snekfetch");
-const Eris   = require("eris");
+const Eris   = require('../util/extensionLoader.js')(require("eris"));
+permissions  = require("../util/Permissions.js");
+
 const client = new Eris.Client(config.keys.discord, {
 	disableEvents: {
 		"GUILD_BAN_ADD"  : true,
@@ -28,14 +29,17 @@ client.on("ready", async () => {
 	client.editStatus("online", { name: `${config.options.prefix}help | v${config.version}` });
 
 	client.guilds.forEach(g => {
-		if (!prefixes[g.id]) prefixes[g.id] = config.options.prefix;
-		if (!guilds[g.id]) guilds[g.id] = { id: g.id, msgc: "", queue: [], svotes: [], repeat: "None" };
+		if (!prefixes[g.id])
+			prefixes[g.id] = config.options.prefix;
+
+		if (!guilds[g.id])
+			guilds[g.id] = { id: g.id, msgc: "", queue: [], svotes: [], repeat: "None" };
 	});
 });
 
 client.on("guildCreate", g => {
-	if ((g.members.filter(m => m.bot).length / g.members.size) >= 0.68) return g.leave();
-	g.defaultChannel.createMessage("Hey there, I'm JukeBot! You can view my commands with `$help`. Please report any issues to CrimsonXV#0387!");
+	if ((g.members.filter(m => m.bot).length / g.members.size) >= 0.68) 
+		return g.leave();
 
 	prefixes[g.id] = config.options.prefix;
 	guilds[g.id] = { id: g.id, msgc: "", queue: [], svotes: [], repeat: "None" };
@@ -58,10 +62,10 @@ client.on("guildDelete", g => {
 		sf.post(`https://discordbots.org/api/bots/${config.botlists._clientid}/stats`).send({ "server_count": client.guilds.size }).set("Authorization", config.botlists.dbl).end();
 })
 
-client.on("messageCreate", async msg => {
-	if (!msg.channel.guild || msg.author.bot || !guilds[msg.channel.guild.id] || permissions.isBlocked(msg.member)) return;
+client.on("messageCreate", async (msg) => {
+	if (msg.isFromDM || msg.author.bot || !guilds[msg.channel.guild.id] || msg.member.isBlocked) return;
 
-	if (msg.mentions.find(u => u.id === client.user.id) && msg.content.toLowerCase().includes("help"))
+	if (msg.mentionsSelf && msg.content.toLowerCase().includes("help"))
 		return msg.channel.createMessage({ embed: {
 			color: config.options.embedColour,
 			title: `Use ${prefixes[msg.channel.guild.id]}help for commands`
