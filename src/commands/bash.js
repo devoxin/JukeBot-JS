@@ -15,7 +15,7 @@ exports.run = async function(client, msg, args) {
 		if (e) return m.edit(`\`\`\`js\n${e.message}\n\`\`\``);
 		if (stdout.length > 2000 || stderr.length > 2000) {
 			let toPost = "INFO:\n" + stdout + "\n\nERRORS:\n" + stderr
-			let s = await superagent.post("https://hastebin.com/documents")
+			let s = await sf.post("https://hastebin.com/documents")
 			.send(toPost)
 			.catch(err => m.edit("Failed to post bash output:\n" + err.message));
 

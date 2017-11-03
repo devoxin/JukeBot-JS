@@ -17,8 +17,8 @@ exports.run = async function (client, msg, args) {
 				{ name: "Aliases", value: `\`\`\`\n${aliases}\n\`\`\``, inline: true },
 				{ name: "Support", value: "Need help with JukeBot? [Join Here!](https://discord.gg/xvtH2Yn)\n\n" +
 										  "**Getting Started**\n1. Join a voicechannel\n2. $play <YouTube URL/Query | Soundcloud URL>\n3. If prompted, select a song (1-3)\n\n" +
-										  `**Current Prefix**\n${prefixes[msg.channel.guild.id]}\n\n` +
-										  `View command info with ${prefixes[msg.channel.guild.id]}help <command>`, inline: true }
+										  `**Current Prefix**\n${msg.channel.guild.prefix}\n\n` +
+										  `View command info with ${msg.channel.guild.prefix}help <command>`, inline: true }
 			]
 		}});
 
@@ -29,7 +29,7 @@ exports.run = async function (client, msg, args) {
 			delete require.cache[require.resolve(`./${args[0]}.js`)];
 			msg.channel.createMessage({ embed: {
 				color: config.options.embedColour,
-				title: `${cmd.main.replace("{command}", args[0].toLowerCase()).replace("{prefix}", prefixes[msg.channel.guild.id])} ${cmd.args}`,
+				title: `${cmd.main.replace("{command}", args[0].toLowerCase()).replace("{prefix}", msg.channel.guild.prefix)} ${cmd.args}`,
 				description: cmd.description
 			}});
 		} catch (err) {

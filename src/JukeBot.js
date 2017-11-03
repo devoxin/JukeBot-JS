@@ -1,6 +1,7 @@
 config       = require("./config.json");
 if (!config.keys.discord || config.keys.discord.length <= 30)
 	return console.log("Invalid token specified. Please ensure you haven't specified the ClientID/ClientSecret");
+
 permissions  = require("../util/Permissions.js");
 const sf     = require("snekfetch");
 const Eris   = require("eris");
@@ -71,6 +72,9 @@ client.on("messageCreate", async msg => {
 	let command = msg.content.slice(prefixes[msg.channel.guild.id].length).toLowerCase().split(" ")[0];
 	const args  = msg.content.split(" ").slice(1);
 	console.log(`${msg.author.username} > ${msg.content}`);
+
+	/* Extras */
+	msg.channel.guild.prefix = prefixes[msg.channel.guild.id];
 
 	delete require.cache[require.resolve("./aliases.json")];
 	let aliases = require("./aliases.json");

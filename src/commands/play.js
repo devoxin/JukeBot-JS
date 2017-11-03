@@ -147,12 +147,12 @@ exports.run = async function (client, msg, args) {
 			}
 		}});
 
-		const collector = await messageCollector.awaitMessages(client, msg.channel, (m => m.author.id === msg.author.id && msg.channel.guild && ((parseInt(m.content) && m.content >= 1 && m.content <= res.items.length) || m.content.toLowerCase().startsWith(prefixes[msg.channel.guild.id] + "p") || m.content === "c")), {
+		const collector = await messageCollector.awaitMessages(client, msg.channel, (m => m.author.id === msg.author.id && msg.channel.guild && ((parseInt(m.content) && m.content >= 1 && m.content <= res.items.length) || m.content.toLowerCase().startsWith(`${msg.channel.guild.prefix}p`) || m.content === "c")), {
 			maxMatches: 1,
 			time: 10000
 		});
 
-		if (collector.length === 0 || collector[0].content.toLowerCase().startsWith(prefixes[msg.channel.guild.id] + "p") || collector[0].content === "c") {
+		if (collector.length === 0 || collector[0].content.toLowerCase().startsWith(`${msg.channel.guild.prefix}p`) || collector[0].content === "c") {
 			if ((collector.length === 0 || collector[0].content === "c") && client.voiceConnections.get(msg.channel.guild.id).channelID && guild.queue.length === 0) client.leaveVoiceChannel(client.voiceConnections.get(msg.channel.guild.id).channelID);
 			return src.delete();
 		};
