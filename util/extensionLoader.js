@@ -17,6 +17,19 @@ function loadExtensions(Eris) {
         }
     });
 
+    Object.defineProperty(Eris.Channel.prototype, "hasPermissions", {
+        value(user, ...permissions) {
+            let check = true;
+            for (permission of permissions) {
+                if (!this.permissionsOf(user).has(permission)) {
+                    check = false;
+                    break
+                }
+            }
+            return check;
+        }
+    })
+
     return Eris;
 }
 
