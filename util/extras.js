@@ -3,7 +3,7 @@ module.exports = {
     disable: (...events) => {
         const disabled = {};
         
-        for (e of events)
+        for (const e of events)
             disabled[e] = true;
 
         return disabled;

@@ -27,7 +27,7 @@ client.on('ready', async () => {
 	});
 });
 
-client.on('guildCreate', g => {
+client.on('guildCreate', async (g) => {
 	if ((g.members.filter(m => m.bot).length / g.members.size) >= 0.60) 
 		return g.leave();
 
@@ -35,10 +35,9 @@ client.on('guildCreate', g => {
 	guilds[g.id] = { id: g.id, msgc: '', queue: [], svotes: [], repeat: 'None' };
 
 	if (!config.botlists || !config.botlists._clientid) return;
-	if (config.botlists.dbots)
-		sf.post(`https://bots.discord.pw/api/bots/${config.botlists._clientid}/stats`).send({ 'server_count': client.guilds.size }).set('Authorization', config.botlists.dbots).end();
-	if (config.botlists.dbl)
-		sf.post(`https://discordbots.org/api/bots/${config.botlists._clientid}/stats`).send({ 'server_count': client.guilds.size }).set('Authorization', config.botlists.dbl).end();
+
+	for (const list of config.botlists.lists) 
+		await sf.post(list.url).send({ 'server_count': client.guilds.size }).set('Authorization', list.token);
 })
 
 client.on('guildDelete', g => {
