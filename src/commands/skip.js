@@ -2,19 +2,19 @@ exports.run = function (client, msg, args) {
 
 	if (!client.voiceConnections.get(msg.channel.guild.id) || !client.voiceConnections.get(msg.channel.guild.id).channelID)	return msg.channel.createMessage({ embed: {
 		color: config.options.embedColour,
-		title: "There's no playback activity"
+		title: 'There\'s no playback activity'
 	}});
 
 	if (msg.member.voiceState.channelID !== client.voiceConnections.get(msg.channel.guild.id).channelID)
 		return msg.channel.createMessage({ embed: {
 			color: config.options.embedColour,
-			title: "You need to be in my voicechannel to skip"
+			title: 'You need to be in my voicechannel to skip'
 		}});
 
 	if (guilds[msg.channel.guild.id].svotes.includes(msg.author.id))
 		return msg.channel.createMessage({ embed: {
 			color: config.options.embedColour,
-			title: "You've already voted"
+			title: 'You\'ve already voted'
 		}});
 
 	guilds[msg.channel.guild.id].svotes.push(msg.author.id);
@@ -26,13 +26,13 @@ exports.run = function (client, msg, args) {
 
 	msg.channel.createMessage({ embed: {
 		color: config.options.embedColour,
-		title: "Voted to skip",
+		title: 'Voted to skip',
 		description: `${guilds[msg.channel.guild.id].svotes.length}/${voiceMembers} vote(s) needed.`
 	}});
 }
 
 exports.usage = {
-	main: "{prefix}{command}",
-	args: "",
-	description: "Vote skip the currently playing song"
+	main: '{prefix}{command}',
+	args: '',
+	description: 'Vote skip the currently playing song'
 };

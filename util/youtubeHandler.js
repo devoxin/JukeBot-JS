@@ -1,15 +1,15 @@
-const sf  = require("snekfetch");
-const yt  = require("ytdl-core");
-const ytk = require("../src/config.json").keys.youtube;
+const sf  = require('snekfetch');
+const yt  = require('ytdl-core');
+const ytk = require('../src/config.json').keys.youtube;
 
 module.exports = {
 
 	async search(query) {
 
-		let results = await sf.get("https://www.googleapis.com/youtube/v3/search").query({
-			part       : "snippet",
-			maxResults : "3",
-			type       : "video",
+		let results = await sf.get('https://www.googleapis.com/youtube/v3/search').query({
+			part       : 'snippet',
+			maxResults : '3',
+			type       : 'video',
 			q          : query,
 			key        : ytk
 		}).catch(err => {
@@ -20,11 +20,11 @@ module.exports = {
 
 	},
 
-	async getPlaylist(id, limit, page = "", videos = []) {
+	async getPlaylist(id, limit, page = '', videos = []) {
 
 		let req = await sf.get('https://www.googleapis.com/youtube/v3/playlistItems').query({
-			maxResults    : "50",
-			part          : "snippet",
+			maxResults    : '50',
+			part          : 'snippet',
 			nextPageToken : null,
 			pageToken     : page,
 			playlistId    : id,
@@ -50,8 +50,8 @@ module.exports = {
 
 	async videoInfo(id) {
 
-		let result = await sf.get("https://www.googleapis.com/youtube/v3/videos").query({
-			part : "snippet",
+		let result = await sf.get('https://www.googleapis.com/youtube/v3/videos').query({
+			part : 'snippet',
 			id   : id,
 			key  : ytk
 		}).catch(err => {
@@ -64,20 +64,20 @@ module.exports = {
 
 	async getFormats(id) {
 
-		let sinfo = await yt.getInfo(id).catch(err => { return { url: "" } });
+		let sinfo = await yt.getInfo(id).catch(err => { return { url: '' } });
 
 		if (!sinfo || !sinfo.formats)
-			return { url: "" }
+			return { url: '' }
 
 		for (let i = 0; i < sinfo.formats.length; i++) {
 
-			if ((sinfo.formats[i].itag === "249" || sinfo.formats[i].itag === "250" || sinfo.formats[i].itag === "251") || (sinfo.formats[i].audioEncoding)) {
+			if ((sinfo.formats[i].itag === '249' || sinfo.formats[i].itag === '250' || sinfo.formats[i].itag === '251') || (sinfo.formats[i].audioEncoding)) {
 				return { url: sinfo.formats[i].url };
 			}
 
 		}
 
-		return { url: "" };
+		return { url: '' };
 
 	},
 

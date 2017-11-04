@@ -1,17 +1,17 @@
 function loadExtensions(Eris) {
-    Object.defineProperty(Eris.Message.prototype, "isFromDM", {
+    Object.defineProperty(Eris.Message.prototype, 'isFromDM', {
         get() {
             return this.channel.type === 1;
         }
     });
     
-    Object.defineProperty(Eris.Member.prototype, "isBlocked", {
+    Object.defineProperty(Eris.Member.prototype, 'isBlocked', {
         get() {
             return permissions.isBlocked(this.id);
         }
     });
 
-    Object.defineProperty(Eris.GuildChannel.prototype, "hasPermissions", {
+    Object.defineProperty(Eris.GuildChannel.prototype, 'hasPermissions', {
         value(user, ...permissions) {
             let check = true;
             for (permission of permissions) {

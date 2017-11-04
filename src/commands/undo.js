@@ -2,12 +2,12 @@ exports.run = async function(client, msg, args) {
 
 	if (guilds[msg.channel.guild.id].queue.length <= 1) return msg.channel.createMessage({ embed: {
 		color: config.options.embedColour,
-		title: "The queue is empty."
+		title: 'The queue is empty.'
 	}});
 
 	if (!parseInt(args[0]) || args[0] === 0) return msg.channel.createMessage({ embed: {
 		color: config.options.embedColour,
-		title: "You need to specify a number between 1 and 100"
+		title: 'You need to specify a number between 1 and 100'
 	}});
 
 	let queue = guilds[msg.channel.guild.id].queue.slice(1);
@@ -40,7 +40,7 @@ exports.run = async function(client, msg, args) {
 }
 
 exports.usage = {
-	main: "{prefix}{command}",
-	args: "<1-100>",
-	description: "Removes the last `x` songs from the queue"
+	main: '{prefix}{command}',
+	args: '<1-100>',
+	description: 'Removes the last `x` songs from the queue'
 };

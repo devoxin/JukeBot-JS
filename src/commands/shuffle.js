@@ -3,19 +3,19 @@ exports.run = function (client, msg, args) {
 	if (!permissions.isAdmin(msg.member))
 		return msg.channel.createMessage({ embed: {
 			color: config.options.embedColour,
-			title: "Insufficient Permissions",
+			title: 'Insufficient Permissions',
 		}});
 
 	if (!client.voiceConnections.get(msg.channel.guild.id))
 		return msg.channel.createMessage({ embed: {
 			color: config.options.embedColour,
-			title: "There's no playback activity"
+			title: 'There\'s no playback activity'
 		}});
 
 	if (guilds[msg.channel.guild.id].queue.length < 3)
 		return msg.channel.createMessage({ embed: {
 			color: config.options.embedColour,
-			title: "There's not enough songs in the queue to shuffle",
+			title: 'There\'s not enough songs in the queue to shuffle',
 		}});
 
 	let tempqueue = guilds[msg.channel.guild.id].queue.slice(1);
@@ -36,13 +36,13 @@ exports.run = function (client, msg, args) {
 
 	msg.channel.createMessage({ embed: {
 		color: config.options.embedColour,
-		title: "Queue Shuffled."
+		title: 'Queue Shuffled.'
 	}});
 
 }
 
 exports.usage = {
-	main: "{prefix}{command}",
-	args: "",
-	description: "Randomizes the queue"
+	main: '{prefix}{command}',
+	args: '',
+	description: 'Randomizes the queue'
 };

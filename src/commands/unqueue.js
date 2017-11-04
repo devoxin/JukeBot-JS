@@ -2,7 +2,7 @@ exports.run = function(client, msg, args) {
 
 	if (guilds[msg.channel.guild.id].queue.length <= 1) return msg.channel.createMessage({ embed: {
 		color: config.options.embedColour,
-		title: "The queue is empty."
+		title: 'The queue is empty.'
 	}});
 
 	if (!parseInt(args[0]) || args[0] <= 0|| args[0] >= guilds[msg.channel.guild.id].queue.length) return msg.channel.createMessage({ embed: {
@@ -13,7 +13,7 @@ exports.run = function(client, msg, args) {
 	if (guilds[msg.channel.guild.id].queue[Math.round(args[0])].req !== msg.author.id && !permissions.isAdmin(msg.member))
 		return msg.channel.createMessage({ embed: {
 			color: config.options.embedColour,
-			title: "You can't unqueue that."
+			title: 'You can\'t unqueue that.'
 		}});
 
 	msg.channel.createMessage({ embed: {
@@ -25,7 +25,7 @@ exports.run = function(client, msg, args) {
 };
 
 exports.usage = {
-	main: "{prefix}{command}",
-	args: "<index>",
-	description: "Unqueues the song at the specified position"
+	main: '{prefix}{command}',
+	args: '<index>',
+	description: 'Unqueues the song at the specified position'
 };

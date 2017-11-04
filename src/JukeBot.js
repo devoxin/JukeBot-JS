@@ -69,7 +69,7 @@ client.on('messageCreate', async (msg) => {
 	msg.channel.guild.prefix = prefixes[msg.channel.guild.id];
 
 	delete require.cache[require.resolve('./aliases.json')];
-	let aliases = require('./aliases.json');
+	const aliases = require('./aliases.json');
 	if (aliases[command]) command = aliases[command];
 
 	try {
@@ -87,7 +87,3 @@ client.on('messageCreate', async (msg) => {
 })
 
 client.connect();
-
-process.on('uncaughtException', err => {
-	console.log(err.message)
-});

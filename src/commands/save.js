@@ -1,11 +1,11 @@
-const fs = require("fs");
+const fs = require('fs');
 
 exports.run = async function (client, msg, args) {
 
 	if (guilds[msg.channel.guild.id].queue.length === 0)
 		return msg.channel.createMessage({ embed: {
 			color: config.options.embedColour,
-			title: "Nothing is queued."
+			title: 'Nothing is queued.'
 		}});
 
 	let dmc = await msg.author.getDMChannel()
@@ -15,25 +15,25 @@ exports.run = async function (client, msg, args) {
 
 	if (!dmc) return msg.channel.createMessage({ embed: {
 		color: config.options.embedColour,
-		title: "There was an error fetching a DM channel."
+		title: 'There was an error fetching a DM channel.'
 	}});
 
-	if (args[0] && args[0] === "-q") {
+	if (args[0] && args[0] === '-q') {
 		let m = await msg.channel.createMessage({ embed: {
 			color: config.options.embedColour,
-			title: "Compiling queue..."
+			title: 'Compiling queue...'
 		}});
 
-		let queue = guilds[msg.channel.guild.id].queue.map(s => `${s.title} (${s.src === "youtube" ? `https://youtu.be/${s.id}` : s.durl})`).join("\r\n");
+		let queue = guilds[msg.channel.guild.id].queue.map(s => `${s.title} (${s.src === 'youtube' ? `https://youtu.be/${s.id}` : s.durl})`).join('\r\n');
 
-		dmc.createMessage("", {
-			name: "queue.txt",
-			file: Buffer.from(queue, "utf8")
+		dmc.createMessage('', {
+			name: 'queue.txt',
+			file: Buffer.from(queue, 'utf8')
 		})
 		.then(() => {
 			m.edit({ embed: {
 				color: config.options.embedColour,
-				title: "You have been DM'd the queue."
+				title: 'You have been DM\'d the queue.'
 			}})
 		})
 		.catch(err => {
@@ -48,13 +48,13 @@ exports.run = async function (client, msg, args) {
 		dmc.createMessage({ embed: {
 			color: config.options.embedColour,
 			title: song.title,
-			url  : song.src === "youtube" ? `https://youtu.be/${song.id}` : song.durl
+			url  : song.src === 'youtube' ? `https://youtu.be/${song.id}` : song.durl
 		}});
 	}
 }
 
 exports.usage = {
-	main: "{prefix}{command}",
-	args: "[-q]",
-	description: "DMs you info about the currently playing song (or queue, if '-q' is specified)"
+	main: '{prefix}{command}',
+	args: '[-q]',
+	description: 'DMs you info about the currently playing song (or queue, if \'-q\' is specified)'
 };
