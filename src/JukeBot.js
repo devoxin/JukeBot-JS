@@ -40,15 +40,14 @@ client.on('guildCreate', async (g) => {
 		await sf.post(list.url.replace(':id', client.user.id)).send({ 'server_count': client.guilds.size }).set('Authorization', list.token);
 })
 
-client.on('guildDelete', g => {
+client.on('guildDelete', async (g) => {
 	delete prefixes[g.id];
 	delete guilds[g.id];
 
-	if (!config.botlists || !config.botlists._clientid) return;
-	if (config.botlists.dbots)
-		sf.post(`https://bots.discord.pw/api/bots/${config.botlists._clientid}/stats`).send({ 'server_count': client.guilds.size }).set('Authorization', config.botlists.dbots).end();
-	if (config.botlists.dbl)
-		sf.post(`https://discordbots.org/api/bots/${config.botlists._clientid}/stats`).send({ 'server_count': client.guilds.size }).set('Authorization', config.botlists.dbl).end();
+	if (!config.botlists) return;
+	
+	for (const list of config.botlists) 
+		await sf.post(list.url.replace(':id', client.user.id)).send({ 'server_count': client.guilds.size }).set('Authorization', list.token);
 })
 
 client.on('messageCreate', async (msg) => {
