@@ -34,10 +34,10 @@ client.on('guildCreate', async (g) => {
 	prefixes[g.id] = config.options.prefix;
 	guilds[g.id] = { id: g.id, msgc: '', queue: [], svotes: [], repeat: 'None' };
 
-	if (!config.botlists || !config.botlists._clientid) return;
+	if (!config.botlists) return;
 
-	for (const list of config.botlists.lists) 
-		await sf.post(list.url).send({ 'server_count': client.guilds.size }).set('Authorization', list.token);
+	for (const list of config.botlists) 
+		await sf.post(list.url.replace('_clientid', client.user.id)).send({ 'server_count': client.guilds.size }).set('Authorization', list.token);
 })
 
 client.on('guildDelete', g => {
