@@ -28,7 +28,7 @@ client.on('ready', async () => {
 });
 
 client.on('guildCreate', g => {
-	if ((g.members.filter(m => m.bot).length / g.members.size) >= 0.68) 
+	if ((g.members.filter(m => m.bot).length / g.members.size) >= 0.60) 
 		return g.leave();
 
 	prefixes[g.id] = config.options.prefix;
