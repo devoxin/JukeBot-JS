@@ -37,7 +37,7 @@ client.on('guildCreate', async (g) => {
 	if (!config.botlists) return;
 
 	for (const list of config.botlists) 
-		await sf.post(list.url.replace('_clientid', client.user.id)).send({ 'server_count': client.guilds.size }).set('Authorization', list.token);
+		await sf.post(list.url.replace(':id', client.user.id)).send({ 'server_count': client.guilds.size }).set('Authorization', list.token);
 })
 
 client.on('guildDelete', g => {
