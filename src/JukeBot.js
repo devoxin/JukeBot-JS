@@ -71,7 +71,6 @@ client.on("messageCreate", async (msg) => {
 			title: `Use ${prefixes[msg.channel.guild.id]}help for commands`
 		}});
 
-	//if (!msg.content.startsWith(prefixes[msg.channel.guild.id]) || !msg.channel.permissionsOf(client.user.id).has("sendMessages") || !msg.channel.permissionsOf(client.user.id).has("embedLinks")) return;
 	if (!msg.content.startsWith(prefixes[msg.channel.guild.id]) || !msg.channel.hasPermissions(client.user.id, "sendMessages", "embedLinks")) return;
 
 	let command = msg.content.slice(prefixes[msg.channel.guild.id].length).toLowerCase().split(" ")[0];
