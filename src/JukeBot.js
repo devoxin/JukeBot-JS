@@ -2,6 +2,7 @@ global.config       = require('./config.json');
 
 const extras = require('../util/extras.js');
 const sf     = require('snekfetch');
+const mCol   = require('../util/messageCollector.js');
 const Eris   = require('../util/extensionLoader.js')(require('eris'));
 
 const client = new Eris.Client(config.keys.discord, {
@@ -10,12 +11,11 @@ const client = new Eris.Client(config.keys.discord, {
     maxShards: config.options.shards
 });
 
-const MessageCollector = require('../util/messageCollector.js');
-const collector = new MessageCollector(client);
+client.messageCollector = new mCol(client);
 
 Object.defineProperty(Eris.TextChannel.prototype, 'awaitMessages', {
     async value(predicate, options = {}) {
-        return await collector.awaitMessages(predicate, options, this.id);
+        return await client.messageCollector.awaitMessages(predicate, options, this.id);
     }
 });
 
