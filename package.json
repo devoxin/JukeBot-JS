@@ -14,10 +14,8 @@
   "author": "CrimsonXV",
   "license": "AGPL-3.0",
   "dependencies": {
-    "buffered2": "*",
     "eris": "*",
     "erlpack": "github:hammerandchisel/erlpack",
-    "eventemitter3": "*",
     "node-opus": "*",
     "snekfetch": "*",
     "sodium-native": "*",

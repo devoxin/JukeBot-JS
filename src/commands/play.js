@@ -112,7 +112,7 @@ exports.run = async function (client, msg, args) {
     }
 
     if (res.items.length === 0) {
-        if (client.voiceConnections.get(msg.channel.guild.id).channelID && guild.queue.length === 0) client.leaveVoiceChannel(client.voiceConnections.get(msg.channel.guild.id).channelID);
+        if (client.voiceConnections.isConnected(msg.channel.guild.id) && guild.queue.length === 0) client.leaveVoiceChannel(client.voiceConnections.get(msg.channel.guild.id).channelID);
         return msg.channel.createMessage({ embed: {
             color: config.options.embedColour,
             title: 'No results found.',
@@ -141,29 +141,24 @@ exports.run = async function (client, msg, args) {
             }
         }});
 
-        const collector = await messageCollector.awaitMessages(client, msg.channel, m => m.author.id === msg.author.id && msg.channel.guild && (parseInt(m.content) && m.content >= 1 && m.content <= res.items.length || m.content.toLowerCase().startsWith(`${msg.channel.guild.prefix}p`) || m.content === 'c'), {
-            maxMatches: 1,
-            time: 10000
-        });
+        const selected = await msg.channel.awaitMessages(m => m.author.id === msg.author.id && m.channel.guild && (parseInt(m.content) && m.content >= 1 && m.content <= res.items.length || m.content.toLowerCase().startsWith(`${msg.channel.guild.prefix}p`) || m.content === 'c'));
 
-        if (collector.length === 0 || collector[0].content.toLowerCase().startsWith(`${msg.channel.guild.prefix}p`) || collector[0].content === 'c') {
-            if ((collector.length === 0 || collector[0].content === 'c') && client.voiceConnections.get(msg.channel.guild.id).channelID && guild.queue.length === 0) client.leaveVoiceChannel(client.voiceConnections.get(msg.channel.guild.id).channelID);
+        if (!selected || selected.content.toLowerCase().startsWith(`${msg.channel.guild.prefix}p`) || selected.content === 'c') {
+            if (!selected || selected.content === 'c' && client.voiceConnections.isConnected(msg.channel.guild.id) && guild.queue.length === 0) client.leaveVoiceChannel(client.voiceConnections.get(msg.channel.guild.id).channelID);
             return src.delete();
         }
 
-        if (msg.channel.permissionsOf(client.user.id).has('manageMessages')) collector[0].delete();
-        guild.queue.push({ id: res.items[collector[0].content - 1].id.videoId, title: res.items[collector[0].content - 1].snippet.title, req: msg.author.id, src: 'youtube' });
+        if (msg.channel.permissionsOf(client.user.id).has('manageMessages')) selected.delete();
+        guild.queue.push({ id: res.items[selected.content - 1].id.videoId, title: res.items[selected.content - 1].snippet.title, req: msg.author.id, src: 'youtube' });
 
-        src.edit({embed: {
+        src.edit({ embed: {
             color: config.options.embedColour,
-            title: `Enqueued ${res.items[collector[0].content - 1].snippet.title}`,
+            title: `Enqueued ${res.items[selected.content - 1].snippet.title}`,
             description: `Requested by ${msg.author.username}#${msg.author.discriminator}`
         }});
-
     }
 
     sthandle.play(guild, client);
-
 };
 
 exports.usage = {

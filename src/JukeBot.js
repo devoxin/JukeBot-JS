@@ -11,6 +11,15 @@ const client = new Eris.Client(config.keys.discord, {
     maxShards: config.options.shards
 });
 
+const messageCollector = require('../util/messageCollector.js');
+const collector = new messageCollector();
+
+Object.defineProperty(Eris.TextChannel.prototype, 'awaitMessages', {
+    async value(predicate) {
+        return await collector.awaitMessages(predicate, this.id);
+    }
+});
+
 global.guilds   = {};
 global.prefixes = require('./prefixes.json');
 
@@ -25,6 +34,8 @@ client.on('ready', async () => {
         if (!guilds[g.id])
             guilds[g.id] = { id: g.id, msgc: '', queue: [], svotes: [], repeat: 'None' };
     });
+
+    collector.setup(client);
 });
 
 client.on('guildCreate', async (g) => {
