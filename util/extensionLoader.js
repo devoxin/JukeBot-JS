@@ -1,28 +1,30 @@
 const permissions = require('../util/Permissions.js');
 
 function loadExtensions(Eris) {
-    Object.defineProperty(Eris.Message.prototype, 'isFromDM', {
-        get() {
-            return this.channel.type === 1;
+    Object.defineProperties(Eris.Message.prototype, {
+        'isFromDM': {
+            get() {
+                return this.channel.type === 1;
+            }
+        },
+        'bulkReact': {
+            async value(reactions) {
+                for (const reaction of reactions)
+                    await this.addReaction(reaction);
+            }
         }
     });
 
-    Object.defineProperty(Eris.Message.prototype, 'bulkReact', {
-        async value(reactions) {
-            for (const reaction of reactions)
-                await this.addReaction(reaction);
-        }
-    });
-
-    Object.defineProperty(Eris.Member.prototype, 'isBlocked', {
-        get() {
-            return permissions.isBlocked(this.id);
-        }
-    });
-
-    Object.defineProperty(Eris.Member.prototype, 'isAdmin', {
-        get() {
-            return permissions.isAdmin(this);
+    Object.defineProperties(Eris.Member.prototype, {
+        'isBlocked': {
+            get() {
+                return permissions.isBlocked(this.id);
+            }
+        },
+        'isAdmin': {
+            get() {
+                return permissions.isAdmin(this);
+            }
         }
     });
 
