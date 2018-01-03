@@ -3,31 +3,28 @@ const sck = require('../src/config.json').keys.soundcloud;
 
 module.exports = {
 
-	async getTrack(id) {
+    async getTrack(id) {
 
-		let req = await sf.get('http://api.soundcloud.com/resolve.json')
-		.query({
-			url       : id,
-			client_id : sck
-		})
-		.catch(err => {
-			return [];
-		})
+        const req = await sf.get('http://api.soundcloud.com/resolve.json')
+            .query({
+                url       : id,
+                client_id : sck
+            }).catch(() => { return []; });
 
-		if (!req || !req.body || req.body.kind !== 'track') return [];
+        if (!req || !req.body || req.body.kind !== 'track') return [];
 
-		let stream = await sf.get(`https://api.soundcloud.com/i1/tracks/${req.body.id}/streams`).query({
-			client_id : sck
-		})
+        const stream = await sf.get(`https://api.soundcloud.com/i1/tracks/${req.body.id}/streams`).query({
+            client_id : sck
+        }).catch(() => { return null; });
 
-		if(!stream.body.http_mp3_128_url) return [];
+        if(!stream.body.http_mp3_128_url) return [];
 
-		return [{
-			id    : stream.body.http_mp3_128_url,
-			title : req.body.user.username + ' - ' + req.body.title
-		}];
-		// duration : req.body.duration
+        return [{
+            id    : stream.body.http_mp3_128_url,
+            title : `${req.body.user.username} - ${req.body.title}`
+        }];
+        // duration : req.body.duration
 
-	}
+    }
 
-}
+};

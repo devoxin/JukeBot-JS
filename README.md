@@ -42,7 +42,6 @@ soundcloud - This is your SoundCloud API key, used for accessing SoundCloud data
 prefix     - This is the character users will need to prefix their messages with to use the bot
 version    - DO NOT CHANGE. This helps diagnose issues should you encounter any.
 hardblock  - Users blocked from using the bot everywhere
-donators   - Users that have access to additional benefits within the bot
 ```
 
 Once you've filled in config.json with the relevant info, return to your command window and type in
