@@ -1,9 +1,6 @@
 class MessageCollector {
-    constructor() {
+    constructor(client) {
         this.collectors = [];
-    }
-
-    setup(client) {
         client.on('messageCreate', this.check.bind(this));
     }
 
