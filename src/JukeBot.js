@@ -15,8 +15,8 @@ const messageCollector = require('../util/messageCollector.js');
 const collector = new messageCollector();
 
 Object.defineProperty(Eris.TextChannel.prototype, 'awaitMessages', {
-    async value(predicate) {
-        return await collector.awaitMessages(predicate, this.id);
+    async value(predicate, options = {}) {
+        return await collector.awaitMessages(predicate, options, this.id);
     }
 });
 

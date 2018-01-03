@@ -1,4 +1,4 @@
-class MessageCollector {  // eslint-disable-line no-unused-vars
+class MessageCollector {
     constructor() {
         this.collectors = [];
     }
@@ -7,13 +7,17 @@ class MessageCollector {  // eslint-disable-line no-unused-vars
         client.on('messageCreate', this.check.bind(this));
     }
 
-    awaitMessages(check, channelId) {
+    awaitMessages(check, options, channelId) {
         return new Promise((accept) => {
             this.collectors.push({
                 channelId,
                 check,
                 accept
             });
+
+            if (options.timeout) {
+                setTimeout(accept, options.timeout);
+            }
         });
     }
 
