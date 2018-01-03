@@ -5,7 +5,7 @@ exports.run = function (client, msg, args) {
         title: 'There\'s no playback activity.'
     }});
 
-    if (!permissions.isAdmin(msg.member) && guilds[msg.channel.guild.id].queue[0].req !== msg.author.id) return msg.channel.createMessage({ embed: {
+    if (!msg.member.isAdmin && guilds[msg.channel.guild.id].queue[0].req !== msg.author.id) return msg.channel.createMessage({ embed: {
         color: config.options.embedColour,
         title: 'Insufficient Permissions',
     }});

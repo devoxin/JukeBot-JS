@@ -1,5 +1,4 @@
 global.config       = require('./config.json');
-global.permissions  = require('../util/Permissions.js');
 
 const extras = require('../util/extras.js');
 const sf     = require('snekfetch');

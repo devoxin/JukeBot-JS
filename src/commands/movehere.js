@@ -1,8 +1,14 @@
 exports.run = function (client, msg, args) {
 
-    if (!permissions.isAdmin(msg.member)) return msg.channel.createMessage({ embed: {
+    if (!msg.member.isAdmin) return msg.channel.createMessage({ embed: {
         color: config.options.embedColour,
         title: 'Insufficient Permissions',
+    }});
+
+    if (client.voiceConnections.isConnected(msg.channel.guild.id)) return msg.channel.createMessage({ embed: {
+        color: config.options.embedColour,
+        title: 'Not Connected',
+        description: 'I\'m not connected to any voicechannels'
     }});
 
     if (!msg.member.voiceState.channelID) return msg.channel.createMessage({ embed: {
@@ -17,7 +23,7 @@ exports.run = function (client, msg, args) {
             description: 'This channel doesn\'t allow me to connect/speak.'
         }});
 
-    client.joinVoiceChannel(msg.member.voiceState.channelID);
+    client.voiceConnections.get(msg.channel.guild.id).switchChannel(msg.member.voiceState.channelID);
 
 };
 

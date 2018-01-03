@@ -1,3 +1,5 @@
+const permissions = require('../util/Permissions.js');
+
 function loadExtensions(Eris) {
     Object.defineProperty(Eris.Message.prototype, 'isFromDM', {
         get() {
@@ -15,6 +17,12 @@ function loadExtensions(Eris) {
     Object.defineProperty(Eris.Member.prototype, 'isBlocked', {
         get() {
             return permissions.isBlocked(this.id);
+        }
+    });
+
+    Object.defineProperty(Eris.Member.prototype, 'isAdmin', {
+        get() {
+            return permissions.isAdmin(this);
         }
     });
 
