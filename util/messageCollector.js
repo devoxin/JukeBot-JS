@@ -5,15 +5,13 @@ class MessageCollector {
     }
 
     awaitMessages(check, options, channelId) {
-        return new Promise((accept) => {
+        return new Promise(accept => {
             this.collectors.push({channelId, check, accept});
             if (options.timeout) setTimeout(accept, options.timeout);
         });
     }
 
     check(message) {
-        if (!this.collectors.length) return false;
-
         const _collectors = this.collectors.filter(c => c.channelId === message.channel.id);
 
         for (const collector of _collectors) {
