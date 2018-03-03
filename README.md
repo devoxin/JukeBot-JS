@@ -1,4 +1,6 @@
 # Welcome to JukeBot's repository!
+don't rip this code for ur own bot or i'll hunt u down kthx
+
 
 ## Self-Hosting: Getting Started
 
