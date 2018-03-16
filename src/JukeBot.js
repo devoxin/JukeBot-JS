@@ -21,7 +21,6 @@ Object.defineProperty(Eris.TextChannel.prototype, 'awaitMessages', {
 });
 
 global.guilds   = {};
-global.prefixes = require('./prefixes.json');
 
 client.on('ready', async () => {
     console.log(`[JukeBot] Ready! (User: ${client.user.username})`);
@@ -42,11 +41,6 @@ client.on('guildCreate', async (g) => {
 
 client.on('guildDelete', async (g) => {
     delete guilds[g.id];
-
-    if (!config.botlists) return;
-
-    for (const list of config.botlists)
-        await sf.post(list.url.replace(':id', client.user.id)).send({ 'server_count': client.guilds.size }).set('Authorization', list.token);
 });
 
 client.on('messageCreate', async (msg) => {
@@ -56,7 +50,7 @@ client.on('messageCreate', async (msg) => {
     if (msg.mentions.find(m => m.id === client.user.id) && msg.content.toLowerCase().includes('help'))
         return msg.channel.createMessage({ embed: {
             color: config.options.embedColour,
-            title: `Use ${prefixes[msg.channel.guild.id]}help for commands`
+            title: `Use ${config.options.prefix}help for commands`
         }});
 
     if (!msg.content.startsWith(config.options.prefix) || !msg.channel.hasPermissions(client.user.id, 'sendMessages', 'embedLinks')) return;
