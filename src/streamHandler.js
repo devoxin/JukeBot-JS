@@ -17,16 +17,15 @@ exports.play = async function play(guild, client) {
         : guild.queue[0].id;
 
     if (guild.queue[0].src === 'youtube') {
-        const duration = await ytutil.getDuration(guild.queue[0].id);
-        guild.queue[0].duration = duration;
+        guild.queue[0].duration = await ytutil.getDuration(guild.queue[0].id);
     }
 
     if (!trackURL) {
-        guild.queue.shift();
         client.getChannel(guild.msgc).createMessage({ embed: {
             color: config.options.embedColour,
             title: `**${guild.queue[0].title}** is unplayable, skipping...`
         }});
+        guild.queue.shift();
         return exports.play(guild, client);
     }
 
@@ -36,7 +35,7 @@ exports.play = async function play(guild, client) {
         description: `${guild.queue[0].title}` //(https://youtu.be/${guild.queue[0].id})`
     }});
 
-    client.voiceConnections.get(guild.id).play(trackURL);
+    client.voiceConnections.get(guild.id).play(trackURL, { format: 'webm' });
 
     client.voiceConnections.get(guild.id).once('end', () => {
         if (guild.repeat === 'All') guild.queue.push(guild.queue[0]);

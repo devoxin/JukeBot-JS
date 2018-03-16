@@ -10,7 +10,7 @@ exports.run = function (client, msg, args) {
         return msg.channel.createMessage({ embed: {
             color: config.options.embedColour,
             title: `Repeat mode: ${guilds[msg.channel.guild.id].repeat}`,
-            description: `${msg.channel.guild.prefix}repeat < a | c | n >\n\n[All, Current, None]`
+            description: `${config.options.prefix}repeat < a | c | n >\n\n[All, Current, None]`
         }});
 
     if (!(args[0] === 'a' || args[0] === 'c' || args[0] === 'n'))

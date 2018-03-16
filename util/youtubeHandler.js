@@ -12,7 +12,7 @@ module.exports = {
             type       : 'video',
             q          : query,
             key        : ytk
-        }).catch(() => { return []; });
+        }).catch(() => []);
 
         return results.body.items;
     },
@@ -26,19 +26,20 @@ module.exports = {
             pageToken     : page,
             playlistId    : id,
             key           : ytk
-        }).catch(() => { return videos; });
+        }).catch(() => null);
 
         if (!req || !req.body || req.body.items.length === 0)
             return videos;
 
-        for (const video of req.body.items) {
-            if (Object.keys(video.snippet).length === 0 && video.snippet.constructor === Object) continue;
+        for (const video of req.body.items)
             videos.push({ id: video.snippet.resourceId.videoId, title: video.snippet.title });
-        }
 
-        if (videos.length >= limit) return videos.slice(0, limit);
+        if (videos.length >= limit)
+            return videos.slice(0, limit);
 
-        if (req.body.nextPageToken) return await module.exports.getPlaylist(id, limit, req.body.nextPageToken, videos);
+        if (req.body.nextPageToken)
+            return await module.exports.getPlaylist(id, limit, req.body.nextPageToken, videos);
+
         return videos;
     },
 
@@ -48,7 +49,7 @@ module.exports = {
             part : 'snippet',
             id   : id,
             key  : ytk
-        }).catch(() => { return []; });
+        }).catch(() => []);
 
         if (result.body.items.length === 0) return [];
         return [{ id: result.body.items[0].id, title: result.body.items[0].snippet.title }];
@@ -56,17 +57,16 @@ module.exports = {
 
     async getFormats(id) {
 
-        const sinfo = await yt.getInfo(id).catch(() => { return null; });
+        const info = await yt.getInfo(id).catch(() => null);
 
-        if (!sinfo || !sinfo.formats)
+        if (!info || !info.formats)
             return null;
 
-        for (const format of sinfo.formats) {
-            if (format.itag === '249' || format.itag === '250' || format.itag === '251' || format.audioEncoding)
-                return format.url;
-        }
+        //const formats = yt.filterFormats(info.formats, 'audioonly');
+        const formats = info.formats.filter(fmt => ['251', '250', '249'].includes(fmt.itag)); // opus-only
+        formats.sort((a, b) => b.itag - a.itag);
 
-        return null;
+        return formats.length > 0 ? formats[0].url : null;
     },
 
     async getDuration(id) {
@@ -75,7 +75,7 @@ module.exports = {
             part : 'contentDetails',
             id   : id,
             key  : ytk
-        }).catch(() => { return 0; });
+        }).catch(() => null);
 
         if (!req || !req.body || req.body.items.length === 0)
             return 0;
@@ -86,7 +86,8 @@ module.exports = {
     getSeconds(duration) {
         const match   = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
 
-        if (!match) return 0;
+        if (!match)
+            return 0;
 
         const hours   = (parseInt(match[1]) || 0) * 3600;
         const minutes = (parseInt(match[2]) || 0) * 60;

@@ -6,7 +6,6 @@
 		"soundcloud" : ""
 	},
 	"options" : {
-		"shards"      : 1,
 		"embedColour" : 2003199,
 		"prefix"      : "!"
 	},

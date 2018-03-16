@@ -1,6 +1,6 @@
 {
   "name": "jukebot",
-  "version": "5.1.8",
+  "version": "5.1.9",
   "description": "MusicBot for Discord",
   "main": "index.js",
   "scripts": {
@@ -11,15 +11,12 @@
     "type": "git",
     "url": "https://github.com/CrimsonXV/JukeBot/JukeBot.git"
   },
-  "author": "CrimsonXV",
+  "author": "Kromatic",
   "license": "AGPL-3.0",
   "dependencies": {
     "eris": "*",
-    "erlpack": "github:hammerandchisel/erlpack",
     "node-opus": "*",
     "snekfetch": "*",
-    "sodium-native": "*",
-    "uws": "*",
     "ytdl-core": "*"
   }
 }

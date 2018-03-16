@@ -1,4 +1,4 @@
-const permissions = require('../util/Permissions.js');
+const permissions = require('./Permissions.js');
 
 function loadExtensions(Eris) {
     Object.defineProperties(Eris.Message.prototype, {
