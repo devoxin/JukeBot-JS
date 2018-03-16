@@ -80,7 +80,7 @@ module.exports = {
         if (!req || !req.body || req.body.items.length === 0)
             return 0;
 
-        return getSeconds(req.body.items[0].contentDetails.duration);
+        return module.exportd.getSeconds(req.body.items[0].contentDetails.duration);
     },
 
     getSeconds(duration) {
