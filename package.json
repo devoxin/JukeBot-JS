@@ -15,7 +15,7 @@
   "license": "AGPL-3.0",
   "dependencies": {
     "eris": "*",
-    "node-opus": "*",
+    "opusscript": "*",
     "snekfetch": "*",
     "ytdl-core": "*"
   }
