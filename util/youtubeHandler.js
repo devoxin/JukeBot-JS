@@ -80,7 +80,7 @@ module.exports = {
         if (!req || !req.body || req.body.items.length === 0)
             return 0;
 
-        return req.body.items[0].contentDetails.duration;
+        return getSeconds(req.body.items[0].contentDetails.duration);
     },
 
     getSeconds(duration) {
@@ -89,11 +89,11 @@ module.exports = {
         if (!match)
             return 0;
 
-        const hours   = (parseInt(match[1]) || 0) * 3600;
-        const minutes = (parseInt(match[2]) || 0) * 60;
+        const hours   = (parseInt(match[1]) || 0);
+        const minutes = (parseInt(match[2]) || 0);
         const seconds =  parseInt(match[3]) || 0;
 
-        return `${hours}${minutes}${seconds}`;
+        return `${hours}:${minutes}:${seconds}`;
     }
 
 };
