@@ -1,5 +1,7 @@
 # Welcome to JukeBot's repository!
-don't rip this code for ur own bot or i'll hunt u down kthx
+requires a mere 3 dependencies *not including the dependencies of those dependencies*
+doesn't require ffmpeg/avconv, very low CPU & RAM usage because of the low dependency count & the fact that it'll only play opus format
+soundcloud is probably broken because of the strict opus-only stuff
 
 
 ## Self-Hosting: Getting Started
