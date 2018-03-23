@@ -1,31 +1,32 @@
-const sf  = require('snekfetch');
+const req = require('./request.js');
 const yt  = require('ytdl-core');
-const ytk = require('../src/config.json').keys.youtube;
+const key = require('../src/config.json').keys.youtube;
 
 module.exports = {
 
-    async search(query) {
+    async search(q) {
 
-        const results = await sf.get('https://www.googleapis.com/youtube/v3/search').query({
-            part       : 'snippet',
-            maxResults : '3',
-            type       : 'video',
-            q          : query,
-            key        : ytk
-        }).catch(() => []);
+        const results = await req.get('https://www.googleapis.com/youtube/v3/search', {
+            key,
+            q,
+            type: 'video',
+            maxResults: 3,
+            part: 'snippet'
+        })
+        .catch((error) => console.error(error));
 
-        return results.body.items;
+        return results.items;
     },
 
-    async getPlaylist(id, limit = 100, page = '', videos = []) {
+    async getPlaylist(playlistId, limit = 100, pageToken, videos = []) {
 
-        const req = await sf.get('https://www.googleapis.com/youtube/v3/playlistItems').query({
-            maxResults    : '50',
+        const req = await req.get('https://www.googleapis.com/youtube/v3/playlistItems', {
+            maxResults    : 50,
             part          : 'snippet',
             nextPageToken : null,
-            pageToken     : page,
-            playlistId    : id,
-            key           : ytk
+            pageToken,
+            playlistId,
+            key
         }).catch(() => null);
 
         if (!req || !req.body || req.body.items.length === 0)
@@ -45,11 +46,11 @@ module.exports = {
 
     async videoInfo(id) {
 
-        const result = await sf.get('https://www.googleapis.com/youtube/v3/videos').query({
+        const result = await req.get('https://www.googleapis.com/youtube/v3/videos', {
             part : 'snippet',
-            id   : id,
-            key  : ytk
-        }).catch(() => []);
+            id,
+            key
+        }).catch(() => { body: { items: []}});
 
         if (result.body.items.length === 0) return [];
         return [{ id: result.body.items[0].id, title: result.body.items[0].snippet.title }];
@@ -71,10 +72,10 @@ module.exports = {
 
     async getDuration(id) {
 
-        const req = await sf.get('https://www.googleapis.com/youtube/v3/videos').query({
+        const req = await req.get('https://www.googleapis.com/youtube/v3/videos', {
             part : 'contentDetails',
-            id   : id,
-            key  : ytk
+            id,
+            key
         }).catch(() => null);
 
         if (!req || !req.body || req.body.items.length === 0)
@@ -89,9 +90,9 @@ module.exports = {
         if (!match)
             return 0;
 
-        const hours   = (parseInt(match[1]) || 0);
-        const minutes = (parseInt(match[2]) || 0);
-        const seconds =  parseInt(match[3]) || 0;
+        const hours   = parseInt(match[1]) || 0;
+        const minutes = parseInt(match[2]) || 0;
+        const seconds = parseInt(match[3]) || 0;
 
         return `${hours}:${minutes}:${seconds}`;
     }

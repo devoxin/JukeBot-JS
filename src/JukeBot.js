@@ -1,7 +1,6 @@
 global.config       = require('./config.json');
 
 const extras    = require('../util/extras.js');
-const sf        = require('snekfetch');
 const collector = require('../util/messageCollector.js');
 const Eris      = require('../util/extensionLoader.js')(require('eris'));
 

@@ -1,23 +1,19 @@
-const sf  = require('snekfetch');
-const sck = require('../src/config.json').keys.soundcloud;
+const req = require('./request.js');
+const client_id = require('../src/config.json').keys.soundcloud;
 
 module.exports = {
 
-    async getTrack(id) {
+    async getTrack(url) {
 
-        const req = await sf.get('http://api.soundcloud.com/resolve.json')
-            .query({
-                url       : id,
-                client_id : sck
-            }).catch(() => { return []; });
+        const req = await req.get('http://api.soundcloud.com/resolve.json', { url, client_id })
+            .catch(() => null);
 
         if (!req || !req.body || req.body.kind !== 'track') return [];
 
-        const stream = await sf.get(`https://api.soundcloud.com/i1/tracks/${req.body.id}/streams`).query({
-            client_id : sck
-        }).catch(() => { return null; });
+        const stream = await req.get(`https://api.soundcloud.com/i1/tracks/${req.body.id}/streams`, { client_id })
+            .catch(() => null);
 
-        if(!stream.body.http_mp3_128_url) return [];
+        if(!stream || !stream.body.http_mp3_128_url) return [];
 
         return [{
             id    : stream.body.http_mp3_128_url,
