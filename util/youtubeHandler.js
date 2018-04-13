@@ -72,16 +72,16 @@ module.exports = {
 
     async getDuration(id) {
 
-        const req = await req.get('https://www.googleapis.com/youtube/v3/videos', {
+        const info = await req.get('https://www.googleapis.com/youtube/v3/videos', {
             part : 'contentDetails',
             id,
             key
         }).catch(() => null);
 
-        if (!req || !req.body || req.body.items.length === 0)
+        if (!info || !info.body || info.body.items.length === 0)
             return 0;
 
-        return module.exports.getSeconds(req.body.items[0].contentDetails.duration);
+        return module.exports.getSeconds(info.body.items[0].contentDetails.duration);
     },
 
     getSeconds(duration) {
