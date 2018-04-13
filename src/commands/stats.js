@@ -1,10 +1,11 @@
-const timeParser = require('../../util/timeParser.js');
+const timeParser  = require('../../util/timeParser.js');
+const { version } = require('../../package.json');
 
 exports.run = function(client, msg, args) {
 
     msg.channel.createMessage({embed: {
         color: config.options.embedColour,
-        title: `JukeBot v${config.version}`,
+        title: `JukeBot v${version}`,
         description: 'Created by Devoxin#0387',
         fields: [
             { name: 'Uptime',		  value: timeParser.formatSeconds(process.uptime()),						inline: true },
