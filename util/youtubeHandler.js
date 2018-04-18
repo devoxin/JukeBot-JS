@@ -50,7 +50,7 @@ module.exports = {
             id,
             key
         }).catch(() => {
-            return { body: { items: []} };
+            return { body: { items: [] } };
         });
 
         if (result.body.items.length === 0) return [];
