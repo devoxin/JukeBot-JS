@@ -19,7 +19,7 @@ module.exports = {
 
     async getPlaylist(playlistId, limit = 100, pageToken, videos = []) {
 
-        const req = await req.get('https://www.googleapis.com/youtube/v3/playlistItems', {
+        const request = await req.get('https://www.googleapis.com/youtube/v3/playlistItems', {
             maxResults    : 50,
             part          : 'snippet',
             nextPageToken : null,
@@ -28,17 +28,17 @@ module.exports = {
             key
         }).catch(() => null);
 
-        if (!req || req.items.length === 0)
+        if (!request || request.items.length === 0)
             return videos;
 
-        for (const video of req.items)
+        for (const video of request.items)
             videos.push({ id: video.snippet.resourceId.videoId, title: video.snippet.title });
 
         if (videos.length >= limit)
             return videos.slice(0, limit);
 
-        if (req.nextPageToken)
-            return await module.exports.getPlaylist(playlistId, limit, req.nextPageToken, videos);
+        if (request.nextPageToken)
+            return await module.exports.getPlaylist(playlistId, limit, request.nextPageToken, videos);
 
         return videos;
     },
