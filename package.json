@@ -16,6 +16,7 @@
   "dependencies": {
     "eris": "*",
     "opusscript": "*",
+    "ws": "^5.1.1",
     "ytdl-core": "*"
   }
 }

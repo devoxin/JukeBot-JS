@@ -1,4 +1,4 @@
-exports.run = function (client, msg, args) {
+exports.run = function (client, msg) {
 
     if (!client.voiceConnections.get(msg.channel.guild.id) || !guilds[msg.channel.guild.id].queue[0]) return msg.channel.createMessage({ embed: {
         color: config.options.embedColour,

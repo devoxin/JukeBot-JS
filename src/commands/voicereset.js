@@ -1,6 +1,6 @@
-exports.run = async function (client, msg, args) {
+exports.run = async function (client, msg) {
 
-    if (!permissions.isAdmin(msg.member)) return msg.channel.createMessage({ embed: {
+    if (!msg.member.isAdmin) return msg.channel.createMessage({ embed: {
         color: config.options.embedColour,
         title: 'Insufficient Permissions',
     }});

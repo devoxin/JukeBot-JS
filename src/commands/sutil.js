@@ -58,7 +58,7 @@ exports.run = function (client, msg, args) {
 
         client.guilds.get(args[1]).defaultChannel.createInvite({ maxAge: 15 }).then(inv => {
             msg.channel.createMessage(`discord.gg/${  inv.code}`);
-        }).catch(err => {
+        }).catch(() => {
             msg.channel.createMessage('Failed to generate invite');
         });
 

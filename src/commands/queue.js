@@ -38,7 +38,7 @@ exports.run = function (client, msg, args) {
         }
     };
 
-    msg.channel.createMessage({ embed: embed }).catch(e => {});
+    msg.channel.createMessage({ embed }).catch(() => {});
 
 };
 

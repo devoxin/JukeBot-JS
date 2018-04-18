@@ -1,5 +1,6 @@
-global.config       = require('./config.json');
+global.config   = require('./config.json');
 
+const sch       = require('../util/soundcloudHandler.js');
 const extras    = require('../util/extras.js');
 const collector = require('../util/messageCollector.js');
 const Eris      = require('../util/extensionLoader.js')(require('eris'));
@@ -12,6 +13,7 @@ const client = new Eris.Client(config.keys.discord, {
 });
 
 client.messageCollector = new collector(client);
+sch.updateClientID();
 
 Object.defineProperty(Eris.TextChannel.prototype, 'awaitMessages', {
     async value(predicate, options = {}) {

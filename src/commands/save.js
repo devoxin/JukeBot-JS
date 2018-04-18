@@ -1,5 +1,3 @@
-const fs = require('fs');
-
 exports.run = async function (client, msg, args) {
 
     if (guilds[msg.channel.guild.id].queue.length === 0)
@@ -9,9 +7,7 @@ exports.run = async function (client, msg, args) {
         }});
 
     const dmc = await msg.author.getDMChannel()
-        .catch(err => {
-            return undefined;
-        });
+        .catch(() => null);
 
     if (!dmc) return msg.channel.createMessage({ embed: {
         color: config.options.embedColour,
@@ -24,7 +20,7 @@ exports.run = async function (client, msg, args) {
             title: 'Compiling queue...'
         }});
 
-        const queue = guilds[msg.channel.guild.id].queue.map(s => `${s.title} (${s.src === 'youtube' ? `https://youtu.be/${s.id}` : s.durl})`).join('\r\n');
+        const queue = guilds[msg.channel.guild.id].queue.map(s => `${s.title} (${s.permalink})`).join('\r\n');
 
         dmc.createMessage('', {
             name: 'queue.txt',
@@ -48,7 +44,7 @@ exports.run = async function (client, msg, args) {
         dmc.createMessage({ embed: {
             color: config.options.embedColour,
             title: song.title,
-            url  : song.src === 'youtube' ? `https://youtu.be/${song.id}` : song.durl
+            url  : song.permalink
         }});
     }
 };

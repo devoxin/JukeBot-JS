@@ -1,4 +1,4 @@
-exports.run = function (client, msg, args) {
+exports.run = function (client, msg) {
 
     if (!msg.member.isAdmin) return msg.channel.createMessage({ embed: {
         color: config.options.embedColour,

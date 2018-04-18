@@ -12,10 +12,9 @@ module.exports = {
             type: 'video',
             maxResults: 3,
             part: 'snippet'
-        })
-        .catch((error) => console.error(error));
+        }).catch(() => null);
 
-        return results.items;
+        return results ? results.items : [];
     },
 
     async getPlaylist(playlistId, limit = 100, pageToken, videos = []) {
@@ -39,7 +38,7 @@ module.exports = {
             return videos.slice(0, limit);
 
         if (req.body.nextPageToken)
-            return await module.exports.getPlaylist(id, limit, req.body.nextPageToken, videos);
+            return await module.exports.getPlaylist(playlistId, limit, req.body.nextPageToken, videos);
 
         return videos;
     },
@@ -50,7 +49,9 @@ module.exports = {
             part : 'snippet',
             id,
             key
-        }).catch(() => { body: { items: []}});
+        }).catch(() => {
+            return { body: { items: []} };
+        });
 
         if (result.body.items.length === 0) return [];
         return [{ id: result.body.items[0].id, title: result.body.items[0].snippet.title }];

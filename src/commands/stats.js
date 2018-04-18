@@ -1,9 +1,9 @@
 const timeParser  = require('../../util/timeParser.js');
 const { version } = require('../../package.json');
 
-exports.run = function(client, msg, args) {
+exports.run = function(client, msg) {
 
-    msg.channel.createMessage({embed: {
+    msg.channel.createMessage({ embed: {
         color: config.options.embedColour,
         title: `JukeBot v${version}`,
         description: 'Created by Devoxin#0387',
