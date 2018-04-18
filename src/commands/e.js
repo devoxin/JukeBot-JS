@@ -9,7 +9,7 @@ exports.run = function (client, msg, args) {
         let code = eval(args.join(' '));
 
         if (typeof code !== 'string')
-            code = require('util').inspect(code, { depth:0 });
+            code = require('util').inspect(code, { depth: 0 });
 
         code = code.replace(new RegExp(client.token.slice(4), 'gi'), '*');
         msg.channel.createMessage(`\`\`\`js\n${code}\n\`\`\``);
