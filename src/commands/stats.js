@@ -6,7 +6,7 @@ exports.run = function(client, msg) {
     msg.channel.createMessage({ embed: {
         color: config.options.embedColour,
         title: `JukeBot v${version}`,
-        description: 'Created by Devoxin#0387',
+        description: 'Created by Kromatic#0420',
         fields: [
             { name: 'Uptime',		  value: timeParser.formatSeconds(process.uptime()),						inline: true },
             { name: 'RAM Usage',	  value: `${(process.memoryUsage().rss / 1024 / 1024).toFixed(2)} MB`,      inline: true },
