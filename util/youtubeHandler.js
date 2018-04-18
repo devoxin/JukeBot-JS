@@ -70,30 +70,8 @@ module.exports = {
     },
 
     async getDuration(id) {
-
-        const info = await req.get('https://www.googleapis.com/youtube/v3/videos', {
-            part : 'contentDetails',
-            id,
-            key
-        }).catch(() => null);
-
-        if (!info || info.items.length === 0)
-            return 0;
-
-        return module.exports.getSeconds(info.items[0].contentDetails.duration);
-    },
-
-    getSeconds(duration) {
-        const match   = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
-
-        if (!match)
-            return 0;
-
-        const hours   = parseInt(match[1]) || 0;
-        const minutes = parseInt(match[2]) || 0;
-        const seconds = parseInt(match[3]) || 0;
-
-        return `${hours}:${minutes}:${seconds}`;
+        const info = await yt.getInfo(id);
+        return info.length_seconds * 1000;
     }
 
 };

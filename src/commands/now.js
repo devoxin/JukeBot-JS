@@ -15,7 +15,7 @@ exports.run = function (client, msg) {
         color       : config.options.embedColour,
         title       : track.title,
         url         : track.permalink,
-        description : `${timeParser.formatSeconds(client.voiceConnections.get(msg.channel.guild.id).current.playTime / 1000)}/${timeParser.formatSeconds(track.duration / 1000)}}`,
+        description : `${timeParser.formatSeconds(client.voiceConnections.get(msg.channel.guild.id).current.playTime / 1000)}/${timeParser.formatSeconds(track.duration / 1000)}`,
         footer: {
             text: `Requested by ${client.users.get(track.req) ? client.users.get(track.req).username : 'Unknown'}`
         }
