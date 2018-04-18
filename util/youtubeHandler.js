@@ -28,17 +28,17 @@ module.exports = {
             key
         }).catch(() => null);
 
-        if (!req || !req.body || req.body.items.length === 0)
+        if (!req || req.items.length === 0)
             return videos;
 
-        for (const video of req.body.items)
+        for (const video of req.items)
             videos.push({ id: video.snippet.resourceId.videoId, title: video.snippet.title });
 
         if (videos.length >= limit)
             return videos.slice(0, limit);
 
-        if (req.body.nextPageToken)
-            return await module.exports.getPlaylist(playlistId, limit, req.body.nextPageToken, videos);
+        if (req.nextPageToken)
+            return await module.exports.getPlaylist(playlistId, limit, req.nextPageToken, videos);
 
         return videos;
     },
@@ -49,12 +49,10 @@ module.exports = {
             part : 'snippet',
             id,
             key
-        }).catch(() => {
-            return { body: { items: [] } };
-        });
+        }).catch(() => null);
 
-        if (result.body.items.length === 0) return [];
-        return [{ id: result.body.items[0].id, title: result.body.items[0].snippet.title }];
+        if (!result || result.items.length === 0) return [];
+        return [{ id: result.items[0].id, title: result.items[0].snippet.title }];
     },
 
     async getFormats(id) {
@@ -79,10 +77,10 @@ module.exports = {
             key
         }).catch(() => null);
 
-        if (!info || !info.body || info.body.items.length === 0)
+        if (!info || info.items.length === 0)
             return 0;
 
-        return module.exports.getSeconds(info.body.items[0].contentDetails.duration);
+        return module.exports.getSeconds(info.items[0].contentDetails.duration);
     },
 
     getSeconds(duration) {
