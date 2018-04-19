@@ -112,7 +112,7 @@ exports.run = async function (client, msg, args) {
 
     res.items.forEach(track => {
         track.req = msg.author.id;
-        track.permalink = res.src === 'youtube' ? `https://youtube.com?watch/v=${track.id}` : url;
+        track.permalink = res.src === 'youtube' ? `https://youtube.com/watch?v=${track.id}` : url;
         track.src = res.src;
     });
 
