@@ -1,44 +1,41 @@
-exports.run = function (client, msg) {
+exports.run = async function ({ client, msg }) {
+    const audioPlayer = client.getAudioPlayer(msg.channel.guild.id);
 
-    if (!msg.member.isAdmin)
+    if (!msg.member.isAdmin) {
         return msg.channel.createMessage({ embed: {
-            color: config.options.embedColour,
+            color: client.config.options.embedColour,
             title: 'Insufficient Permissions',
         }});
+    }
 
-    if (!client.voiceConnections.get(msg.channel.guild.id))
+    if (!audioPlayer.isPlaying())
         return msg.channel.createMessage({ embed: {
-            color: config.options.embedColour,
+            color: client.config.options.embedColour,
             title: 'There\'s no playback activity'
         }});
 
-    if (guilds[msg.channel.guild.id].queue.length < 3)
+    if (audioPlayer.queue.length < 3)
         return msg.channel.createMessage({ embed: {
-            color: config.options.embedColour,
+            color: client.config.options.embedColour,
             title: 'There\'s not enough songs in the queue to shuffle',
         }});
 
-    const tempqueue = guilds[msg.channel.guild.id].queue.slice(1);
-    let curInd = tempqueue.length, tempVal, randInd;
+    let curInd = audioPlayer.queue.length, tempVal, randInd;
 
     while (curInd !== 0) {
 
         randInd = Math.floor(Math.random() * curInd);
-        curInd --;
-        tempVal = tempqueue[curInd];
-        tempqueue[curInd] = tempqueue[randInd];
-        tempqueue[randInd] = tempVal;
+        curInd--;
+        tempVal = audioPlayer.queue[curInd];
+        audioPlayer.queue[curInd] = audioPlayer.queue[randInd];
+        audioPlayer.queue[randInd] = tempVal;
 
     }
 
-    tempqueue.splice(0, 0, guilds[msg.channel.guild.id].queue[0]);
-    guilds[msg.channel.guild.id].queue = tempqueue;
-
     msg.channel.createMessage({ embed: {
-        color: config.options.embedColour,
+        color: client.config.options.embedColour,
         title: 'Queue Shuffled.'
     }});
-
 };
 
 exports.usage = {

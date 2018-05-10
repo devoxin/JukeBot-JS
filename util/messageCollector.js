@@ -4,10 +4,10 @@ class MessageCollector {
         client.on('messageCreate', this.check.bind(this));
     }
 
-    awaitMessages(check, options, channelId) {
+    awaitMessages(channelId, check, timeout = null) {
         return new Promise(accept => {
-            this.collectors.push({channelId, check, accept});
-            if (options.timeout) setTimeout(accept, options.timeout);
+            this.collectors.push({ channelId, check, accept });
+            if (timeout) setTimeout(accept, timeout);
         });
     }
 

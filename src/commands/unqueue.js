@@ -1,27 +1,35 @@
-exports.run = function(client, msg, args) {
+exports.run = async function({ client, msg, args}) {
+    const audioPlayer = client.getAudioPlayer(msg.channel.guild.id);
 
-    if (guilds[msg.channel.guild.id].queue.length <= 1) return msg.channel.createMessage({ embed: {
-        color: config.options.embedColour,
-        title: 'The queue is empty.'
-    }});
-
-    if (!parseInt(args[0]) || args[0] <= 0|| args[0] >= guilds[msg.channel.guild.id].queue.length) return msg.channel.createMessage({ embed: {
-        color: config.options.embedColour,
-        title: `You need to specify a number higher than 0, and less than ${guilds[msg.channel.guild.id].queue.length}`
-    }});
-
-    if (guilds[msg.channel.guild.id].queue[Math.round(args[0])].req !== msg.author.id && !msg.member.isAdmin)
+    if (audioPlayer.queue.length === 0) {
         return msg.channel.createMessage({ embed: {
-            color: config.options.embedColour,
+            color: client.config.options.embedColour,
+            title: 'The queue is empty.'
+        }});
+    }
+
+    const amount = Math.round(Number(args[0]) || 0);
+
+    if (amount <= 0|| amount >= audioPlayer.queue.length) {
+        return msg.channel.createMessage({ embed: {
+            color: client.config.options.embedColour,
+            title: `You need to specify a number higher than 0, and less than ${audioPlayer.queue.length}`
+        }});
+    }
+
+    if (audioPlayer.queue[amount].req !== msg.author.id && !msg.member.isAdmin) {
+        return msg.channel.createMessage({ embed: {
+            color: client.config.options.embedColour,
             title: 'You can\'t unqueue that.'
         }});
+    }
 
     msg.channel.createMessage({ embed: {
-        color: config.options.embedColour,
-        title: `Unqueued ${guilds[msg.channel.guild.id].queue[args[0]].title}`
+        color: client.config.options.embedColour,
+        title: `Unqueued ${audioPlayer.queue[amount].title}`
     }});
 
-    guilds[msg.channel.guild.id].queue.splice(args[0], 1);
+    audioPlayer.queue.splice(amount, 1);
 };
 
 exports.usage = {
@@ -29,3 +37,5 @@ exports.usage = {
     args: '<index>',
     description: 'Unqueues the song at the specified position'
 };
+
+exports.aliases = ['uq'];

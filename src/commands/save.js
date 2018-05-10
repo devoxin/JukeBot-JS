@@ -1,48 +1,53 @@
-exports.run = async function (client, msg, args) {
-
-    if (guilds[msg.channel.guild.id].queue.length === 0)
-        return msg.channel.createMessage({ embed: {
-            color: config.options.embedColour,
-            title: 'Nothing is queued.'
-        }});
+exports.run = async function ({ client, msg, args }) {
+    const audioPlayer = client.getAudioPlayer(msg.channel.guild.id);
 
     const dmc = await msg.author.getDMChannel()
         .catch(() => null);
 
-    if (!dmc) return msg.channel.createMessage({ embed: {
-        color: config.options.embedColour,
-        title: 'There was an error fetching a DM channel.'
-    }});
+    if (!dmc) {
+        return msg.channel.createMessage({ embed: {
+            color: client.config.options.embedColour,
+            title: 'There was an error fetching a DM channel.'
+        }});
+    }
 
-    if (args[0] && args[0] === '-q') {
+    if (args[0] === '-q') {
+        if (audioPlayer.queue.length === 0) {
+            return msg.channel.createMessage({ embed: {
+                color: client.config.options.embedColour,
+                title: 'Nothing is queued.'
+            }});
+        }
+
         const m = await msg.channel.createMessage({ embed: {
-            color: config.options.embedColour,
+            color: client.config.options.embedColour,
             title: 'Compiling queue...'
         }});
 
-        const queue = guilds[msg.channel.guild.id].queue.map(s => `${s.title} (${s.permalink})`).join('\r\n');
+        const queue = audioPlayer.queue.map(s => `${s.title} (${s.permalink})`).join('\r\n');
 
-        dmc.createMessage('', {
+        dmc.createMessage({
             name: 'queue.txt',
             file: Buffer.from(queue, 'utf8')
         })
-            .then(() => {
-                m.edit({ embed: {
-                    color: config.options.embedColour,
-                    title: 'You have been DM\'d the queue.'
-                }});
-            })
             .catch(err => {
                 m.edit({ embed: {
-                    color: config.options.embedColour,
+                    color: client.config.options.embedColour,
                     title: err.message
                 }});
             });
     } else {
-        const song = guilds[msg.channel.guild.id].queue[0];
+        const song = audioPlayer.current;
+
+        if (!song) {
+            return msg.channel.createMessage({ embed: {
+                color: client.config.options.embedColour,
+                title: 'Nothing playing.'
+            }});
+        }
 
         dmc.createMessage({ embed: {
-            color: config.options.embedColour,
+            color: client.config.options.embedColour,
             title: song.title,
             url  : song.permalink
         }});

@@ -1,29 +1,13 @@
-const permissions = require('./Permissions.js');
-
 function loadExtensions(Eris) {
-    Object.defineProperties(Eris.Message.prototype, {
-        'isFromDM': {
-            get() {
-                return this.channel.type === 1;
-            }
-        },
-        'bulkReact': {
-            async value(reactions) {
-                for (const reaction of reactions)
-                    await this.addReaction(reaction);
-            }
-        }
-    });
-
     Object.defineProperties(Eris.Member.prototype, {
         'isBlocked': {
             get() {
-                return permissions.isBlocked(this.id);
+                return this.guild.roles.find(r => r.name === 'JukeBlock' && this.roles.includes(r.id)); // TODO: Link this into config for global blacklists?
             }
         },
         'isAdmin': {
             get() {
-                return permissions.isAdmin(this);
+                return this.guild.roles.find(r => r.name === 'DJ' && this.roles.includes(r.id)) || this.id === '180093157554388993'; // TODO: Link this into config
             }
         }
     });

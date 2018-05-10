@@ -1,9 +1,11 @@
-exports.run = function (client, msg, args) {
-    if (!config.prop.owners.includes(msg.author.id)) return msg.channel.createMessage({ embed: {
-        color: config.options.embedColour,
-        title: ':warning: Restricted Command',
-        description: 'This command is locked to the developer only.'
-    }});
+exports.run = async function ({ client, msg, args }) {
+    if (!client.config.prop.owners.includes(msg.author.id)) {
+        return msg.channel.createMessage({ embed: {
+            color: client.config.options.embedColour,
+            title: ':warning: Restricted Command',
+            description: 'This command is locked to the developer only.'
+        }});
+    }
 
     try {
         let code = eval(args.join(' '));

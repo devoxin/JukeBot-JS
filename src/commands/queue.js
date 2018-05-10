@@ -1,36 +1,33 @@
 const timeParser = require('../../util/timeParser.js');
 
-exports.run = function (client, msg, args) {
+exports.run = async function ({ client, msg, args }) {
+    const audioPlayer = client.getAudioPlayer(msg.channel.guild.id);
 
-    if (guilds[msg.channel.guild.id].queue.length <= 1)
+    if (audioPlayer.queue.length === 0) {
         return msg.channel.createMessage({ embed: {
-            color: config.options.embedColour,
-            title: 'There\'s nothing queued'
+            color: client.config.options.embedColour,
+            title: 'The queue is empty'
         }});
+    }
 
-
-    const guild = guilds[msg.channel.guild.id];
-
-    let page = parseInt(args[0]) ? parseInt(args[0]) : 1;
-    const maxPage = Math.ceil(guild.queue.slice(1).length / 10);
-
-    if (page < 1)       page = 1;
-    if (page > maxPage) page = maxPage;
+    const maxPage = Math.ceil(audioPlayer.queue.length / 10);
+    const page = Math.max(Math.min(Number(args[0]) || 1, maxPage), 1);
 
     const startQueue = (page - 1) * 10 + 1;
-    const endQueue   = startQueue + 10 > guild.queue.length ? guild.queue.length : startQueue + 10;
+    const endQueue   = Math.min(startQueue + 10, audioPlayer.queue.length);
 
-    const track = guild.queue[0];
+    const track = audioPlayer.current;
+    const { current } = client.voiceConnections.get(msg.channel.guild.id);
 
     const embed = {
-        color       : config.options.embedColour,
+        color       : client.config.options.embedColour,
         title       : track.title,
         url         : track.src !== 'soundcloud' ? `https://youtu.be/${track.id}` : undefined,
-        description : `${timeParser.formatSeconds(client.voiceConnections.get(msg.channel.guild.id).current.playTime / 1000)}${track.src === 'youtube' ? `/${  timeParser.formatSeconds(track.duration)}` : ''}`,
+        description : `${timeParser.formatSeconds(current.playTime / 1000)}/${timeParser.formatSeconds(track.duration)}`,
         fields: [
             {
                 name: 'Queue',
-                value: guild.queue.slice(startQueue, endQueue).map((item, i) => `${startQueue + i}. ${item.title} - ${client.users.get(item.req) ? client.users.get(item.req).username : 'Unknown'}`).join('\n')
+                value: audioPlayer.queue.slice(startQueue, endQueue).map((item, i) => `${startQueue + i}. ${item.title} - ${client.users.has(item.req) ? client.users.get(item.req).username : 'Unknown'}`).join('\n')
             }
         ],
         footer: {
@@ -38,12 +35,13 @@ exports.run = function (client, msg, args) {
         }
     };
 
-    msg.channel.createMessage({ embed }).catch(() => {});
-
+    msg.channel.createMessage({ embed }).catch(() => null);
 };
 
 exports.usage = {
     main: '{prefix}{command}',
-    args: '<page number>',
+    args: '<page>',
     description: 'View the specified queue page'
 };
+
+exports.aliases = ['q'];

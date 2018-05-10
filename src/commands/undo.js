@@ -1,41 +1,43 @@
-exports.run = async function(client, msg, args) {
+exports.run = async function({ client, msg, args }) {
+    const audioPlayer = client.getAudioPlayer(msg.channel.guild.id);
 
-    if (guilds[msg.channel.guild.id].queue.length <= 1) return msg.channel.createMessage({ embed: {
-        color: config.options.embedColour,
-        title: 'The queue is empty.'
-    }});
+    if (audioPlayer.queue.length === 0) {
+        return msg.channel.createMessage({ embed: {
+            color: client.config.options.embedColour,
+            title: 'The queue is empty.'
+        }});
+    }
 
-    if (!parseInt(args[0]) || args[0] === 0) return msg.channel.createMessage({ embed: {
-        color: config.options.embedColour,
-        title: 'You need to specify a number between 1 and 100'
-    }});
+    const amount = Number(args[0]);
 
-    const queue = guilds[msg.channel.guild.id].queue.slice(1);
-
-    const remove = parseInt(args[0]) ? parseInt(args[0]) : 1;
-    let removed = 0;
-    const qi = queue.length - 1;
+    if (!amount || amount <= 0) {
+        return msg.channel.createMessage({ embed: {
+            color: client.config.options.embedColour,
+            title: 'You need to specify a number between 1 and 100'
+        }});
+    }
 
     const m = await msg.channel.createMessage({ embed: {
-        color: config.options.embedColour,
-        title: `Removing up to ${remove} songs queued by you...`
+        color: client.config.options.embedColour,
+        title: `Removing up to ${amount} songs queued by you...`
     }});
 
-    for (let i = qi; i > -1; i--) {
-        if (removed === remove) break;
+    let removed = 0;
 
-        if (queue[i].req === msg.author.id) {
-            queue.splice(i, 1);
+    for (const track in audioPlayer.queue) {
+        if (removed === amount) {
+            break;
+        }
+
+        if (audioPlayer.queue[track].req === msg.author.id) {
+            audioPlayer.queue.splice(track, 1);
             removed++;
         }
     }
 
-    queue.splice(0, 0, guilds[msg.channel.guild.id].queue[0]);
-    guilds[msg.channel.guild.id].queue = queue;
-
     m.edit({ embed: {
-        color: config.options.embedColour,
-        title: `${removed} songs unqueued`
+        color: client.config.options.embedColour,
+        title: `${removed} songs removed.`
     }});
 };
 
@@ -44,3 +46,5 @@ exports.usage = {
     args: '<1-100>',
     description: 'Removes the last `x` songs from the queue'
 };
+
+exports.aliases = ['z'];

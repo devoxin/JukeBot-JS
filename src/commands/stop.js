@@ -1,19 +1,22 @@
-exports.run = function (client, msg) {
+exports.run = async function ({ client, msg }) {
+    const audioPlayer = client.getAudioPlayer(msg.channel.guild.id);
 
-    if (!msg.member.isAdmin) return msg.channel.createMessage({ embed: {
-        color: config.options.embedColour,
-        title: 'Insufficient Permissions',
-    }});
+    if (!msg.member.isAdmin) {
+        return msg.channel.createMessage({ embed: {
+            color: client.config.options.embedColour,
+            title: 'Insufficient Permissions',
+        }});
+    }
 
-    if (!client.voiceConnections.get(msg.channel.guild.id)) return msg.channel.createMessage({ embed: {
-        color: config.options.embedColour,
-        title: 'There\'s no playback activity.'
-    }});
+    if (!audioPlayer.isPlaying()) {
+        return msg.channel.createMessage({ embed: {
+            color: client.config.options.embedColour,
+            title: 'There\'s no playback activity.'
+        }});
+    }
 
-    guilds[msg.channel.guild.id].repeat = 'None';
-    guilds[msg.channel.guild.id].queue.splice(1, guilds[msg.channel.guild.id].queue.length);
-    client.voiceConnections.get(msg.channel.guild.id).stopPlaying();
-
+    audioPlayer.queue = [];
+    audioPlayer.stop();
 };
 
 exports.usage = {

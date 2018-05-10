@@ -1,6 +1,5 @@
 module.exports = {
-
-    disable: (...events) => {
+    disable: (events) => {
         const disabled = {};
 
         for (const e of events)
@@ -8,5 +7,4 @@ module.exports = {
 
         return disabled;
     }
-
 };

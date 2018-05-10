@@ -1,39 +1,44 @@
-exports.run = function (client, msg, args) {
+exports.run = async function ({ client, msg, args }) {
+    const audioPlayer = client.getAudioPlayer(msg.channel.guild.id);
 
-    if (!msg.member.isAdmin)
+    if (!msg.member.isAdmin) {
         return msg.channel.createMessage({ embed: {
-            color: config.options.embedColour,
+            color: client.config.options.embedColour,
             title: 'Insufficient Permissions',
         }});
+    }
 
-    if (!args[0])
-        return msg.channel.createMessage({ embed: {
-            color: config.options.embedColour,
-            title: `Repeat mode: ${guilds[msg.channel.guild.id].repeat}`,
-            description: `${config.options.prefix}repeat < a | c | n >\n\n[All, Current, None]`
-        }});
-
-    if (!(args[0] === 'a' || args[0] === 'c' || args[0] === 'n'))
-        return msg.channel.createMessage({ embed: {
-            color: config.options.embedColour,
-            title: 'Repeat mode can only be set to \'a\', \'c\' or \'n\'',
-            description: '[All, Current, None]'
-        }});
-
-    if 		(args[0] === 'a')  guilds[msg.channel.guild.id].repeat = 'All';
-    else if (args[0] === 'c')  guilds[msg.channel.guild.id].repeat = 'Current';
-    else if	(args[0] === 'n')  guilds[msg.channel.guild.id].repeat = 'None';
+    switch (args[0]) {
+        case 'a':
+        case 'all':
+            audioPlayer.setRepeat(2);
+            break;
+        case 'c':
+        case 'current':
+            audioPlayer.setRepeat(1);
+            break;
+        case 'n':
+        case 'none':
+            audioPlayer.setRepeat(0);
+            break;
+        default:
+            return msg.channel.createMessage({ embed: {
+                color: client.config.options.embedColour,
+                title: `Repeat mode: ${audioPlayer.getRepeatReadable()}`,
+                description: `${client.config.options.prefix}repeat < a | c | n >\n\n[All, Current, None]`
+            }});
+    }
 
     msg.channel.createMessage({ embed: {
-        color: config.options.embedColour,
+        color: client.config.options.embedColour,
         title: 'Repeat Toggled',
-        description: `Repeating ${guilds[msg.channel.guild.id].repeat}`
+        description: `Repeating ${audioPlayer.getRepeatReadable()}`
     }});
 
 };
 
 exports.usage = {
     main: '{prefix}{command}',
-    args: '',
-    description: 'Toggles the repeat mode (All -> Current -> None)'
+    args: '<all|current|none>',
+    description: 'Toggles the repeat mode'
 };

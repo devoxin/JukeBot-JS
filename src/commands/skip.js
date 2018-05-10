@@ -1,33 +1,32 @@
-exports.run = function (client, msg) {
+exports.run = async function ({ client, msg }) {
+    const audioPlayer = client.getAudioPlayer(msg.channel.guild.id);
+    const voiceConnection = client.voiceConnections.get(msg.channel.guild.id);
 
-    if (!client.voiceConnections.get(msg.channel.guild.id) || !client.voiceConnections.get(msg.channel.guild.id).channelID)	return msg.channel.createMessage({ embed: {
-        color: config.options.embedColour,
-        title: 'There\'s no playback activity'
-    }});
-
-    if (msg.member.voiceState.channelID !== client.voiceConnections.get(msg.channel.guild.id).channelID)
+    if (!audioPlayer.isPlaying()) {
         return msg.channel.createMessage({ embed: {
-            color: config.options.embedColour,
+            color: client.config.options.embedColour,
+            title: 'There\'s no playback activity'
+        }});
+    }
+
+    if (msg.member.voiceState.channelID !== voiceConnection.channelID) {
+        return msg.channel.createMessage({ embed: {
+            color: client.config.options.embedColour,
             title: 'You need to be in my voicechannel to skip'
         }});
+    }
 
-    if (guilds[msg.channel.guild.id].svotes.includes(msg.author.id))
-        return msg.channel.createMessage({ embed: {
-            color: config.options.embedColour,
-            title: 'You\'ve already voted'
-        }});
+    const votes = audioPlayer.voteSkip(msg.author.id);
+    const requiredVotes = Math.round(client.getChannel(voiceConnection.channelID).voiceMembers.filter(m => !m.bot).length / 2);
 
-    guilds[msg.channel.guild.id].svotes.push(msg.author.id);
-
-    const voiceMembers = Math.round(msg.channel.guild.channels.get(msg.member.voiceState.channelID).voiceMembers.filter(m => !m.bot).length / 2);
-
-    if (guilds[msg.channel.guild.id].svotes.length >= voiceMembers)
-        return client.voiceConnections.get(msg.channel.guild.id).stopPlaying();
+    if (votes >= requiredVotes) {
+        return audioPlayer.stop();
+    }
 
     msg.channel.createMessage({ embed: {
-        color: config.options.embedColour,
-        title: 'Voted to skip',
-        description: `${guilds[msg.channel.guild.id].svotes.length}/${voiceMembers} vote(s) needed.`
+        color: client.config.options.embedColour,
+        title: 'Vote Skip',
+        description: `${votes}/${requiredVotes} voted.`
     }});
 };
 

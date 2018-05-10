@@ -1,17 +1,21 @@
-exports.run = function (client, msg) {
+exports.run = async function ({ client, msg }) {
+    const audioPlayer = client.getAudioPlayer(msg.channel.guild.id);
 
-    if (!client.voiceConnections.get(msg.channel.guild.id) || !guilds[msg.channel.guild.id].queue[0]) return msg.channel.createMessage({ embed: {
-        color: config.options.embedColour,
-        title: 'There\'s no playback activity.'
-    }});
+    if (!audioPlayer.isPlaying()) {
+        return msg.channel.createMessage({ embed: {
+            color: client.config.options.embedColour,
+            title: 'There\'s no playback activity.'
+        }});
+    }
 
-    if (!msg.member.isAdmin && guilds[msg.channel.guild.id].queue[0].req !== msg.author.id) return msg.channel.createMessage({ embed: {
-        color: config.options.embedColour,
-        title: 'Insufficient Permissions',
-    }});
+    if (!msg.member.isAdmin && audioPlayer.currentlyPlaying.req !== msg.author.id) {
+        return msg.channel.createMessage({ embed: {
+            color: client.config.options.embedColour,
+            title: 'Insufficient Permissions',
+        }});
+    }
 
-    client.voiceConnections.get(msg.channel.guild.id).stopPlaying();
-
+    audioPlayer.stop();
 };
 
 exports.usage = {
@@ -19,3 +23,5 @@ exports.usage = {
     args: '',
     description: 'Skips the current song by force (no voting)'
 };
+
+exports.aliases = ['fs'];

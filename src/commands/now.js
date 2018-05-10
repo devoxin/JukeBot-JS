@@ -1,23 +1,25 @@
 const timeParser = require('../../util/timeParser.js');
 
-exports.run = function (client, msg) {
+exports.run = async function ({ client, msg }) {
+    const audioPlayer = client.getAudioPlayer(msg.channel.guild.id);
 
-    if (guilds[msg.channel.guild.id].queue.length === 0)
+    if (!audioPlayer.isPlaying()) {
         return msg.channel.createMessage({ embed: {
-            color: config.options.embedColour,
+            color: client.config.options.embedColour,
             title: 'There\'s nothing playing'
         }});
+    }
 
-    const guild = guilds[msg.channel.guild.id];
-    const track = guild.queue[0];
+    const track = audioPlayer.current;
+    const { current } = client.voiceConnections.get(msg.channel.guild.id);
 
     const embed = {
-        color       : config.options.embedColour,
-        title       : track.title,
-        url         : track.permalink,
-        description : `${timeParser.formatSeconds(client.voiceConnections.get(msg.channel.guild.id).current.playTime / 1000)}/${timeParser.formatSeconds(track.duration / 1000)}`,
+        color: client.config.options.embedColour,
+        title: 'Now Playing',
+        description: `[${track.title}](${track.permalink})\n` +
+            `${timeParser.formatSeconds(current.playTime / 1000)}/${timeParser.formatSeconds(track.duration / 1000)}`,
         footer: {
-            text: `Requested by ${client.users.get(track.req) ? client.users.get(track.req).username : 'Unknown'}`
+            text: `Requested by ${client.users.has(track.req) ? client.users.get(track.req).username : 'Unknown'}`
         }
     };
 
@@ -30,3 +32,5 @@ exports.usage = {
     args: '',
     description: 'Shows info about the currently playing song'
 };
+
+exports.aliases = ['n'];
