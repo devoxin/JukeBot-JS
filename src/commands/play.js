@@ -141,7 +141,9 @@ exports.run = async function (client, msg, args) {
         const selected = await msg.channel.awaitMessages(m => m.author.id === msg.author.id && m.channel.guild && (Number(m.content) && m.content >= 1 && m.content <= res.items.length || m.content.toLowerCase().startsWith(`${config.options.prefix}p`) || m.content === 'c'), { timeout: 10e3 });
 
         if (!selected || selected.content.toLowerCase().startsWith(`${config.options.prefix}p`) || selected.content === 'c') {
-            if (!selected || selected.content === 'c' && client.voiceConnections.isConnected(msg.channel.guild.id) && guild.queue.length === 0) client.leaveVoiceChannel(client.voiceConnections.get(msg.channel.guild.id).channelID);
+            if ((!selected || selected.content === 'c') && client.voiceConnections.isConnected(msg.channel.guild.id) && guild.queue.length === 0) {
+                client.leaveVoiceChannel(client.voiceConnections.get(msg.channel.guild.id).channelID);
+            }
             return src.delete();
         }
 
