@@ -14,7 +14,7 @@ exports.run = async function ({ client, msg, args }) {
     const page = Math.max(Math.min(Number(args[0]) || 1, maxPage), 1);
 
     const startQueue = (page - 1) * 10 + 1;
-    const endQueue   = Math.min(startQueue + 10, audioPlayer.queue.length);
+    const endQueue   = startQueue + 10 > audioPlayer.queue.length ? audioPlayer.queue.length : startQueue + 10;
 
     const track = audioPlayer.current;
     const { current } = client.voiceConnections.get(msg.channel.guild.id);
