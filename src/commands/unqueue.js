@@ -8,9 +8,9 @@ exports.run = async function ({ client, msg, args }) {
         } });
     }
 
-    const amount = Math.round(Number(args[0]) || 0);
+    const amount = Math.round(Number(args[0]) || 0) - 1;
 
-    if (amount <= 0|| amount >= audioPlayer.queue.length) {
+    if (amount < 0|| amount >= audioPlayer.queue.length) {
         return msg.channel.createMessage({ embed: {
             color: client.config.options.embedColour,
             title: `You need to specify a number higher than 0, and less than ${audioPlayer.queue.length}`
