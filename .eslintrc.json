@@ -9,6 +9,17 @@
         "indent": ["error", 4],
         "prefer-template": ["error"],
         "quotes": ["error", "single"],
-        "brace-style": ["error", "1tbs"]
+        "brace-style": ["error", "1tbs"],
+        "eqeqeq": ["error", "always"],
+        "yoda": ["error"],
+        "no-var": ["error"],
+        "no-obj-calls": ["error"],
+        "no-cond-assign": ["error"],
+        "no-regex-spaces": ["error"],
+        "no-sparse-arrays": ["error"],
+        "no-template-curly-in-string": ["error"],
+        "no-unreachable": ["error"],
+        "dot-notation": ["error"],
+        "no-global-assign": ["error"]
     }
 }
