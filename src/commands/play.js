@@ -18,11 +18,12 @@ exports.run = async function ({ client, msg, args }) {
     }
 
     if (!client.voiceConnections.isConnected(msg.channel.guild.id)) {
-        if (!msg.member.voiceState.channelID)
-        {return msg.channel.createMessage({ embed: {
-            color: client.config.options.embedColour,
-            title: 'Join a voicechannel first',
-        } });}
+        if (!msg.member.voiceState.channelID) {
+            return msg.channel.createMessage({ embed: {
+                color: client.config.options.embedColour,
+                title: 'Join a voicechannel first',
+            } });
+        }
 
         if (!client.getChannel(msg.member.voiceState.channelID).hasPermissions(client.user.id, 'voiceConnect', 'voiceSpeak')) {
             return msg.channel.createMessage({ embed: {
@@ -41,7 +42,9 @@ exports.run = async function ({ client, msg, args }) {
                 } });
             });
 
-        if (!client.voiceConnections.isConnected(msg.channel.guild.id)) {return;}
+        if (!client.voiceConnections.isConnected(msg.channel.guild.id)) {
+            return;
+        }
         audioPlayer.setAnnounce(msg.channel.id);
 
     } else if (msg.member.voiceState.channelID !== client.voiceConnections.get(msg.channel.guild.id).channelID) {

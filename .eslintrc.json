@@ -8,6 +8,7 @@
         "space-before-function-paren": ["error", "always"],
         "indent": ["error", 4],
         "prefer-template": ["error"],
-        "quotes": ["error", "single"]
+        "quotes": ["error", "single"],
+        "brace-style": ["error", "1tbs"]
     }
 }

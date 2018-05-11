@@ -8,17 +8,19 @@ exports.run = async function ({ client, msg }) {
         } });
     }
 
-    if (!audioPlayer.isPlaying())
-    {return msg.channel.createMessage({ embed: {
-        color: client.config.options.embedColour,
-        title: 'There\'s no playback activity'
-    } });}
+    if (!audioPlayer.isPlaying()) {
+        return msg.channel.createMessage({ embed: {
+            color: client.config.options.embedColour,
+            title: 'There\'s no playback activity'
+        } });
+    }
 
-    if (audioPlayer.queue.length < 3)
-    {return msg.channel.createMessage({ embed: {
-        color: client.config.options.embedColour,
-        title: 'There\'s not enough songs in the queue to shuffle',
-    } });}
+    if (audioPlayer.queue.length < 3) {
+        return msg.channel.createMessage({ embed: {
+            color: client.config.options.embedColour,
+            title: 'There\'s not enough songs in the queue to shuffle',
+        } });
+    }
 
     let curInd = audioPlayer.queue.length, tempVal, randInd;
 

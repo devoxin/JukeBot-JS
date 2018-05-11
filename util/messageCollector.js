@@ -7,7 +7,9 @@ class MessageCollector {
     awaitMessages (channelId, check, timeout = null) {
         return new Promise(accept => {
             this.collectors.push({ channelId, check, accept });
-            if (timeout) {setTimeout(accept, timeout);}
+            if (timeout) {
+                setTimeout(accept, timeout);
+            }
         });
     }
 

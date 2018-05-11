@@ -18,7 +18,9 @@ function get (url, query = {}, headers = {}) {
         };
 
         https.get(opts, (res) => {
-            if (![200, 302].includes(res.statusCode)) {return reject(`Status code not valid: ${res.statusCode}`);}
+            if (![200, 302].includes(res.statusCode)) {
+                return reject(`Status code not valid: ${res.statusCode}`);
+            }
 
             const chunks = [];
 

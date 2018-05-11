@@ -12,16 +12,22 @@ module.exports = {
         const request = await req.get('https://api.soundcloud.com/resolve', { url, client_id })
             .catch(() => null);
 
-        if (!request) {return [];}
+        if (!request) {
+            return [];
+        }
 
         const trackId = trackIdRegex.exec(request.location);
 
-        if (!trackId) {return [];}
+        if (!trackId) {
+            return [];
+        }
 
         const metadata = await req.get(`https://api.soundcloud.com/tracks/${trackId}`, { client_id })
             .catch(() => null);
 
-        if (!metadata) {return [];}
+        if (!metadata) {
+            return [];
+        }
 
         return [{
             id: `https://api.soundcloud.com/tracks/${trackId[0]}/stream?client_id=${client_id}`,
