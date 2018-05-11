@@ -42,7 +42,7 @@ class Bot extends Client {
                         }
                     }
                 } catch(e) {
-                    this.log('ERROR', `Failed to load command "${file}"`, e);
+                    this.log('ERROR', `Failed to load command "${file}"`, e.message, e.stack);
                 }
             });
         });
@@ -59,7 +59,7 @@ class Bot extends Client {
     log (logLevel, content, ...extras) {
         const time = new Date();
         const timestamp = `${time.toDateString()} ${time.toLocaleTimeString()}`;
-        console.log(`[${timestamp}] [${logLevel.padEnd(5, ' ')}] ${content}${extras.join('\n\t').trim()}`); // eslint-disable-line
+        console.log(`[${timestamp}] [${logLevel.padEnd(5, ' ')}] ${content}${extras.length > 0 ? `\n\t${extras.join('\n\t').trim()}` : ''}`); // eslint-disable-line
     }
 
     async awaitMessage (channelId, check, timeout) {
