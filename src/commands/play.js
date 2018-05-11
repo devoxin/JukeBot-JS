@@ -3,8 +3,8 @@ const scutil = require('../../util/soundcloudHandler.js');
 const sputil = require('../../spotifyHandler.js');
 
 const ytrx = new RegExp('(?:youtube\\.com.*(?:\\?|&)(?:v|list)=|youtube\\.com.*embed\\/|youtube\\.com.*v\\/|youtu\\.be\\/)((?!videoseries)[a-zA-Z0-9_-]*)');
-const scrx = new RegExp('((https:\\/\\/)|(http:\\/\\/)|(www.)|(s))+(soundcloud.com\\/)+[a-zA-Z0-9-.]+(\\/)+[a-zA-Z0-9-.]+');
-const sprx = new RegExp('https?:\/\/(?:open\.)?spotify\.com\/track\/([a-zA-Z0-9]{22})', 'g');
+const scrx = new RegExp('(?:https?:\/\/)?(?:www\.)?soundcloud\.com\/+[a-zA-Z0-9-.]+\/+[a-zA-Z0-9-.]+');
+const sprx = new RegExp('https?:\/\/(?:open\.)?spotify\.com\/track\/([a-zA-Z0-9]{22})');
 
 exports.run = async function ({ client, msg, args }) {
     const audioPlayer = client.getAudioPlayer(msg.channel.guild.id);

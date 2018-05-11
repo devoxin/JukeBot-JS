@@ -26,3 +26,5 @@ exports.usage = {
     args: '',
     description: 'Developer command'
 };
+
+exports.aliases = ['ev', 'e'];

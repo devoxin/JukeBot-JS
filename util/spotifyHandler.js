@@ -8,6 +8,6 @@ const spotify = new SpotifyAPI({
 module.exports = {
     async lookup (id) {
         const track = await spotify.request(`https://api.spotify.com/v1/tracks/${id}`);
-        console.log(track);
+        return track;
     }
 };
