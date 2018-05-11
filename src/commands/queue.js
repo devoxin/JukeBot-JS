@@ -35,7 +35,7 @@ exports.run = async function ({ client, msg, args }) {
         }
     };
 
-    msg.channel.createMessage({ embed }).catch(() => null);
+    msg.channel.createMessage({ embed });
 };
 
 exports.usage = {
