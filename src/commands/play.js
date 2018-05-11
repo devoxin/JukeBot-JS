@@ -1,6 +1,6 @@
 const ytutil = require('../../util/youtubeHandler.js');
 const scutil = require('../../util/soundcloudHandler.js');
-const sputil = require('../../util/spotifyHandler.js');
+//const sputil = require('../../util/spotifyHandler.js');
 
 const ytrx = new RegExp('(?:youtube\\.com.*(?:\\?|&)(?:v|list)=|youtube\\.com.*embed\\/|youtube\\.com.*v\\/|youtu\\.be\\/)((?!videoseries)[a-zA-Z0-9_-]*)');
 const scrx = new RegExp('(?:https?:\/\/)?(?:www\.)?soundcloud\.com\/+[a-zA-Z0-9-.]+\/+[a-zA-Z0-9-.]+');
