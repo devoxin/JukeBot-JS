@@ -28,7 +28,7 @@ Open your newly created folder, and shift+right-click inside. Select 'Open Comma
 
 In the command window, type in the following command:
 ```
-git clone https://github.com/CrimsonXV/JukeBot.git
+git clone https://github.com/Devoxin/JukeBot.git
 ```
 ![](http://i.imgur.com/qwJPsMP.png, "Screenshot 1")
 
