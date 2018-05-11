@@ -7,7 +7,7 @@ exports.run = async function ({ client, msg }) {
         } });
     }
 
-    if (client.voiceConnections.isConnected(msg.channel.guild.id)) {
+    if (!client.voiceConnections.isConnected(msg.channel.guild.id)) {
         return msg.channel.createMessage({ embed: {
             color: client.config.options.embedColour,
             title: 'Not Connected',
