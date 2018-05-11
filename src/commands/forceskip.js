@@ -8,7 +8,7 @@ exports.run = async function ({ client, msg }) {
         } });
     }
 
-    if (!msg.member.isAdmin && audioPlayer.currentlyPlaying.req !== msg.author.id) {
+    if (!msg.member.isAdmin && audioPlayer.current.req !== msg.author.id) {
         return msg.channel.createMessage({ embed: {
             color: client.config.options.embedColour,
             title: 'Insufficient Permissions',
