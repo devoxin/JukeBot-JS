@@ -7,21 +7,21 @@ let client_id = '';
 
 module.exports = {
 
-    async getTrack(url) {
+    async getTrack (url) {
 
         const request = await req.get('https://api.soundcloud.com/resolve', { url, client_id })
             .catch(() => null);
 
-        if (!request) return [];
+        if (!request) {return [];}
 
         const trackId = trackIdRegex.exec(request.location);
 
-        if (!trackId) return [];
+        if (!trackId) {return [];}
 
         const metadata = await req.get(`https://api.soundcloud.com/tracks/${trackId}`, { client_id })
             .catch(() => null);
 
-        if (!metadata) return [];
+        if (!metadata) {return [];}
 
         return [{
             id: `https://api.soundcloud.com/tracks/${trackId[0]}/stream?client_id=${client_id}`,
@@ -31,7 +31,7 @@ module.exports = {
 
     },
 
-    async updateClientID() {
+    async updateClientID () {
         const page = await req.get('https://soundcloud.com')
             .catch(() => null);
 
@@ -54,7 +54,7 @@ module.exports = {
         console.log(`Updated client ID to ${client_id}`); // eslint-disable-line
     },
 
-    getClientID() {
+    getClientID () {
         return client_id;
     }
 

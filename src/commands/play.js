@@ -1,9 +1,10 @@
-const ytutil           = require('../../util/youtubeHandler.js');
-const scutil           = require('../../util/soundcloudHandler.js');
-//const sthandle         = require('../streamHandler.js');
+const ytutil = require('../../util/youtubeHandler.js');
+const scutil = require('../../util/soundcloudHandler.js');
+const sputil = require('../../spotifyHandler.js');
 
 const ytrx = new RegExp('(?:youtube\\.com.*(?:\\?|&)(?:v|list)=|youtube\\.com.*embed\\/|youtube\\.com.*v\\/|youtu\\.be\\/)((?!videoseries)[a-zA-Z0-9_-]*)');
 const scrx = new RegExp('((https:\\/\\/)|(http:\\/\\/)|(www.)|(s))+(soundcloud.com\\/)+[a-zA-Z0-9-.]+(\\/)+[a-zA-Z0-9-.]+');
+const sprx = new RegExp("https?:\/\/(?:open\.)?spotify\.com\/track\/([a-zA-Z0-9]{22})", "g")
 
 exports.run = async function ({ client, msg, args }) {
     const audioPlayer = client.getAudioPlayer(msg.channel.guild.id);
@@ -13,24 +14,23 @@ exports.run = async function ({ client, msg, args }) {
             color: client.config.options.embedColour,
             title: 'You need to specify something',
             description: 'YouTube: Search Term, URL or Playlist URL\nSoundCloud: URL'
-        }});
+        } });
     }
 
     if (!client.voiceConnections.isConnected(msg.channel.guild.id)) {
         if (!msg.member.voiceState.channelID)
-            return msg.channel.createMessage({ embed: {
-                color: client.config.options.embedColour,
-                title: 'Join a voicechannel first',
-            }});
+        {return msg.channel.createMessage({ embed: {
+            color: client.config.options.embedColour,
+            title: 'Join a voicechannel first',
+        } });}
 
         if (!client.getChannel(msg.member.voiceState.channelID).hasPermissions(client.user.id, 'voiceConnect', 'voiceSpeak')) {
             return msg.channel.createMessage({ embed: {
                 color: client.config.options.embedColour,
                 title: 'Unable to Connect',
                 description: 'This channel doesn\'t allow me to connect/speak.'
-            }});
+            } });
         }
-
 
         await client.joinVoiceChannel(msg.member.voiceState.channelID)
             .catch(e => {
@@ -38,17 +38,17 @@ exports.run = async function ({ client, msg, args }) {
                     color: client.config.options.embedColour,
                     title: 'Unable to Connect',
                     description: e.message
-                }});
+                } });
             });
 
-        if (!client.voiceConnections.isConnected(msg.channel.guild.id)) return;
+        if (!client.voiceConnections.isConnected(msg.channel.guild.id)) {return;}
         audioPlayer.setAnnounce(msg.channel.id);
 
     } else if (msg.member.voiceState.channelID !== client.voiceConnections.get(msg.channel.guild.id).channelID) {
         return msg.channel.createMessage({ embed: {
             color: client.config.options.embedColour,
             title: 'Join my voicechannel to queue.',
-        }});
+        } });
     }
 
     const query = args.join(' ').replace(/<|>/g, '');
@@ -69,7 +69,7 @@ exports.run = async function ({ client, msg, args }) {
                 color: client.config.options.embedColour,
                 title: 'No YouTube key specified',
                 description: 'No YouTube key was configured in `config.json`. YouTube not available.'
-            }});
+            } });
         }
 
         res.src = 'youtube';
@@ -89,7 +89,7 @@ exports.run = async function ({ client, msg, args }) {
                     color: client.config.options.embedColour,
                     title: 'No YouTube key specified',
                     description: 'No YouTube key was configured in `config.json`. YouTube not available.'
-                }});
+                } });
             }
 
             res.src = 'youtube';
@@ -120,7 +120,7 @@ exports.run = async function ({ client, msg, args }) {
         return msg.channel.createMessage({ embed: {
             color: client.config.options.embedColour,
             title: 'No results found.',
-        }});
+        } });
     }
 
     res.items.forEach(track => {
@@ -153,7 +153,7 @@ exports.run = async function ({ client, msg, args }) {
             footer: {
                 text: '1, 2 or 3 || c to cancel selection'
             }
-        }});
+        } });
 
         const selected = await client.awaitMessage(msg.channel.id,
             m => m.author.id === msg.author.id && m.channel.guild && (Number(m.content) && m.content >= 1 && m.content <= res.items.length || m.content.toLowerCase().startsWith(`${client.config.options.prefix}p`) || m.content === 'c'),
@@ -185,7 +185,7 @@ exports.run = async function ({ client, msg, args }) {
             color: client.config.options.embedColour,
             title: `Enqueued ${res.items[selected.content - 1].snippet.title}`,
             description: `Requested by ${msg.author.username}#${msg.author.discriminator}`
-        }});
+        } });
     }
 
     if (!audioPlayer.isPlaying()) {

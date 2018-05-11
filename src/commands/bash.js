@@ -1,12 +1,12 @@
 const { exec } = require('child_process');
 
-exports.run = async function({ client, msg, args }) {
+exports.run = async function ({ client, msg, args }) {
     if (!client.config.prop.owners.includes(msg.author.id)) {
         return msg.channel.createMessage({ embed: {
             color: client.config.options.embedColour,
             title: ':warning: Restricted Command',
             description: 'This command is locked to the developer only.'
-        }});
+        } });
     }
 
     if (!args[0]) {
@@ -39,7 +39,7 @@ exports.run = async function({ client, msg, args }) {
     });
 };
 
-function paginate(text, limit = 2000) {
+function paginate (text, limit = 2000) {
     const lines = text.trim().split('\n');
     const pages = [];
 

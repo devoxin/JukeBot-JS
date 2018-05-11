@@ -5,14 +5,14 @@ exports.run = async function ({ client, msg }) {
         return msg.channel.createMessage({ embed: {
             color: client.config.options.embedColour,
             title: 'Insufficient Permissions',
-        }});
+        } });
     }
 
     if (!audioPlayer.isPlaying()) {
         return msg.channel.createMessage({ embed: {
             color: client.config.options.embedColour,
             title: 'There\'s no playback activity.'
-        }});
+        } });
     }
 
     client.voiceConnections.get(msg.channel.guild.id).pause();

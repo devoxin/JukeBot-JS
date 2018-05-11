@@ -5,20 +5,20 @@ exports.run = async function ({ client, msg }) {
         return msg.channel.createMessage({ embed: {
             color: client.config.options.embedColour,
             title: 'Insufficient Permissions',
-        }});
+        } });
     }
 
     if (!audioPlayer.isPlaying())
-        return msg.channel.createMessage({ embed: {
-            color: client.config.options.embedColour,
-            title: 'There\'s no playback activity'
-        }});
+    {return msg.channel.createMessage({ embed: {
+        color: client.config.options.embedColour,
+        title: 'There\'s no playback activity'
+    } });}
 
     if (audioPlayer.queue.length < 3)
-        return msg.channel.createMessage({ embed: {
-            color: client.config.options.embedColour,
-            title: 'There\'s not enough songs in the queue to shuffle',
-        }});
+    {return msg.channel.createMessage({ embed: {
+        color: client.config.options.embedColour,
+        title: 'There\'s not enough songs in the queue to shuffle',
+    } });}
 
     let curInd = audioPlayer.queue.length, tempVal, randInd;
 
@@ -35,7 +35,7 @@ exports.run = async function ({ client, msg }) {
     msg.channel.createMessage({ embed: {
         color: client.config.options.embedColour,
         title: 'Queue Shuffled.'
-    }});
+    } });
 };
 
 exports.usage = {

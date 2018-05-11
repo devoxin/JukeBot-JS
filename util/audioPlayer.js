@@ -1,7 +1,7 @@
 const ytutil = require('./youtubeHandler.js');
 
 class AudioPlayer {
-    constructor(client, guildId) {
+    constructor (client, guildId) {
         this._client = client;
         this._guildId = guildId;
         this.queue = [];
@@ -17,14 +17,14 @@ class AudioPlayer {
      * 1 - single
      * 2 - all
      */
-    setRepeat(mode) {
+    setRepeat (mode) {
         let val = Number(mode) || 0;
         val = Math.max(Math.min(val, 2), 0);
 
         this.repeat = val;
     }
 
-    getRepeatReadable() {
+    getRepeatReadable () {
         if (this.repeat === 2) {
             return 'all';
         } else if (this.repeat === 1) {
@@ -36,20 +36,20 @@ class AudioPlayer {
         }
     }
 
-    voteSkip(userId) {
+    voteSkip (userId) {
         this.skips.add(userId);
         return this.skips.size;
     }
 
-    setAnnounce(channelId) {
+    setAnnounce (channelId) {
         this.msgChannel = channelId;
     }
 
-    add(track) {
+    add (track) {
         this.queue.push(track);
     }
 
-    async play() {
+    async play () {
         if (!this._client.voiceConnections.isConnected(this._guildId)) {
             return;
         }
@@ -97,7 +97,7 @@ class AudioPlayer {
         });
     }
 
-    stop() {
+    stop () {
         const voiceConnection = this._client.voiceConnections.get(this._guildId);
 
         if (!voiceConnection) {
@@ -107,7 +107,7 @@ class AudioPlayer {
         voiceConnection.stopPlaying();
     }
 
-    destroy() {
+    destroy () {
         this.queue.clear();
         this.skips.clear();
 
@@ -119,11 +119,11 @@ class AudioPlayer {
         this._client.audioPlayers.delete(this._guildId);
     }
 
-    isPlaying() {
+    isPlaying () {
         return this._client.voiceConnections.isConnected(this._guildId) && this.current !== null;
     }
 
-    _announce(title, description) {
+    _announce (title, description) {
         if (!this.msgChannel) {
             return;
         }
@@ -138,7 +138,7 @@ class AudioPlayer {
             color: this._client.config.options.embedColour,
             title,
             description
-        }});
+        } });
     }
 }
 

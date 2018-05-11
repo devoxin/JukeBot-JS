@@ -6,7 +6,7 @@ exports.run = async function ({ client, msg }) {
             { name: 'Add me to your server!',  value: '[Click Here](http://bit.ly/2oBEE0Q)',      inline: true },
             { name: 'Join my support server!', value: '[Click Here](https://discord.gg/xvtH2Yn)', inline: true }
         ]
-    }});
+    } });
 
 };
 

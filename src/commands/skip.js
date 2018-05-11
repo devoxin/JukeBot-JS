@@ -6,14 +6,14 @@ exports.run = async function ({ client, msg }) {
         return msg.channel.createMessage({ embed: {
             color: client.config.options.embedColour,
             title: 'There\'s no playback activity'
-        }});
+        } });
     }
 
     if (msg.member.voiceState.channelID !== voiceConnection.channelID) {
         return msg.channel.createMessage({ embed: {
             color: client.config.options.embedColour,
             title: 'You need to be in my voicechannel to skip'
-        }});
+        } });
     }
 
     const votes = audioPlayer.voteSkip(msg.author.id);
@@ -27,7 +27,7 @@ exports.run = async function ({ client, msg }) {
         color: client.config.options.embedColour,
         title: 'Vote Skip',
         description: `${votes}/${requiredVotes} voted.`
-    }});
+    } });
 };
 
 exports.usage = {

@@ -7,7 +7,7 @@ exports.run = async function ({ client, msg, args }) {
         return msg.channel.createMessage({ embed: {
             color: client.config.options.embedColour,
             title: 'The queue is empty'
-        }});
+        } });
     }
 
     const maxPage = Math.ceil(audioPlayer.queue.length / 10);

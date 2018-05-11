@@ -2,7 +2,7 @@ const https = require('https');
 const { parse } = require('url');
 const { stringify } = require('querystring');
 
-function get(url, query = {}, headers = {}) {
+function get (url, query = {}, headers = {}) {
     return new Promise((resolve, reject) => {
         url = parse(url);
         headers = Object.assign(headers, defaultHeaders);
@@ -18,7 +18,7 @@ function get(url, query = {}, headers = {}) {
         };
 
         https.get(opts, (res) => {
-            if (![200, 302].includes(res.statusCode)) return reject(`Status code not valid: ${res.statusCode}`);
+            if (![200, 302].includes(res.statusCode)) {return reject(`Status code not valid: ${res.statusCode}`);}
 
             const chunks = [];
 

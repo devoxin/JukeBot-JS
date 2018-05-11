@@ -1,11 +1,11 @@
-exports.run = async function({ client, msg, args }) {
+exports.run = async function ({ client, msg, args }) {
     const audioPlayer = client.getAudioPlayer(msg.channel.guild.id);
 
     if (audioPlayer.queue.length === 0) {
         return msg.channel.createMessage({ embed: {
             color: client.config.options.embedColour,
             title: 'The queue is empty.'
-        }});
+        } });
     }
 
     const amount = Number(args[0]);
@@ -14,13 +14,13 @@ exports.run = async function({ client, msg, args }) {
         return msg.channel.createMessage({ embed: {
             color: client.config.options.embedColour,
             title: 'You need to specify a number between 1 and 100'
-        }});
+        } });
     }
 
     const m = await msg.channel.createMessage({ embed: {
         color: client.config.options.embedColour,
         title: `Removing up to ${amount} songs queued by you...`
-    }});
+    } });
 
     let removed = 0;
 
@@ -38,7 +38,7 @@ exports.run = async function({ client, msg, args }) {
     m.edit({ embed: {
         color: client.config.options.embedColour,
         title: `${removed} songs removed.`
-    }});
+    } });
 };
 
 exports.usage = {

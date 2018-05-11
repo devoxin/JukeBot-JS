@@ -8,7 +8,7 @@ const { Client } = Eris;
 
 
 class Bot extends Client {
-    constructor(config, clientOptions) {
+    constructor (config, clientOptions) {
         if (Array.isArray(clientOptions.disableEvents)) {
             clientOptions.disableEvents = extras.disable(clientOptions.disableEvents);
         }
@@ -24,7 +24,7 @@ class Bot extends Client {
         this._loadCommands();
     }
 
-    _loadCommands() {
+    _loadCommands () {
         fs.readdir(`${process.cwd()}/commands/`, (err, files) => {
             if (err) {
                 return this.log('ERROR', 'Unable to index "commands"', err);
@@ -48,7 +48,7 @@ class Bot extends Client {
         });
     }
 
-    getAudioPlayer(guildId) {
+    getAudioPlayer (guildId) {
         if (!this.audioPlayers.has(guildId)) {
             this.audioPlayers.set(guildId, new audioPlayer(this, guildId));
         }
@@ -56,13 +56,13 @@ class Bot extends Client {
         return this.audioPlayers.get(guildId);
     }
 
-    log(logLevel, content, ...extras) {
+    log (logLevel, content, ...extras) {
         const time = new Date();
         const timestamp = `${time.toDateString()} ${time.toLocaleTimeString()}`;
         console.log(`[${timestamp}] [${logLevel.padEnd(5, ' ')}] ${content}${extras.join('\n\t').trim()}`); // eslint-disable-line
     }
 
-    async awaitMessage(channelId, check, timeout) {
+    async awaitMessage (channelId, check, timeout) {
         const result = await this.messageCollector.awaitMessages(channelId, check, timeout);
         return result;
     }

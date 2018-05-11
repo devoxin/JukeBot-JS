@@ -1,7 +1,7 @@
 const timeParser  = require('../../util/timeParser.js');
 const { version } = require('../../package.json');
 
-exports.run = async function({ client, msg }) {
+exports.run = async function ({ client, msg }) {
     const playing = client.voiceConnections.filter(vc => vc.playing).length;
     const paused  = client.voiceConnections.size - playing;
 
@@ -17,7 +17,7 @@ exports.run = async function({ client, msg }) {
             { name: 'Servers',		  value: client.guilds.size,												inline: true },
             { name: 'Latency',		  value: `${msg.channel.guild.shard.latency}ms`,							inline: true }
         ]
-    }});
+    } });
 
 };
 

@@ -4,7 +4,7 @@ exports.run = async function ({ client, msg }) {
         return msg.channel.createMessage({ embed: {
             color: client.config.options.embedColour,
             title: 'Insufficient Permissions',
-        }});
+        } });
     }
 
     if (client.voiceConnections.isConnected(msg.channel.guild.id)) {
@@ -12,14 +12,14 @@ exports.run = async function ({ client, msg }) {
             color: client.config.options.embedColour,
             title: 'Not Connected',
             description: 'I\'m not connected to any voicechannels'
-        }});
+        } });
     }
 
     if (!msg.member.voiceState.channelID) {
         return msg.channel.createMessage({ embed: {
             color: client.config.options.embedColour,
             title: 'You need to be in a voicechannel.'
-        }});
+        } });
     }
 
     if (!client.getChannel(msg.member.voiceState.channelID).hasPermissions(client.user.id, 'voiceConnect', 'voiceSpeak')) {
@@ -27,7 +27,7 @@ exports.run = async function ({ client, msg }) {
             color: client.config.options.embedColour,
             title: 'Unable to Connect',
             description: 'This channel doesn\'t allow me to connect/speak.'
-        }});
+        } });
     }
 
     client.voiceConnections.get(msg.channel.guild.id).switchChannel(msg.member.voiceState.channelID);

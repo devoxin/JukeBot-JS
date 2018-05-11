@@ -5,14 +5,14 @@ exports.run = async function ({ client, msg }) {
         return msg.channel.createMessage({ embed: {
             color: client.config.options.embedColour,
             title: 'There\'s no playback activity.'
-        }});
+        } });
     }
 
     if (!msg.member.isAdmin && audioPlayer.currentlyPlaying.req !== msg.author.id) {
         return msg.channel.createMessage({ embed: {
             color: client.config.options.embedColour,
             title: 'Insufficient Permissions',
-        }});
+        } });
     }
 
     audioPlayer.stop();

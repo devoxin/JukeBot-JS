@@ -33,7 +33,7 @@ client.on('messageCreate', async (msg) => {
         return msg.channel.createMessage({ embed: {
             color: client.config.options.embedColour,
             title: `Use ${client.config.options.prefix}help for commands`
-        }});
+        } });
     }
 
     if (!msg.content.startsWith(client.config.options.prefix) || !msg.channel.hasPermissions(client.user.id, 'sendMessages', 'embedLinks')) {
@@ -58,7 +58,7 @@ client.on('messageCreate', async (msg) => {
             color: client.config.options.embedColour,
             title: `${command} failed`,
             description: 'The command failed to run. The error has been logged.'
-        }});
+        } });
         client.log('ERROR', e.message, e.stack.split('\n'));
     }
 });

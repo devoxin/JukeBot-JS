@@ -1,0 +1,11 @@
+{
+    "parserOptions": {
+        "ecmaVersion": 9
+    },
+    "rules": {
+        "curly": ["error", "all"],
+        "object-curly-spacing": ["error", "always"],
+        "space-before-function-paren": ["error", "always"],
+        "indent": ["error", 4]
+    }
+}

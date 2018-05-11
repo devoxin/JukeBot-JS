@@ -12,7 +12,7 @@ exports.run = async function ({ client, msg, args }) {
                 { name: 'Support', value: 'Need help with JukeBot? [Join Here!](https://discord.gg/xvtH2Yn)\n\n' +
                                           `View command info with \`${client.config.options.prefix}help <command>\``, inline: true }
             ]
-        }});
+        } });
 
     } else {
         if (client.commands.has(args[0])) {
@@ -22,13 +22,13 @@ exports.run = async function ({ client, msg, args }) {
                 color: client.config.options.embedColour,
                 title: `Help for ${args[0].toLowerCase()}`,
                 description: `Syntax: \`${client.config.options.prefix}${args[0].toLowerCase()} ${cmd.usage.args}\`\n\nDescription: ${cmd.usage.description}`
-            }});
+            } });
         } else {
             msg.channel.createMessage({ embed: {
                 color: client.config.options.embedColour,
                 title: 'Invalid command',
                 description: 'Did you type the command correctly?'
-            }});
+            } });
         }
     }
 };

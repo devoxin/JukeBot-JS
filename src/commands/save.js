@@ -8,7 +8,7 @@ exports.run = async function ({ client, msg, args }) {
         return msg.channel.createMessage({ embed: {
             color: client.config.options.embedColour,
             title: 'There was an error fetching a DM channel.'
-        }});
+        } });
     }
 
     if (args[0] === '-q') {
@@ -16,13 +16,13 @@ exports.run = async function ({ client, msg, args }) {
             return msg.channel.createMessage({ embed: {
                 color: client.config.options.embedColour,
                 title: 'Nothing is queued.'
-            }});
+            } });
         }
 
         const m = await msg.channel.createMessage({ embed: {
             color: client.config.options.embedColour,
             title: 'Compiling queue...'
-        }});
+        } });
 
         const queue = audioPlayer.queue.map(s => `${s.title} (${s.permalink})`).join('\r\n');
 
@@ -34,7 +34,7 @@ exports.run = async function ({ client, msg, args }) {
                 m.edit({ embed: {
                     color: client.config.options.embedColour,
                     title: err.message
-                }});
+                } });
             });
     } else {
         const song = audioPlayer.current;
@@ -43,14 +43,14 @@ exports.run = async function ({ client, msg, args }) {
             return msg.channel.createMessage({ embed: {
                 color: client.config.options.embedColour,
                 title: 'Nothing playing.'
-            }});
+            } });
         }
 
         dmc.createMessage({ embed: {
             color: client.config.options.embedColour,
             title: song.title,
             url  : song.permalink
-        }});
+        } });
     }
 };
 

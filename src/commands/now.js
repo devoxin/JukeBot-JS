@@ -7,7 +7,7 @@ exports.run = async function ({ client, msg }) {
         return msg.channel.createMessage({ embed: {
             color: client.config.options.embedColour,
             title: 'There\'s nothing playing'
-        }});
+        } });
     }
 
     const track = audioPlayer.current;
