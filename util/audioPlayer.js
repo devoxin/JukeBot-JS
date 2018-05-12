@@ -55,7 +55,7 @@ class AudioPlayer {
         if (gain === null || gain === 0) {
             this.bassBoost = null;
         } else {
-            this.bassBoost = ['-af', `equalizer=f=40:width_type=h:width=30:g=${gain}`];
+            this.bassBoost = ['-af', `equalizer=f=40:width_type=h:width=50:g=${gain}`];
         }
     }
 
