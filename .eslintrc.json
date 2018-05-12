@@ -20,6 +20,13 @@
         "no-template-curly-in-string": ["error"],
         "no-unreachable": ["error"],
         "dot-notation": ["error"],
-        "no-global-assign": ["error"]
+        "no-global-assign": ["error"],
+        "semi": ["error", "always"],
+        "no-extra-parens": ["error"],
+        "no-whitespace-before-property": ["error"],
+        "space-before-blocks": ["error", "always"],
+        "prefer-arrow-callback": ["error"],
+        "prefer-const": ["error"],
+        "no-trailing-spaces": ["error"]
     }
 }

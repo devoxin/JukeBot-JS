@@ -9,6 +9,8 @@ class AudioPlayer {
         this.msgChannel = null;
         this.skips = new Set();
         this.repeat = 0;
+
+        this.bassBoost = null;
     }
 
     /*
@@ -49,6 +51,14 @@ class AudioPlayer {
         this.queue.push(track);
     }
 
+    setBassBoost(gain) {
+        if (gain === null || gain === 0) {
+            this.bassBoost = null;
+        } else {
+            this.bassBoost = ['-af', `equalizer=f=50:width_type=h:width=20:g=${gain}`];
+        }
+    }
+
     async play () {
         if (!this._client.voiceConnections.isConnected(this._guildId)) {
             return;
@@ -72,6 +82,7 @@ class AudioPlayer {
         const playbackURL = this.current.src === 'youtube'
             ? await ytutil.getFormats(this.current.id)
             : this.current.id;
+
         const format = this.current.src === 'youtube' ? 'webm' : null;
 
         if (this.current.src === 'youtube') {
@@ -84,7 +95,12 @@ class AudioPlayer {
         }
 
         this._announce('Now Playing', this.current.title);
-        voiceConnection.play(playbackURL, { format });
+
+        voiceConnection.play(playbackURL, {
+            encoderArgs: this.bassBoost,
+            format: this.bassBoost ? null : format
+        });
+
         voiceConnection.once('end', () => {
             if (this.repeat === 2) {
                 this.queue.push(this.current);
