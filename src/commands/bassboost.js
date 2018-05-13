@@ -9,12 +9,14 @@ exports.run = async function ({ client, msg, args }) {
         } });
     }
 
-    if (!args[0] || !Number(args[0])) {
+    const boost = !args[0] ? -1 : (Number(args[0]) || 0);
+
+    if (boost < 0) {
         return msg.channel.createMessage({
             embed: {
                 color: client.config.options.embedColour,
                 title: 'Bass Boost',
-                description: `You need to specify how many dB to boost bass by.`
+                description: `dB must be a 0 or higher.`
             }
         });
     }
