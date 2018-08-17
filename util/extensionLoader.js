@@ -27,7 +27,7 @@ function loadExtensions (Eris) {
 
     Object.defineProperty(Eris.VoiceConnectionManager.prototype, 'isConnected', {
         value (guildId) {
-            return this.has(guildId) && this.get(guildId).channelId !== null;
+            return this.has(guildId) && this.get(guildId).channelID !== null;
         }
     });
 
