@@ -124,7 +124,7 @@ class AudioPlayer {
     }
 
     destroy () {
-        this.queue.clear();
+        this.queue = [];
         this.skips.clear();
 
         if (this._client.voiceConnections.has(this._guildId)) {
