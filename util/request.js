@@ -5,11 +5,11 @@ const { stringify } = require('querystring');
 function get (url, query = {}, headers = {}) {
     return new Promise((resolve, reject) => {
         url = parse(url);
-        headers = Object.assign(headers, defaultHeaders);
+        headers = { ...headers, ...defaultHeaders };
 
         const qs = stringify(query);
         const { hostname, pathname } = url;
-        const path = pathname + (qs.length > 0 ? `?${qs}` : '');
+        const path = `${pathname}${qs ? `?${qs}` : ''}`;
 
         const opts = {
             hostname,
