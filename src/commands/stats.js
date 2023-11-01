@@ -10,7 +10,7 @@ exports.run = async function ({ client, msg }) {
     title: `JukeBot v${version}`,
     description: 'Created by devoxin',
     fields: [
-      { name: 'Uptime',     value: timeParser.formatSeconds(process.uptime()),                  inline: true },
+      { name: 'Uptime',    value: timeParser.formatSeconds(process.uptime()),                   inline: true },
       { name: 'RAM Usage', value: `${(process.memoryUsage().rss / 1024 / 1024).toFixed(2)} MB`, inline: true },
       { name: 'Library',   value: 'Eris',                                                       inline: true },
       { name: 'Streams',   value: `► ${playing}, ❚❚ ${paused}`,                                 inline: true },
