@@ -28,6 +28,7 @@
         "prefer-arrow-callback": ["error"],
         "prefer-const": ["error"],
         "no-trailing-spaces": ["error"],
-        "no-tabs": ["error"]
+        "no-tabs": ["error"],
+        "no-mixed-spaces-and-tabs": ["error"]
     }
 }
