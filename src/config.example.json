@@ -1,0 +1,17 @@
+{
+	"keys" : {
+		"discord": "",
+        "spotify": {
+            "client": "",
+            "secret": ""
+        }
+	},
+	"options" : {
+		"embedColour": 2003199,
+		"prefix": "!"
+	},
+	"prop" : {
+		"owners"   : [],
+		"blocked"  : []
+	}
+}

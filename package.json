@@ -1,10 +1,11 @@
 {
   "name": "JukeBot-JS",
-  "version": "1.0.0",
-  "description": "requires a mere 3 dependencies *not including the dependencies of those dependencies*",
+  "version": "5.4.1",
+  "description": "MusicBot for Discord",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cd src && node ./JukeBot.js"
   },
   "repository": {
     "type": "git",
@@ -12,7 +13,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "AGPL-3.0",
   "bugs": {
     "url": "https://github.com/devoxin/JukeBot-JS/issues"
   },
