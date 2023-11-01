@@ -77,6 +77,7 @@ class AudioPlayer {
         }
 
         this.current = this.queue.shift();
+        console.log(this.current);
 
         const voiceConnection = this._client.voiceConnections.get(this._guildId);
         const playbackURL = this.current.src === 'youtube'

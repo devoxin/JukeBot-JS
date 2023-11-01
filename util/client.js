@@ -13,6 +13,7 @@ class Bot extends Client {
             clientOptions.disableEvents = extras.disable(clientOptions.disableEvents);
         }
 
+        console.log(config.keys.discord);
         super(config.keys.discord, clientOptions);
 
         this.config = config;

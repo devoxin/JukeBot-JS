@@ -1,22 +1,26 @@
 {
-  "name": "jukebot",
-  "version": "5.4.0",
-  "description": "MusicBot for Discord",
+  "name": "JukeBot-JS",
+  "version": "1.0.0",
+  "description": "requires a mere 3 dependencies *not including the dependencies of those dependencies*",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cd src && node ./JukeBot.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/CrimsonXV/JukeBot/JukeBot.git"
+    "url": "git+https://github.com/devoxin/JukeBot-JS.git"
   },
-  "author": "Kromatic",
-  "license": "AGPL-3.0",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/devoxin/JukeBot-JS/issues"
+  },
+  "homepage": "https://github.com/devoxin/JukeBot-JS#readme",
   "dependencies": {
-    "eris": "*",
-    "node-spotify-api": "^1.0.7",
-    "opusscript": "*",
-    "ytdl-core": "*"
+    "eris": "^0.17.2",
+    "opusscript": "0.0.8",
+    "tubesearch": "^2.0.1",
+    "ytdl-core": "^4.11.5"
   }
 }

@@ -77,7 +77,16 @@ exports.run = async function ({ client, msg, args }) {
 
         res.src = 'youtube';
         res.type = 'search';
-        res.items = await ytutil.search(query);
+        //res.items = await ytutil.search(query);
+        res.items = [{
+          id: {
+            videoId: 'q-74HTjRbuY'
+          },
+          snippet: {
+            videoId: 'q-74HTjRbuY',
+            title: 'Something Comforting'
+          }
+        }];
 
     } else {
 

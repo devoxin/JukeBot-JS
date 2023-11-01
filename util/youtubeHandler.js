@@ -1,20 +1,12 @@
 const req = require('./request.js');
 const yt  = require('ytdl-core');
 const key = require('../src/config.json').keys.youtube;
+const ts = require('tubesearch');
 
 module.exports = {
 
     async search (q) {
-
-        const results = await req.get('https://www.googleapis.com/youtube/v3/search', {
-            key,
-            q,
-            type: 'video',
-            maxResults: 3,
-            part: 'snippet'
-        }).catch(() => null);
-
-        return results ? results.items : [];
+        return await ts.search(q).catch(() => ([]));
     },
 
     async getPlaylist (playlistId, limit = 100, pageToken, videos = []) {
@@ -69,11 +61,9 @@ module.exports = {
         if (!info || !info.formats) {
             return null;
         }
-
+        
         //const formats = yt.filterFormats(info.formats, 'audioonly');
-        const formats = info.formats.filter(fmt => ['251', '250', '249'].includes(fmt.itag)); // opus-only
-        formats.sort((a, b) => b.itag - a.itag);
-
+        const formats = info.formats.filter(fmt => [251, 250, 249].includes(fmt.itag)); // opus-only
         return formats.length > 0 ? formats[0].url : null;
     },
 
