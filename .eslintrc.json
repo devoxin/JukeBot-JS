@@ -27,6 +27,7 @@
         "space-before-blocks": ["error", "always"],
         "prefer-arrow-callback": ["error"],
         "prefer-const": ["error"],
-        "no-trailing-spaces": ["error"]
+        "no-trailing-spaces": ["error"],
+        "no-tabs": ["error"]
     }
 }
